@@ -1,26 +1,40 @@
 import React from "react";
 import PropTypes from "prop-types";
+import style from "./index.module.scss";
+import logo from "logo.svg";
 
 const Layout = (props) => {
-  return <div></div>;
+  return <section className={style.layout}>{props.children}</section>;
 };
 
-Layout.propTypes = {};
+Layout.propTypes = {
+  children: PropTypes.node,
+};
 
 const Header = (props) => {
-  return <div></div>;
+  return (
+    <header className={style.header}>
+      <div className={style.headerBrand}>
+        <img className={style.logo} src={logo} alt="Logo" />
+        <span className={style.brand}>El viveroo</span>
+      </div>
+      <div></div>
+    </header>
+  );
 };
 
 Header.propTypes = {};
 
 const Content = (props) => {
-  return <div></div>;
+  return <main className={style.content}>{props.children}</main>;
 };
 
-Content.propTypes = {};
+Content.propTypes = {
+  children: PropTypes.node,
+};
 
 const Footer = (props) => {
-  return <div></div>;
+  return <footer className={style.footer}></footer>;
 };
 
 Footer.propTypes = {};

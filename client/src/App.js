@@ -7,9 +7,11 @@ function App() {
   return (
     <div className="App">
       <Layout>
+        <Layout.Header />
         <Layout.Content>
           <Routes />
         </Layout.Content>
+        <Layout.Footer />
       </Layout>
     </div>
   );
