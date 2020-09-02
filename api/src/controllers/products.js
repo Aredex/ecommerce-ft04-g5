@@ -55,7 +55,7 @@ const editOne = (id, name, description, price) => {
 const getByQuery = (query) => {
     return new Promise((resolve, reject) => {
         if (!query) {
-            return reject({ error: "Se necesita el nombre" });
+            return reject({ error: "Se necesita parámetro de búsqueda" });
         }
 
         Product.findAll({
