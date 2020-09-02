@@ -4,7 +4,7 @@ export default async function getById(id) {
     name: "palmera",
     description: "una palmera",
     price: 15,
-    stock: 0,
+    stock: 5,
     createdAt: "2020-09-02T15:52:18.498Z",
     updatedAt: "2020-09-02T15:52:18.498Z",
     categories: [
