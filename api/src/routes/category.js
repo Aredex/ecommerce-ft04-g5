@@ -1,39 +1,28 @@
 const router = require("express").Router();
-const { Category } = require("../db");
+
+// Trayendo los métodos del controlador de categorías
+const {
+    getAll,
+    createOne,
+    getOne,
+    editOne,
+    deleteOne,
+} = require("../controllers/categories");
 
 router
-    .route("/")
+    .route("/") // Defino la ruta para la llamada
     .get((req, res) => {
-        Category.findAll({})
-            .then((categories) => {
-                res.json({
-                    message: "Success",
-                    categories,
-                });
-            })
-            .catch((err) => {
-                res.json({
-                    message: "error",
-                    error: err.message,
-                });
-            });
+        // Defino el método de la llamada
+        getAll() // LLamo al método del controlador
+            .then((response) => res.json(response)) // OK
+            .catch((err) => res.status(400).json(err)); // Err
     })
     .post((req, res) => {
         const { name, description } = req.body;
 
-        Category.create({ name, description })
-            .then((category) => {
-                res.status(201).json({
-                    message: "Success",
-                    category,
-                });
-            })
-            .catch((err) => {
-                res.status(400).json({
-                    message: "error",
-                    error: err.message,
-                });
-            });
+        createOne(name, description)
+            .then((response) => res.status(201).json(response))
+            .catch((err) => res.status(400).json(err));
     });
 
 router
@@ -41,65 +30,24 @@ router
     .get((req, res) => {
         const { id } = req.params;
 
-        Category.findOne({
-            where: { id },
-        })
-            .then((category) => {
-                res.json({
-                    message: "Success",
-                    category,
-                });
-            })
-            .catch((err) => {
-                res.json({
-                    message: "error",
-                    error: err.message,
-                });
-            });
+        getOne(id)
+            .then((response) => res.json(response))
+            .catch((err) => res.status(400).json(err));
     })
     .put((req, res) => {
         const { id } = req.params;
         const { name, description } = req.body;
-        Category.findOne({
-            where: { id },
-        })
-            .then((category) => {
-                category.name = name;
-                category.description = description;
 
-                return category.save();
-            })
-            .then((category) => {
-                res.json({
-                    message: "Success",
-                    category,
-                });
-            })
-            .catch((err) => {
-                res.json({
-                    message: "error",
-                    error: err.message,
-                });
-            });
+        editOne(id, name, description)
+            .then((response) => res.json(response))
+            .catch((err) => res.status(400).json(err));
     })
     .delete((req, res) => {
         const { id } = req.params;
-        Category.findOne({
-            where: { id },
-        })
-            .then((category) => {
-                category.destroy();
 
-                res.json({
-                    message: "Success",
-                });
-            })
-            .catch((err) => {
-                res.json({
-                    message: "error",
-                    error: err.message,
-                });
-            });
+        deleteOne(id)
+            .then((response) => res.json(response))
+            .catch((err) => res.status(400).json(err));
     });
 
 module.exports = router;
