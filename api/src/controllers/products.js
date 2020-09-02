@@ -1,4 +1,4 @@
-const { Product, Category } = require("../db");
+const { Product, Category, Op } = require("../db");
 
 // ==============================================
 //      ESTOS METODOS RETORNAN PROMESAS
@@ -52,9 +52,33 @@ const editOne = (id, name, description, price) => {
     });
 };
 
+const getByQuery = (query) => {
+    return new Promise((resolve, reject) => {
+        if (!query) {
+            return reject({ error: "Se necesita el nombre" });
+        }
+
+        Product.findAll({
+            where: {
+                [Op.or]: [
+                    { name: { [Op.like]: `%${query}%` } },
+                    { description: { [Op.like]: `%${query}%` } },
+                ],
+            },
+        })
+            .then((products) => resolve(products))
+            .catch(() =>
+                reject({
+                    error: "No hay productos que conicidan con la búsqueda",
+                })
+            );
+    });
+};
+
 module.exports = {
     getAll,
     createOne,
     getOne,
     editOne,
+    getByQuery,
 };

@@ -1,7 +1,5 @@
 require("dotenv").config();
-const { Sequelize, DataTypes } = require("sequelize");
-const fs = require("fs");
-const path = require("path");
+const { Sequelize, DataTypes, Op } = require("sequelize");
 const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
 const ProductModel = require("./models/Product");
@@ -27,4 +25,5 @@ module.exports = {
     DataTypes,
     Product,
     Category,
+    Op,
 };
