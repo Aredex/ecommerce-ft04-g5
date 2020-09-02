@@ -1,5 +1,6 @@
 const { getOne: getProduct } = require("./products");
 const { getOne: getCategory } = require("./categories");
+<<<<<<< HEAD
 // ==============================================
 //      ESTOS METODOS RETORNAN PROMESAS
 // ==============================================
@@ -32,4 +33,20 @@ const removeCategory = async (IdProduct, IdCategory) => {
 module.exports = {
     addCategory,
     removeCategory,
+=======
+
+const addCategory = async (IdProduct, IdCategory) => {
+  const Product = await getProduct(IdProduct);
+  const Category = await getCategory(IdCategory);
+
+  return new Promise((resolve, reject) => {
+    Product.addCategory(Category)
+      .then((product_category) => resolve(product_category))
+      .catch((err) => reject(err));
+  });
+};
+
+module.exports = {
+  addCategory,
+>>>>>>> dev
 };
