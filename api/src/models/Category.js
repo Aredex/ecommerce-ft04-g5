@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     // defino el modelo
-    return sequelize.define("product", {
+    return sequelize.define("category", {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -8,14 +8,6 @@ module.exports = (sequelize, DataTypes) => {
         description: {
             type: DataTypes.STRING,
             allowNull: false,
-        },
-        price: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        stock: {
-            type: DataTypes.INTEGER,
-            defaultValue: 0,
         },
     });
 };
