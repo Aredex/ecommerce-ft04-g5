@@ -9,6 +9,7 @@ const {
     editOne,
     getOne,
     getByQuery,
+    deleteOne,
 } = require("../controllers/products");
 
 router
@@ -21,15 +22,15 @@ router
             .catch(next);
     })
     .post((req, res) => {
-        const { name, description, price } = req.body;
+        const { name, description, price, stock } = req.body;
 
-        createOne(name, description, price)
+        createOne(name, description, price, stock)
             .then((products) => res.status(201).json(products))
             .catch((err) => res.status(400).json(err));
     });
 
 router.route("/search").get((req, res) => {
-    const { name } = req.query;    
+    const { name } = req.query;
 
     getByQuery(name)
         .then((products) => res.json(products))
@@ -46,11 +47,17 @@ router
     })
     .put((req, res) => {
         const { id } = req.params;
-        const { name, description, price } = req.body;
+        const { name, description, price, stock } = req.body;
 
-        editOne(id, name, description, price)
+        editOne(id, name, description, price, stock)
             .then((product) => res.json(product).status(201))
-            .catch((err) => res.json(err));
+            .catch((err) => res.json(err).status(404));
+    })
+    .delete((req, res) => {
+        const { id } = req.params;
+        deleteOne(id)
+            .then((result) => res.status(204).json(result))
+            .catch((err) => res.json(err).status(400));
     });
 
 router
