@@ -38,5 +38,6 @@ module.exports = {
   Category,
   Image,
   Order,
+  Order_product,
   Op,
 };
