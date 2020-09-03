@@ -4,6 +4,7 @@ const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
 const ProductModel = require("./models/Product");
 const CategoryModel = require("./models/Category");
+const ImageModel = require("./models/Image");
 
 const sequelize = new Sequelize(
     `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/ecommerce`,
@@ -15,15 +16,20 @@ const sequelize = new Sequelize(
 
 const Product = ProductModel(sequelize, DataTypes);
 const Category = CategoryModel(sequelize, DataTypes);
+const Image = ImageModel(sequelize, DataTypes);
 
-Product.belongsToMany(Category, { through: "productCategory" });
-Category.belongsToMany(Product, { through: "productCategory" });
+Product.belongsToMany(Category, { through: "product_category" });
+Category.belongsToMany(Product, { through: "product_category" });
+
+
+Product.hasMany(Image);
+Image.belongsTo(Product);
 
 module.exports = {
-    // ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
     conn: sequelize, // para importart la conexión { conn } = require('./db.js');
     DataTypes,
     Product,
     Category,
+    Image,
     Op,
 };
