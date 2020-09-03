@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define("users", {
+    return sequelize.define("user", {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         password: {
             type: DataTypes.STRING,
             allowNull: false,
+        },
+        role: {
+            type: DataTypes.ENUM,
+            values: ["ADMIN", "GUEST"],
+            defaultValue: "ADMIN",
         },
     });
 };
