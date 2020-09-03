@@ -2,6 +2,7 @@ const { Product, Category, Op, Image } = require("../db");
 const {
     createOne: createImage,
     setProductAsociation,
+    setMultipleProductAsociations,
 } = require("../controllers/images");
 
 // ==============================================
@@ -30,14 +31,15 @@ const createOne = (name, description, price, stock, imageUrl) => {
                 }
 
                 if (imageUrl) {
-                    console.log(imageUrl);
-                    createImage(imageUrl)
-                        .then((image) => {
-                            return image.id;
-                        })
-                        .then((id) => setProductAsociation(id, product.id))
-                        // .then((image) => console.log(image))
-                        .catch((err) => reject(err));
+                    if (!Array.isArray(imageUrl)) {
+                        createImage(imageUrl)
+                            .then((image) => image.id)
+                            .then((id) => setProductAsociation(id, product.id))
+                            .catch((err) => reject(err));
+                    } else {
+                        setMultipleProductAsociations(product.id, imageUrl)
+                            .catch((err) => reject(err));
+                    }
                 }
 
                 resolve(product);

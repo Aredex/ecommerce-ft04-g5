@@ -35,9 +35,28 @@ const setProductAsociation = (idImage, idProduct) => {
     });
 };
 
+const setMultipleProductAsociations = async (idProduct, arrayUrls) => {
+    return new Promise((resolve, reject) => {
+        let images = arrayUrls.map((url) => {
+            return createOne(url)
+                .then((image) => image)
+                .catch((err) => reject(err));
+        });
+
+        Promise.all(images).then((imgs) => {
+            imgs.forEach((image) => {
+                setProductAsociation(image.id, idProduct)
+                    .then((createdAsociation) => resolve(createdAsociation))
+                    .catch((err) => reject(err));
+            });
+        });
+    });
+};
+
 module.exports = {
     createOne,
     getAll,
     getOne,
     setProductAsociation,
+    setMultipleProductAsociations,
 };
