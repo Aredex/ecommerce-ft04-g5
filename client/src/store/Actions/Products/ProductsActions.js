@@ -1,31 +1,16 @@
 import getById from "services/products/getById"
 import getAll from "services/products/getAll"
 
-var arrayPrueba = [{
-  img: "https://laslandas.com/wp-content/uploads/2019/11/abbaye-cluny1.jpg",
-  title: "Planta 1",
-  price: 450,
-  id: 1
-}, {
-  img: "https://laslandas.com/wp-content/uploads/2019/11/abbaye-cluny1.jpg",
-  title: "Planta 2",
-  price: 150,
-  id: 2
-}, {
-  img: "https://laslandas.com/wp-content/uploads/2019/11/abbaye-cluny1.jpg",
-  title: "Planta 3",
-  price: 12450,
-  id: 3
-}]
-
-
 export function addProduct(payload) {
   return { type: "ADD_PRODUCT", payload };
 }
 
 export function getProducts() {
   return function (dispatch) {
-    return dispatch({ type: "GET_PRODUCTS", payload: arrayPrueba });
+    return getAll()
+      .then(function (data) {
+        dispatch({ type: "GET_PRODUCTS", payload: data });
+      })
   };
 }
 export function getProductDetail(id) {

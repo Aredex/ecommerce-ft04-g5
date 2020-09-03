@@ -14,7 +14,7 @@ const ProductCard = ({ img, title, price }) => {
   return (
     //eliminar el Style una vez definido los estilos en css externo
     <div className="DivProduct" style={prueba}>
-      <img src={img} style={
+      <img src={img} alt="foto del producto" style={
         {
           width: "100%",
           maxHeight: "100px",
