@@ -22,10 +22,12 @@ router
             .catch(next);
     })
     .post((req, res) => {
-        const { name, description, price, stock } = req.body;
+        // TODO - Luego de crear el producto, para visualizarlo completamente, incluídas las fotos, es necesario llamar a la ruta de obtener un único producto.
 
-        createOne(name, description, price, stock)
-            .then((products) => res.status(201).json(products))
+        const { name, description, price, stock, imageUrl } = req.body;
+
+        createOne(name, description, price, stock, imageUrl)
+            .then((product) => res.status(201).json(product))
             .catch((err) => res.status(400).json(err));
     });
 

@@ -1,4 +1,8 @@
-const { Product, Category, Op, ImageProduct } = require("../db");
+const { Product, Category, Op, Image } = require("../db");
+const {
+    createOne: createImage,
+    setProductAsociation,
+} = require("../controllers/images");
 
 // ==============================================
 //      ESTOS METODOS RETORNAN PROMESAS
@@ -6,17 +10,18 @@ const { Product, Category, Op, ImageProduct } = require("../db");
 
 const getAll = () => {
     return new Promise((resolve, reject) => {
-        Product.findAll({ include: [ImageProduct] })
+        Product.findAll({ include: [Image] })
             .then((products) => resolve(products))
             .catch((err) => reject({ error: err }));
     });
 };
 
-const createOne = (name, description, price, stock) => {
+const createOne = (name, description, price, stock, imageUrl) => {
     return new Promise((resolve, reject) => {
         if (!name || !description || !price) {
             return reject({ error: "Uno o mas parametros faltantes" });
         }
+
         Product.create({ name, description, price })
             .then((product) => {
                 if (stock) {
@@ -24,13 +29,16 @@ const createOne = (name, description, price, stock) => {
                     product.save();
                 }
 
-                // if (!imageUrl) {
-                //     ImageProduct.create({ url: imageUrl })
-                //         .then((image) => {
-                //             return image.setProduct(product);
-                //         })
-                //         .catch((err) => reject(err));
-                // }
+                if (imageUrl) {
+                    console.log(imageUrl);
+                    createImage(imageUrl)
+                        .then((image) => {
+                            return image.id;
+                        })
+                        .then((id) => setProductAsociation(id, product.id))
+                        // .then((image) => console.log(image))
+                        .catch((err) => reject(err));
+                }
 
                 resolve(product);
             })
@@ -40,7 +48,7 @@ const createOne = (name, description, price, stock) => {
 
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
-        Product.findOne({ where: { id }, include: [Category, ImageProduct] })
+        Product.findOne({ where: { id }, include: [Category, Image] })
             .then((product) => {
                 if (!product) {
                     return reject({ error: "No existe en la BD" });
