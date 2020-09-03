@@ -1,0 +1,67 @@
+.inputNumber {
+  display: flex;
+  height: 2rem;
+  width: fit-content;
+  border: none;
+  overflow: hidden;
+  border-radius: 9999px;
+  box-shadow: 0 0 4px #d5d5d5;
+  transition-property: background, box-shadow;
+  transition-duration: 0.25s;
+  margin-right: 0px;
+    margin-left: auto;
+  // :hover {
+  //   box-shadow: 0 1px 8px #c5c5c5;
+  // }
+
+  input {
+    margin: 0;
+    margin-left: 0.75rem;
+    width: 10rem;
+    border: none;
+    text-align: center;
+   
+  }
+  input:focus, input.form-control:focus {
+
+    outline:none !important;
+    outline-width: 0 !important;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+  section {
+    display: flex;
+    flex-direction: column;
+    button {
+      width: 2rem;
+      height: 1rem;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      border: none;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  .submit {
+    background: #00cc76;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+
+    i {
+      padding-right: 0.5rem;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
