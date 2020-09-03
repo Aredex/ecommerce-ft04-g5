@@ -1,0 +1,44 @@
+.page {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 20rem 1fr;
+  min-height: 100%;
+}
+.table {
+  width: stretch;
+  table-layout: fixed;
+  th,
+  td {
+    text-align: left;
+    padding: 0.25rem 0.125rem;
+  }
+  tr:nth-child(even) {
+    background-color: #00000011;
+  }
+  thead {
+    button {
+      height: 3rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  tbody {
+    button {
+      width: 3rem;
+      height: 3rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
