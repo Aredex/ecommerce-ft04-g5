@@ -1,0 +1,45 @@
+const { User } = require("../db");
+
+const getAll = () => {
+    return new Promise((resolve, reject) => {
+        User.findAll()
+            .then((users) => resolve(users))
+            .catch((err) => reject(err));
+    });
+};
+
+const createOne = (name, email, password, role) => {
+    return new Promise((resolve, reject) => {
+        User.create({ name, email, password })
+            .then((user) => {
+                if (role) {
+                    if (role !== "ADMIN" && role !== "GUEST") {
+                        return reject({
+                            error: "Los campos para el rol son ADMIN o GUEST",
+                        });
+                    }
+
+                    user.role = role;
+                    user.save();
+                }
+
+                return user;
+            })
+            .then((user) => resolve(user))
+            .catch((err) => reject(err));
+    });
+};
+
+const getOne = (id) => {
+    return new Promise((resolve, reject) => {
+        User.findOne({ where: { id } })
+            .then((user) => resolve(user))
+            .catch((err) => reject(err));
+    });
+};
+
+module.exports = {
+    createOne,
+    getAll,
+    getOne,
+};
