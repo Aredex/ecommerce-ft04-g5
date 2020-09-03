@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export default async function getById(id) {
+export default async function create(name, description) {
   return axios
-    .get(`http://localhost:3001/products/${id}`)
+    .post(`http://localhost:3001/categories`, { name, description })
     .then((response) => {
       return response.data;
     })

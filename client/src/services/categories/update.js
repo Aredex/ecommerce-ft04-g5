@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export default async function getById(id) {
+export default async function update(id, name, description) {
   return axios
-    .get(`http://localhost:3001/products/${id}`)
+    .put(`http://localhost:3001/categories/${id}`, { name, description })
     .then((response) => {
       return response.data;
     })

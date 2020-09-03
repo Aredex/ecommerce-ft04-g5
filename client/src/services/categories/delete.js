@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export default async function getById(id) {
+export default async function remove(id) {
   return axios
-    .get(`http://localhost:3001/products/${id}`)
+    .delete(`http://localhost:3001/categories/${id}`)
     .then((response) => {
       return response.data;
     })

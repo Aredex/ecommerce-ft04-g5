@@ -1,0 +1,12 @@
+.page {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 20rem 1fr;
+  min-height: 100%;
+
+  aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
