@@ -24,6 +24,27 @@ const getOne = (id) => {
     });
 };
 
+const deleteOne = (id) => {
+    return new Promise((resolve, reject) => {
+        getOne(id)
+            .then((image) => image.destroy())
+            .then(() => resolve({ res: "imagen eliminada" }))
+            .then((err) => reject(err));
+    });
+};
+
+const deleteMultiple = (arrayId) => {
+    return new Promise((resolve, reject) => {
+        arrayId.forEach((id) => {
+            deleteOne(id)
+                .then((image) => {
+                    resolve(image);
+                })
+                .catch((err) => reject(err));
+        });
+    });
+};
+
 const setProductAsociation = (idImage, idProduct) => {
     return new Promise((resolve, reject) => {
         getOne(idImage)
@@ -59,4 +80,6 @@ module.exports = {
     getOne,
     setProductAsociation,
     setMultipleProductAsociations,
+    deleteOne,
+    deleteMultiple,
 };

@@ -51,8 +51,6 @@ router
         const { id } = req.params;
         const { name, description, price, stock, imageUrl } = req.body;
 
-        // res.json(req.body);
-
         editOne(id, name, description, price, stock, imageUrl)
             .then((product) => res.json(product).status(201))
             .catch((err) => res.json(err).status(404));

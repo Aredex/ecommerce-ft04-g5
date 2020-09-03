@@ -17,6 +17,19 @@ const getAll = () => {
     });
 };
 
+const verifyImagesUrl = (imageUrl, product, resolve, reject) => {
+    if (!Array.isArray(imageUrl)) {
+        createImage(imageUrl)
+            .then((image) => image.id)
+            .then((id) => setProductAsociation(id, product.id))
+            .catch((err) => reject(err));
+    } else {
+        setMultipleProductAsociations(product.id, imageUrl).catch((err) =>
+            reject(err)
+        );
+    }
+};
+
 const createOne = (name, description, price, stock, imageUrl) => {
     return new Promise((resolve, reject) => {
         if (!name || !description || !price) {
@@ -31,15 +44,7 @@ const createOne = (name, description, price, stock, imageUrl) => {
                 }
 
                 if (imageUrl) {
-                    if (!Array.isArray(imageUrl)) {
-                        createImage(imageUrl)
-                            .then((image) => image.id)
-                            .then((id) => setProductAsociation(id, product.id))
-                            .catch((err) => reject(err));
-                    } else {
-                        setMultipleProductAsociations(product.id, imageUrl)
-                            .catch((err) => reject(err));
-                    }
+                    verifyImagesUrl(imageUrl, product, resolve, reject);
                 }
 
                 resolve(product);
@@ -62,7 +67,7 @@ const getOne = (id) => {
     });
 };
 
-const editOne = (id, name, description, price, stock) => {
+const editOne = (id, name, description, price, stock, imageUrl) => {
     return new Promise((resolve, reject) => {
         getOne(id)
             .then((product) => {
@@ -72,6 +77,10 @@ const editOne = (id, name, description, price, stock) => {
 
                 if (stock) {
                     product.stock = stock;
+                }
+
+                if (imageUrl) {
+                    verifyImagesUrl(imageUrl, product, resolve, reject);
                 }
 
                 return product.save();
