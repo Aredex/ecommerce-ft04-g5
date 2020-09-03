@@ -12,7 +12,7 @@ const getAll = () => {
     });
 };
 
-const createOne = (name, description, price, stock, imageUrl) => {
+const createOne = (name, description, price, stock) => {
     return new Promise((resolve, reject) => {
         if (!name || !description || !price) {
             return reject({ error: "Uno o mas parametros faltantes" });
@@ -24,13 +24,13 @@ const createOne = (name, description, price, stock, imageUrl) => {
                     product.save();
                 }
 
-                if (!imageUrl) {
-                    ImageProduct.create({ url: imageUrl })
-                        .then((image) => {
-                            return image.setProduct(product);
-                        })
-                        .catch((err) => reject(err));
-                }
+                // if (!imageUrl) {
+                //     ImageProduct.create({ url: imageUrl })
+                //         .then((image) => {
+                //             return image.setProduct(product);
+                //         })
+                //         .catch((err) => reject(err));
+                // }
 
                 resolve(product);
             })
