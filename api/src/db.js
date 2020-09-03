@@ -26,8 +26,8 @@ Category.belongsToMany(Product, { through: "product_category" });
 Product.hasMany(Image);
 Image.belongsTo(Product);
 
-Order.hasMany(Order_product); // order_product Cambiar el nombre al que tenga el modelo
-Order_product.belongsTo(Order); // same here
+// Order.hasMany(Order_product); // order_product Cambiar el nombre al que tenga el modelo
+// Order_product.belongsTo(Order); // same here
 
 module.exports = {
   conn: sequelize, // para importart la conexión { conn } = require('./db.js');
