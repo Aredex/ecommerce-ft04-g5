@@ -1,105 +1,60 @@
 const router = require("express").Router();
-const { Category } = require("../db");
+
+// Trayendo los métodos del controlador de categorías
+const {
+  getAll,
+  createOne,
+  getOne,
+  editOne,
+  deleteOne,
+} = require("../controllers/categories");
 
 router
-    .route("/")
-    .get((req, res) => {
-        Category.findAll({})
-            .then((categories) => {
-                res.json({
-                    message: "Success",
-                    categories,
-                });
-            })
-            .catch((err) => {
-                res.json({
-                    message: "error",
-                    error: err.message,
-                });
-            });
-    })
-    .post((req, res) => {
-        const { name, description } = req.body;
+  .route("/") // Defino la ruta para la llamada
+  .get((req, res) => {
+    // Defino el método de la llamada
+    getAll() // LLamo al método del controlador
+      .then((response) => res.json(response)) // OK
+      .catch((err) => res.status(400).json(err)); // Err
+  })
+  .post((req, res) => {
+    const { name, description } = req.body;
 
-        Category.create({ name, description })
-            .then((category) => {
-                res.status(201).json({
-                    message: "Success",
-                    category,
-                });
-            })
-            .catch((err) => {
-                res.status(400).json({
-                    message: "error",
-                    error: err.message,
-                });
-            });
-    });
+    createOne(name, description)
+      .then((response) => res.status(201).json(response))
+      .catch((err) => res.status(400).json(err));
+  });
 
 router
-    .route("/:id")
-    .get((req, res) => {
-        const { id } = req.params;
+  .route("/:id")
+  .get((req, res) => {
+    const { id } = req.params;
 
-        Category.findOne({
-            where: { id },
-        })
-            .then((category) => {
-                res.json({
-                    message: "Success",
-                    category,
-                });
-            })
-            .catch((err) => {
-                res.json({
-                    message: "error",
-                    error: err.message,
-                });
-            });
-    })
-    .put((req, res) => {
-        const { id } = req.params;
-        const { name, description } = req.body;
-        Category.findOne({
-            where: { id },
-        })
-            .then((category) => {
-                category.name = name;
-                category.description = description;
+    getOne(id)
+      .then((response) => res.json(response))
+      .catch((err) => res.status(400).json(err));
+  })
+  .put((req, res) => {
+    const { id } = req.params;
+    const { name, description } = req.body;
 
-                return category.save();
-            })
-            .then((category) => {
-                res.json({
-                    message: "Success",
-                    category,
-                });
-            })
-            .catch((err) => {
-                res.json({
-                    message: "error",
-                    error: err.message,
-                });
-            });
-    })
-    .delete((req, res) => {
-        const { id } = req.params;
-        Category.findOne({
-            where: { id },
-        })
-            .then((category) => {
-                category.destroy();
+    editOne(id, name, description)
+      .then((response) => res.json(response))
+      .catch((err) => res.status(400).json(err));
+  })
+  .delete((req, res) => {
+    const { id } = req.params;
 
-                res.json({
-                    message: "Success",
-                });
-            })
-            .catch((err) => {
-                res.json({
-                    message: "error",
-                    error: err.message,
-                });
-            });
-    });
+    deleteOne(id)
+      .then((response) => res.json(response))
+      .catch((err) => res.status(400).json(err));
+  });
+
+router.route("/:id/products").get((req, res) => {
+  const { id } = req.params;
+  getOne(id)
+    .then((category) => res.json(category.products).status(201))
+    .catch((err) => res.status(400).json(err));
+});
 
 module.exports = router;
