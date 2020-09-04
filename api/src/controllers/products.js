@@ -11,7 +11,7 @@ const {
 
 const getAll = () => {
     return new Promise((resolve, reject) => {
-        Product.findAll({ include: [Image] })
+        Product.findAll({ include: [Image, Category] })
             .then((products) => {
                 if (products.length === 0)
                     return reject({
@@ -145,7 +145,7 @@ const getByQuery = (query) => {
                     { description: { [Op.like]: `%${query}%` } },
                 ],
             },
-            include: [Image, Category], 
+            include: [Image, Category],
         })
             .then((products) => {
                 if (products.length === 0)
