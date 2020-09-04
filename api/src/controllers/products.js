@@ -24,9 +24,9 @@ const verifyImagesUrl = (imageUrl, product, resolve, reject) => {
             .then((id) => setProductAsociation(id, product.id))
             .catch((err) => reject(err));
     } else {
-        setMultipleProductAsociations(product.id, imageUrl).catch((err) =>
-            reject(err)
-        );
+        setMultipleProductAsociations(product.id, imageUrl)
+            .then((resp) => resolve(resp))
+            .catch((err) => reject({ error: err }));
     }
 };
 
@@ -49,7 +49,7 @@ const createOne = (name, description, price, stock, imageUrl) => {
 
                 resolve(product);
             })
-            .catch((err) => reject({ error: err.message }));
+            .catch((err) => reject({ error: err }));
     });
 };
 
@@ -63,7 +63,7 @@ const getOne = (id) => {
 
                 resolve(product);
             })
-            .catch((err) => reject({ error: err.message }));
+            .catch((err) => reject({ error: err }));
     });
 };
 
@@ -86,7 +86,7 @@ const editOne = (id, name, description, price, stock, imageUrl) => {
                 return product.save();
             })
             .then((product) => resolve(product))
-            .catch((err) => reject(err));
+            .catch((err) => reject({ error: err }));
     });
 };
 
@@ -94,7 +94,7 @@ const deleteOne = (id) => {
     return new Promise((resolve, reject) => {
         getOne(id)
             .then((product) => resolve(product.destroy()))
-            .catch((err) => reject(err));
+            .catch((err) => reject({ error: err }));
     });
 };
 
@@ -111,6 +111,7 @@ const getByQuery = (query) => {
                     { description: { [Op.like]: `%${query}%` } },
                 ],
             },
+            include: [Image],
         })
             .then((products) => resolve(products))
             .catch(() =>
