@@ -1,26 +1,30 @@
 import React from "react";
-import Catalogue from "components/Catalogue.js"
+import Catalogue from "components/Catalogue.js";
 import { connect } from "react-redux";
-import { getProducts } from "../store/Actions/Actions.js"
+import { getProducts } from "../store/Actions/Products/ProductsActions";
 //objeto de prueba para dar estilos al contenedor del Catalogo
-var estiloPrueba = { display: "flex", flexWrap: "wrap", justifyContent: "center" }
+var estiloPrueba = {
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "center",
+};
 
 //revisar datos de prueba al conectar con la Api
 const Home = (props) => {
-
-
   React.useEffect(() => {
-
     if (props.search.length === 0) {
-      props.getProducts()
+      props.getProducts();
     }
-  })
+  });
 
-  return <div className="DivContainer" style={estiloPrueba}>
-    <Catalogue products={props.search.length > 0 ? props.search : props.products} />
-  </div>;
+  return (
+    <div className="DivContainer" style={estiloPrueba}>
+      <Catalogue
+        products={props.search.length > 0 ? props.search : props.products}
+      />
+    </div>
+  );
 };
-
 
 function mapStateToProps(state) {
   return {
@@ -31,11 +35,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getProducts: () => dispatch(getProducts())
+    getProducts: () => dispatch(getProducts()),
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
