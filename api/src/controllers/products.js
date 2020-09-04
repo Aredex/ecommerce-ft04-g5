@@ -111,6 +111,7 @@ const getByQuery = (query) => {
                     { description: { [Op.like]: `%${query}%` } },
                 ],
             },
+            include: [Image],
         })
             .then((products) => resolve(products))
             .catch(() =>
