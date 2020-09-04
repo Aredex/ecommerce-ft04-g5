@@ -10,6 +10,7 @@ const {
     getOne,
     getByQuery,
     deleteOne,
+    setViews,
 } = require("../controllers/products");
 
 router
@@ -82,4 +83,13 @@ router
             .then((productCategory) => res.json(productCategory).status(200))
             .catch((err) => res.json(err));
     });
+
+router.route("/:id/views").post((req, res) => {
+    const { id } = req.params;
+
+    setViews(id)
+        .then((views) => res.json(views).status(200))
+        .catch((err) => res.status(404).json(err));
+});
+
 module.exports = router;

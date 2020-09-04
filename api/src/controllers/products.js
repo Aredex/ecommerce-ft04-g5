@@ -200,6 +200,18 @@ const getByQuery = (query, page, pageSize) => {
     });
 };
 
+const setViews = (id) => {
+    return new Promise((resolve, reject) => {
+        getOne(id)
+            .then((product) => {
+                product.views++;
+                return product.save();
+            })
+            .then((product) => resolve(product))
+            .catch((err) => reject({ error: err }));
+    });
+};
+
 module.exports = {
     getAll,
     createOne,
@@ -207,4 +219,5 @@ module.exports = {
     editOne,
     getByQuery,
     deleteOne,
+    setViews,
 };
