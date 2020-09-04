@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function remove(id) {
   return axios
-    .delete(`http://localhost:3001/categories/${id}`)
+    .delete(`http://localhost:3001/products/${id}`)
     .then((response) => {
       return response.data;
     })
