@@ -30,6 +30,24 @@ const createOne = (name, email, password, role) => {
     });
 };
 
+const editOne = (id, name, email, password, role) => {
+    return new Promise((resolve, reject) => {
+        getOne(id)
+            .then((user) => {
+                user.name = name;
+                user.email = email;
+                user.password = password;
+                if (role) {
+                    user.role = role;
+                }
+
+                return user.save();
+            })
+            .then((user) => resolve(user))
+            .catch((err) => reject(err));
+    });
+};
+
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
         User.findOne({ where: { id } })
@@ -42,4 +60,5 @@ module.exports = {
     createOne,
     getAll,
     getOne,
+    editOne,
 };
