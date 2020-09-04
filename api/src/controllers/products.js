@@ -81,6 +81,7 @@ const createOne = (name, description, price, stock, imageUrl) => {
 
                 if (imageUrl) {
                     // Si la imagen no se agrega al producto es porque la imágen ya está asignada a otro producto
+                    // ! BUSCAR LA MANERA DE DARLE EL MENSAJE AL CLIENT EN LA RESPUESTA
                     verifyImagesUrl(imageUrl, product, resolve, reject);
                 }
 
@@ -130,6 +131,7 @@ const editOne = (id, name, description, price, stock, imageUrl) => {
 
                 if (imageUrl) {
                     // Si la imagen no se agrega al producto es porque la imágen ya está asignada a otro producto
+                    // ! BUSCAR LA MANERA DE DARLE EL MENSAJE AL CLIENT EN LA RESPUESTA
                     verifyImagesUrl(imageUrl, product, resolve, reject);
                 }
 
