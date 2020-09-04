@@ -145,7 +145,7 @@ const getByQuery = (query) => {
                     { description: { [Op.like]: `%${query}%` } },
                 ],
             },
-            include: [Image],
+            include: [Image, Category],
         })
             .then((products) => {
                 if (products.length === 0)
