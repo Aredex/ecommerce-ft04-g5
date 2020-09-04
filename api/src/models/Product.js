@@ -22,5 +22,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        errors: {
+            type: DataTypes.STRING,
+            defaultValue: null,
+        },
     });
 };
