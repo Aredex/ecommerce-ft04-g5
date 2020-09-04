@@ -5,6 +5,7 @@ const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 // Importando todos los modelos
 const ProductModel = require("./models/Product");
 const CategoryModel = require("./models/Category");
+const ProductCAtegoryModel = require("./models/Product_Category");
 const ImageModel = require("./models/Image");
 const OrderModel = require("./models/Order");
 const OrderProductModel = require("./models/Order_product");
@@ -22,22 +23,23 @@ const sequelize = new Sequelize(
 // Instanciando Modelos para crear las tablas en la BD
 const Product = ProductModel(sequelize, DataTypes);
 const Category = CategoryModel(sequelize, DataTypes);
+const ProductCategory = ProductCAtegoryModel(sequelize, DataTypes);
 const Image = ImageModel(sequelize, DataTypes);
 const Order = OrderModel(sequelize, DataTypes);
 const Order_product = OrderProductModel(sequelize, DataTypes);
 const User = UserModel(sequelize, DataTypes);
 
 // Relación entre productos y categorías
-Product.belongsToMany(Category, { through: "product_category" });
-Category.belongsToMany(Product, { through: "product_category" });
+Product.belongsToMany(Category, { through: ProductCategory });
+Category.belongsToMany(Product, { through: ProductCategory });
 
 // Relación entre productos e imágenes
 Product.hasMany(Image);
 Image.belongsTo(Product);
 
 // Relación entre productos y Órdenes
-Product.belongsToMany(Order, { through: "order_product" });
-Order.belongsToMany(Product, { through: "order_product" });
+Product.belongsToMany(Order, { through: Order_product });
+Order.belongsToMany(Product, { through: Order_product });
 
 // Relación entre usuarios y órdenes
 User.hasMany(Order);
@@ -53,4 +55,5 @@ module.exports = {
     Order_product,
     Op,
     User,
+    ProductCategory,
 };
