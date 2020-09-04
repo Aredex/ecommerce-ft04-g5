@@ -8,8 +8,9 @@ const Catalogue = ({ products }) => {
 
   var productos = products.map(function (e) {
     return (
-      <NavLink to={`/product/${e.id}`}>
+      <NavLink to={`/product/${e.id}`} key={e.id}>
         <ProductCard
+
           id={e.id}
           img={e.img}
           title={e.title}
