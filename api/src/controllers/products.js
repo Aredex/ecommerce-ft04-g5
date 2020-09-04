@@ -51,6 +51,8 @@ const createOne = (name, description, price, stock, imageUrl) => {
     return new Promise((resolve, reject) => {
         // Validación viene por parte de Sequelize
 
+        name = name.toLowerCase();
+
         Product.create({ name, description, price })
             .then((product) => {
                 if (stock) {
@@ -101,7 +103,7 @@ const editOne = (id, name, description, price, stock, imageUrl) => {
                 // De esta manera solo se actualizará el campo que sea enviando
                 // TODO Buscar una mejor manera de escribirlo!
 
-                if (name) product.name = name;
+                if (name) product.name = name.toLowerCase();
                 if (description) product.description = description;
                 if (price) product.price = price;
                 if (stock) product.stock = stock;
@@ -138,11 +140,13 @@ const getByQuery = (query) => {
             return reject({ error: "Se necesita parámetro de búsqueda" });
         }
 
+        query = query.toLowerCase();
+
         Product.findAll({
             where: {
                 [Op.or]: [
-                    { name: { [Op.like]: `%${query}%` } },
-                    { description: { [Op.like]: `%${query}%` } },
+                    { name: { [Op.substring]: `${query}` } },
+                    { description: { [Op.substring]: `${query}` } },
                 ],
             },
             include: [Image, Category],
@@ -155,7 +159,7 @@ const getByQuery = (query) => {
                             errors: [
                                 {
                                     message:
-                                        "there are no products in the database",
+                                        "there are no products that match your search",
                                     type: "not found",
                                     value: null,
                                 },
