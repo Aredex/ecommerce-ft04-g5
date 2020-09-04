@@ -147,7 +147,24 @@ const getByQuery = (query) => {
             },
             include: [Image],
         })
-            .then((products) => resolve(products))
+            .then((products) => {
+                if (products.length === 0)
+                    return reject({
+                        error: {
+                            name: "ApiFindError",
+                            errors: [
+                                {
+                                    message:
+                                        "there are no products in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
+                        },
+                    });
+
+                resolve(products);
+            })
             .catch(() =>
                 reject({
                     error: "No hay productos que conicidan con la búsqueda",

@@ -36,7 +36,7 @@ router.route("/search").get((req, res) => {
 
     getByQuery(name)
         .then((products) => res.json(products))
-        .catch((err) => res.status(400).json(err));
+        .catch((err) => res.status(404).json(err));
 });
 
 router
