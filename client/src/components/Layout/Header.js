@@ -11,7 +11,7 @@ const Header = () => {
       </button>
       <div className={style.headerBrand}>
         <img className={style.logo} src={logo} alt="Logo" />
-        <span className={style.brand}>El viveroo</span>
+        <span className={style.brand}>GardenRy</span>
       </div>
       <SearchBar />
     </header>

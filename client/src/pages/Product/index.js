@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import getById from "services/products/getById";
 import { useParams } from "react-router";
 import AddToCart from "components/AddToCart";
+import noImage from "noImage.svg";
 import style from "./index.module.scss";
 
 const Product = () => {
@@ -29,15 +30,13 @@ const Product = () => {
 
     setCount(count - 1);
   };
+
   if (product) {
+    const imageURL = product.images[0]?.url || noImage;
     return (
       <div className={style.page}>
         <div className={style.carusel}>
-          <img
-            width="200"
-            height="200"
-            src="https://laslandas.com/wp-content/uploads/2019/11/abbaye-cluny1.jpg"
-          />
+          <img width="200" height="200" src={imageURL} />
         </div>
         <div className={style.name}>
           <h1>{product.name}</h1>
