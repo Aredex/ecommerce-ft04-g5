@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 isUrl: true,
             },
+            unique: true
         },
     });
 };
