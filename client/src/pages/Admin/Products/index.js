@@ -55,7 +55,7 @@ const Products = () => {
       initialValues: {
         name: "",
         description: "",
-        price: 0,
+        price: 1,
         stock: 0,
         imageUrl: "",
       },

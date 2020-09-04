@@ -1,0 +1,12 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 4px #d5d5d5;
+  background: #fff;
+  .actions {
+    display: flex;
+  }
+}
