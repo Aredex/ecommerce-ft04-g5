@@ -9,9 +9,28 @@ const {
 //      ESTOS METODOS RETORNAN PROMESAS
 // ==============================================
 
-const getAll = () => {
+const getPagination = (page, pageSize) => {
+    let offset = 0;
+    let limit = 100;
+
+    if (page && pageSize) {
+        offset = (page - 1) * pageSize;
+        limit = pageSize;
+    }
+
+    return { limit, offset };
+};
+
+const getAll = (page, pageSize) => {
     return new Promise((resolve, reject) => {
-        Product.findAll({ include: [Image, Category] })
+        const pagination = getPagination(page, pageSize);
+
+        Product.findAll({
+            include: [Image, Category],
+            order: [["id", "ASC"]],
+            limit: pagination.limit,
+            offset: pagination.offset,
+        })
             .then((products) => {
                 if (products.length === 0)
                     return reject({
@@ -134,13 +153,14 @@ const deleteOne = (id) => {
     });
 };
 
-const getByQuery = (query) => {
+const getByQuery = (query, page, pageSize) => {
     return new Promise((resolve, reject) => {
         if (!query) {
             return reject({ error: "Se necesita parámetro de búsqueda" });
         }
 
         query = query.toLowerCase();
+        const pagination = getPagination(page, pageSize);
 
         Product.findAll({
             where: {
@@ -149,7 +169,10 @@ const getByQuery = (query) => {
                     { description: { [Op.substring]: `${query}` } },
                 ],
             },
+            limit: pagination.limit,
+            offset: pagination.offset,
             include: [Image, Category],
+            order: [["id", "ASC"]],
         })
             .then((products) => {
                 if (products.length === 0)

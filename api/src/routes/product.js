@@ -15,7 +15,9 @@ const {
 router
     .route("/")
     .get((req, res) => {
-        return getAll()
+        const { page, pageSize } = req.body;
+
+        return getAll(page, pageSize)
             .then((products) => {
                 res.send(products);
             })
@@ -33,8 +35,9 @@ router
 
 router.route("/search").get((req, res) => {
     const { name } = req.query;
+    const { page, pageSize } = req.body;
 
-    getByQuery(name)
+    getByQuery(name, page, pageSize)
         .then((products) => res.json(products))
         .catch((err) => res.status(404).json(err));
 });
