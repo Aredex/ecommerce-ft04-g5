@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: false,
             },
             set(value) {
-                this.setDataValue("address", value.trim());
+                this.setDataValue("address", value.trim().toLowerCase());
             },
         },
     });

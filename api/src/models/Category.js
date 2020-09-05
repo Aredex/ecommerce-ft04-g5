@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: false,
             },
             set(value) {
-                this.setDataValue("name", value.trim());
+                this.setDataValue("name", value.trim().toLowerCase());
             },
         },
         description: {

@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: false,
             },
             set(value) {
-                this.setDataValue("name", value.trim());
+                this.setDataValue("name", value.trim().toLowerCase());
             },
         },
         email: {
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: false,
             },
             set(value) {
-                this.setDataValue("email", value.trim());
+                this.setDataValue("email", value.trim().toLowerCase());
             },
         },
         password: {
