@@ -6,6 +6,9 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 notEmpty: false,
             },
+            set(value) {
+                this.setDataValue("name", value.trim());
+            },
         },
         email: {
             type: DataTypes.STRING,
@@ -15,12 +18,18 @@ module.exports = (sequelize, DataTypes) => {
                 isEmail: true,
                 notEmpty: false,
             },
+            set(value) {
+                this.setDataValue("email", value.trim());
+            },
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
                 notEmpty: false,
+            },
+            set(value) {
+                this.setDataValue("password", value.trim());
             },
         },
         role: {

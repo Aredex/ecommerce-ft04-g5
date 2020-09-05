@@ -8,6 +8,9 @@ module.exports = (sequelize, DataTypes) => {
                 isUrl: true,
                 notEmpty: false,
             },
+            set(value) {
+                this.setDataValue("url", value.trim());
+            },
             // unique: true
         },
     });

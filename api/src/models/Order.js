@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 notEmpty: false,
             },
+            set(value) {
+                this.setDataValue("address", value.trim());
+            },
         },
     });
 };
