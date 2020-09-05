@@ -5,10 +5,16 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
+            validate: {
+                notEmpty: false,
+            },
         },
         description: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false,
+            validate: {
+                notEmpty: false,
+            },
         },
     });
 };
