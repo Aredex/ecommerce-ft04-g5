@@ -37,5 +37,10 @@ module.exports = (sequelize, DataTypes) => {
             values: ["ADMIN", "GUEST"],
             defaultValue: "GUEST",
         },
+        status: {
+            type: DataTypes.ENUM,
+            values: ["ACTIVE", "INACTIVE"],
+            defaultValue: "ACTIVE",
+        },
     });
 };
