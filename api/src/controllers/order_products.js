@@ -1,14 +1,39 @@
 const { getOne: getProduct } = require("./products");
 const { getOne: getOrder, createOne: createOrder } = require("./orders");
+const { Order_product } = require("../db");
+
+const findByProduct = (productId) => {
+    return new Promise((resolve, reject) => {
+        Order_product.findAll({ where: { productId } })
+            .then((product_order) => resolve(product_order))
+            .catch((err) => reject({ error: err }));
+    });
+};
 
 const addProductToOrder = async (idProduct, idOrder, amount) => {
     const Product = await getProduct(idProduct);
     const Order = await getOrder(idOrder);
 
     return new Promise((resolve, reject) => {
-        Order.addProduct(Product, {
-            through: { price: Product.price, amount: amount },
+        if (!Order.hasProduct(Product)) {
+            return Order.addProduct(Product, {
+                through: { price: Product.price, amount: amount },
+            })
+                .then((product_order) => {
+                    return product_order[0];
+                })
+                .then((product_order) => resolve(product_order))
+                .catch((err) => reject({ error: err }));
+        }
+
+        Order_product.findOne({
+            where: { productId: Product.id, orderId: Order.id },
         })
+            .then((product_order) => {
+                product_order.amount = amount;
+
+                return product_order.save();
+            })
             .then((product_order) => resolve(product_order))
             .catch((err) => reject({ error: err }));
     });
@@ -41,4 +66,5 @@ module.exports = {
     addProductToOrder,
     removeProductToOrder,
     createOrderInCreation,
+    findByProduct,
 };

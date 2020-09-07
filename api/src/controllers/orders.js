@@ -1,9 +1,9 @@
-const { Order } = require("../db");
+const { Order, Product } = require("../db");
 
 // Obtiene todas las ordenes hechas
 const getAll = () => {
     return new Promise((resolve, reject) => {
-        Order.findAll({})
+        Order.findAll({ include: [Product] })
             .then((order) => resolve(order))
             .catch((err) => reject({ error: err }));
     });
@@ -12,7 +12,7 @@ const getAll = () => {
 // Busca una orden por su ID
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
-        Order.findOne({ where: { id } })
+        Order.findOne({ where: { id }, include: [Product] })
             .then((order) => resolve(order))
             .catch((err) => reject({ error: err }));
     });
