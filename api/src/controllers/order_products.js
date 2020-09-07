@@ -27,10 +27,11 @@ const findOne = (productId, orderId) => {
     });
 };
 
-// Agrega a una orden, el producto, dado su id
-// Si la orden no esiste la crea, con un status de IN CREATION
-// Si la orden existe pero aún no tiene el producto asignado, se lo asigna
-// Si ya la orden tiene el produto, actualiza la candtidad de él
+// * Agrega a una orden, el producto, dado su id
+// * Si la orden no esiste la crea, con un status de IN CREATION
+// * Si la orden existe pero aún no tiene el producto asignado, se lo asigna
+// * Si ya la orden tiene el produto, actualiza la candtidad de él
+// * - Esta sirve para acutalizar la cantidad de los mismos productos en la orden
 const addProductToOrder = async ({ idProduct, idOrder, amount }) => {
     if (!amount) amount = 1;
 
