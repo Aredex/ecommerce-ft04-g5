@@ -128,4 +128,5 @@ router.route("/:id/finalized").put((req, res) => {
         .then((order_product) => res.json(order_product))
         .catch((err) => res.status(400).json(err));
 });
+
 module.exports = router;

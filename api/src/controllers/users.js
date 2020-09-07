@@ -56,9 +56,24 @@ const getOne = (id) => {
     });
 };
 
+const deleteOne = (id) => {
+    return new Promise((resolve, reject) => {
+      getOne(id)
+        .then((user) => {
+          user.destroy();
+  
+          resolve({ description: "successfully deleted user" });
+        })
+        .catch((err) => reject(err));
+    });
+  };
+
+
+
 module.exports = {
     createOne,
     getAll,
     getOne,
     editOne,
+    deleteOne,
 };
