@@ -14,7 +14,7 @@ const Home = (props) => {
   });
 
   return (
-    <div className="DivContainer" className={style.home}>
+    <div className={style.home}>
       <div className={style.content}>
         <img className={style.logo} src={logo} alt="Logo" />
         <span className={style.title}>GardenRy</span>
