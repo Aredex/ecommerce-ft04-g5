@@ -10,7 +10,6 @@ const Catalogue = ({ products }) => {
   return (
     <div className={style.catalogue}>
       {products.map(function (e) {
-        console.log(e);
         const imageURL = e.images ? e.images[0]?.url || undefined : undefined;
         return (
           <ProductCard

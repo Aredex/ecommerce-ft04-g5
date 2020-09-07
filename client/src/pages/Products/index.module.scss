@@ -1,0 +1,21 @@
+@import "bp.scss";
+@import "var.scss";
+
+.page {
+  position: relative;
+  display: grid;
+  width: stretch;
+  height: auto;
+  padding: 0 1rem;
+
+  @include respond-to("default") {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  @include respond-to("small") {
+    grid-template-columns: 15rem 1fr;
+    grid-template-rows: auto;
+  }
+  @include respond-to("medium") {
+  }
+}
