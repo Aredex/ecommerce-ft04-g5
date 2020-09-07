@@ -5,6 +5,7 @@ const {
     deleteOne,
     getOne,
     editOne,
+    emptyOrder,
 } = require("../controllers/orders");
 const {
     removeProductToOrder,
@@ -75,6 +76,14 @@ router.route("/product/:idProduct").post((req, res) => {
 
     addProductToOrder({ idProduct, amount, address })
         .then((order_product) => res.json(order_product))
+        .catch((err) => res.status(400).json(err));
+});
+
+router.route("/:id/empty").delete((req, res) => {
+    const { id } = req.params;
+
+    emptyOrder(id)
+        .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
 

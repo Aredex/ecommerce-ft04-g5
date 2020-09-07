@@ -52,10 +52,21 @@ const deleteOne = (id) => {
             .catch((err) => reject({ error: err }));
     });
 };
+
+const emptyOrder = (id) => {
+    return new Promise((resolve, reject) => {
+        getOne(id)
+            .then((order) => order.setProducts([]))
+            .then((order) => resolve(order))
+            .catch((err) => reject({ error: err }));
+    });
+};
+
 module.exports = {
     getAll,
     createOne,
     getOne,
     editOne,
     deleteOne,
+    emptyOrder,
 };
