@@ -32,7 +32,7 @@ const findOne = (productId, orderId) => {
 // * Si la orden existe pero aún no tiene el producto asignado, se lo asigna
 // * Si ya la orden tiene el produto, actualiza la candtidad de él
 // * - Esta sirve para acutalizar la cantidad de los mismos productos en la orden
-const addProductToOrder = async ({ idProduct, idOrder, amount }) => {
+const addProductToOrder = async ({ idProduct, idOrder, amount, address }) => {
     if (!amount) amount = 1;
 
     const Product = await getProduct(idProduct);
@@ -41,7 +41,7 @@ const addProductToOrder = async ({ idProduct, idOrder, amount }) => {
     if (idOrder) {
         Order = await getOrder(idOrder);
     } else {
-        Order = await createOrder("IN CREATION", null);
+        Order = await createOrder("IN CREATION", address);
     }
 
     return new Promise((resolve, reject) => {

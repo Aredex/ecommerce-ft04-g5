@@ -31,8 +31,8 @@ const editOne = ({ id, status, address }) => {
     return new Promise((resolve, reject) => {
         getOne(id)
             .then((order) => {
-                order.status = status;
-                order.address = address;
+                if (status) order.status = status;
+                if (address) order.address = address;
 
                 return order.save();
             })
