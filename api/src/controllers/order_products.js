@@ -27,6 +27,25 @@ const findOne = (productId, orderId) => {
     });
 };
 
+// * ArrayProducts debe ser un array de objetos, donde cada objeto tenga:
+// * => El Id del producto en una propiedad id
+// * => La cantidad de ese producto para esa orden en una propiedad amount
+const addMultipleProductsToOrder = ({ idOrder, arrayProducts }) => {
+    const orders = arrayProducts.map((product) =>
+        addProductToOrder({
+            idOrder,
+            idProduct: product.id,
+            amount: product.amount,
+        })
+    );
+    return new Promise((resolve, reject) => {
+        // if (orders) return resolve(orders);
+        Promise.all(orders)
+            .then((product_order) => resolve(product_order))
+            .catch((err) => reject({ error: err }));
+    });
+};
+
 // * Agrega a una orden, el producto, dado su id
 // * Si la orden no esiste la crea, con un status de IN CREATION
 // * Si la orden existe pero aún no tiene el producto asignado, se lo asigna
@@ -88,4 +107,5 @@ module.exports = {
     addProductToOrder,
     removeProductToOrder,
     findByProduct,
+    addMultipleProductsToOrder,
 };

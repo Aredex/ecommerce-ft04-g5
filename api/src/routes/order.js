@@ -10,6 +10,7 @@ const {
 const {
     removeProductToOrder,
     addProductToOrder,
+    addMultipleProductsToOrder,
 } = require("../controllers/order_products");
 
 router
@@ -52,6 +53,24 @@ router
             .catch((err) => res.status(400).json(err));
     });
 
+router.route("/product/:idProduct").post((req, res) => {
+    const { idProduct } = req.params;
+    const { amount, address } = req.body;
+
+    addProductToOrder({ idProduct, amount, address })
+        .then((order_product) => res.json(order_product))
+        .catch((err) => res.status(400).json(err));
+});
+
+router.route("/:idOrder/products").post((req, res) => {
+    const { idOrder } = req.params;
+    const { products } = req.body;
+
+    addMultipleProductsToOrder({ idOrder, arrayProducts: products })
+        .then((order_product) => res.json(order_product))
+        .catch((err) => res.status(400).json(err));
+});
+
 router
     .route("/:idOrder/product/:idProduct")
     .post((req, res) => {
@@ -69,15 +88,6 @@ router
             .then((order_product) => res.json(order_product).status(204))
             .catch((err) => res.status(400).json(err));
     });
-
-router.route("/product/:idProduct").post((req, res) => {
-    const { idProduct } = req.params;
-    const { amount, address } = req.body;
-
-    addProductToOrder({ idProduct, amount, address })
-        .then((order_product) => res.json(order_product))
-        .catch((err) => res.status(400).json(err));
-});
 
 router.route("/:id/empty").delete((req, res) => {
     const { id } = req.params;
