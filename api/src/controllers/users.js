@@ -68,6 +68,8 @@ const deleteOne = (id) => {
     });
   };
 
+
+
 module.exports = {
     createOne,
     getAll,

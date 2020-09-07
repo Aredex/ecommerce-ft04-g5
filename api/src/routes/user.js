@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { createOne, getAll, getOne, editOne, deleteOne } = require("../controllers/users");
-
+const { returnOrder } = require("../controllers/users_order"); 
 router
     .route("/")
     .post((req, res) => {
@@ -38,7 +38,21 @@ router
         deleteOne(id)
         .then((user)=> res.json(user).status(200))
         .catch((err)=> res.status(400).json(err))
+    });
+
+router
+    .route("/:id/order")
+    .get((req, res)=>{
+        const { id } = req.params;
+        returnOrder(id)
+        .then((orders) => res.json(orders).status(200))
+        .catch((err) => res.status(400).json(err))
+
     })
 
+
+
+
+    
 
 module.exports = router;
