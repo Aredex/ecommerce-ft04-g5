@@ -18,7 +18,7 @@ const getOne = (id) => {
     return new Promise((resolve, reject) => {
         Category.findOne({
             where: { id },
-            include: { model: Product, include: Image },
+            include: [{ model: Product, include: Image }],
         })
             .then((category) => {
                 if (!category) {
