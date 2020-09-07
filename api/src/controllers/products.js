@@ -9,9 +9,28 @@ const {
 //      ESTOS METODOS RETORNAN PROMESAS
 // ==============================================
 
-const getAll = () => {
+const getPagination = (page, pageSize) => {
+    let offset = 0;
+    let limit = 100;
+
+    if (page && pageSize) {
+        offset = (page - 1) * pageSize;
+        limit = pageSize;
+    }
+
+    return { limit, offset };
+};
+
+const getAll = (page, pageSize) => {
     return new Promise((resolve, reject) => {
-        Product.findAll({ include: [Image, Category] })
+        const pagination = getPagination(page, pageSize);
+
+        Product.findAll({
+            include: [Image, Category],
+            order: [["id", "ASC"]],
+            limit: pagination.limit,
+            offset: pagination.offset,
+        })
             .then((products) => {
                 if (products.length === 0)
                     return reject({
@@ -59,6 +78,8 @@ const createOne = (name, description, price, stock, imageUrl) => {
                 }
 
                 if (imageUrl) {
+                    // Si la imagen no se agrega al producto es porque la imágen ya está asignada a otro producto
+                    // ! BUSCAR LA MANERA DE DARLE EL MENSAJE AL CLIENT EN LA RESPUESTA
                     verifyImagesUrl(imageUrl, product, resolve, reject);
                 }
 
@@ -107,6 +128,8 @@ const editOne = (id, name, description, price, stock, imageUrl) => {
                 if (stock) product.stock = stock;
 
                 if (imageUrl) {
+                    // Si la imagen no se agrega al producto es porque la imágen ya está asignada a otro producto
+                    // ! BUSCAR LA MANERA DE DARLE EL MENSAJE AL CLIENT EN LA RESPUESTA
                     verifyImagesUrl(imageUrl, product, resolve, reject);
                 }
 
@@ -132,13 +155,14 @@ const deleteOne = (id) => {
     });
 };
 
-const getByQuery = (query) => {
+const getByQuery = (query, page, pageSize) => {
     return new Promise((resolve, reject) => {
         if (!query) {
             return reject({ error: "Se necesita parámetro de búsqueda" });
         }
 
         query = query.toLowerCase();
+        const pagination = getPagination(page, pageSize);
 
         Product.findAll({
             where: {
@@ -147,7 +171,10 @@ const getByQuery = (query) => {
                     { description: { [Op.substring]: `${query}` } },
                 ],
             },
+            limit: pagination.limit,
+            offset: pagination.offset,
             include: [Image, Category],
+            order: [["id", "ASC"]],
         })
             .then((products) => {
                 if (products.length === 0)
@@ -175,6 +202,18 @@ const getByQuery = (query) => {
     });
 };
 
+const setViews = (id) => {
+    return new Promise((resolve, reject) => {
+        getOne(id)
+            .then((product) => {
+                product.views++;
+                return product.save();
+            })
+            .then((product) => resolve(product))
+            .catch((err) => reject({ error: err }));
+    });
+};
+
 module.exports = {
     getAll,
     createOne,
@@ -182,4 +221,5 @@ module.exports = {
     editOne,
     getByQuery,
     deleteOne,
+    setViews,
 };

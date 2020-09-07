@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
+            unique: true,
         },
         description: {
             type: DataTypes.TEXT,
@@ -17,6 +17,14 @@ module.exports = (sequelize, DataTypes) => {
         stock: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
+        },
+        views: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
+        errors: {
+            type: DataTypes.STRING,
+            defaultValue: null,
         },
     });
 };

@@ -10,12 +10,15 @@ const {
     getOne,
     getByQuery,
     deleteOne,
+    setViews,
 } = require("../controllers/products");
 
 router
     .route("/")
     .get((req, res) => {
-        return getAll()
+        const { page, pageSize } = req.body;
+
+        return getAll(page, pageSize)
             .then((products) => {
                 res.send(products);
             })
@@ -33,8 +36,9 @@ router
 
 router.route("/search").get((req, res) => {
     const { name } = req.query;
+    const { page, pageSize } = req.body;
 
-    getByQuery(name)
+    getByQuery(name, page, pageSize)
         .then((products) => res.json(products))
         .catch((err) => res.status(404).json(err));
 });
@@ -79,4 +83,13 @@ router
             .then((productCategory) => res.json(productCategory).status(200))
             .catch((err) => res.json(err));
     });
+
+router.route("/:id/views").post((req, res) => {
+    const { id } = req.params;
+
+    setViews(id)
+        .then((views) => res.json(views).status(200))
+        .catch((err) => res.status(404).json(err));
+});
+
 module.exports = router;
