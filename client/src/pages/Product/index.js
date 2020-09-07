@@ -36,7 +36,7 @@ const Product = () => {
     return (
       <div className={style.page}>
         <div className={style.carusel}>
-          <img width="200" height="200" src={imageURL} />
+          <img width="200" height="200" src={imageURL} alt="" />
         </div>
         <div className={style.name}>
           <h1>{product.name}</h1>

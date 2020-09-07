@@ -1,5 +1,4 @@
 import getById from "services/products/getById";
-import getAll from "services/products/getAll";
 
 var arrayPrueba = [
   {
