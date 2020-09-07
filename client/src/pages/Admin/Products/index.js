@@ -1,81 +1,111 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import style from "./index.module.scss";
+import getAll from "services/products/getAll";
+import { getAll as getCategories } from "services/categories";
+import CRUD from "./CRUD";
+import getById from "services/products/getById";
+import update from "services/products/editar";
+import create from "services/products/create";
+import remove from "services/products/delete";
+import addCategoryToProduct from "services/products/addCategoryToProduct";
+import removeCategoryToProduct from "services/products/removeCategoryToProduct";
 
 const Products = () => {
-  const [products, setProducts] = useState([
-    {
-      id: 4,
-      name: "palmera",
-      description: "una palmera",
-      price: 15,
-      stock: 5,
-      createdAt: "2020-09-02T15:52:18.498Z",
-      updatedAt: "2020-09-02T15:52:18.498Z",
-      categories: [
-        {
-          id: 2,
-          name: "palmera",
-          description: "son palmeras",
-          createdAt: "2020-09-02T00:29:48.133Z",
-          updatedAt: "2020-09-02T00:29:48.133Z",
-          productCategory: {
-            createdAt: "2020-09-02T15:56:12.997Z",
-            updatedAt: "2020-09-02T15:56:12.997Z",
-            productId: 4,
-            categoryId: 2,
-          },
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "palmera",
-      description: "una palmera",
-      price: 15,
-      stock: 5,
-      createdAt: "2020-09-02T15:52:18.498Z",
-      updatedAt: "2020-09-02T15:52:18.498Z",
-      categories: [
-        {
-          id: 2,
-          name: "palmera",
-          description: "son palmeras",
-          createdAt: "2020-09-02T00:29:48.133Z",
-          updatedAt: "2020-09-02T00:29:48.133Z",
-          productCategory: {
-            createdAt: "2020-09-02T15:56:12.997Z",
-            updatedAt: "2020-09-02T15:56:12.997Z",
-            productId: 4,
-            categoryId: 2,
-          },
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "palmera",
-      description: "una palmera",
-      price: 15,
-      stock: 5,
-      createdAt: "2020-09-02T15:52:18.498Z",
-      updatedAt: "2020-09-02T15:52:18.498Z",
-      categories: [
-        {
-          id: 2,
-          name: "palmera",
-          description: "son palmeras",
-          createdAt: "2020-09-02T00:29:48.133Z",
-          updatedAt: "2020-09-02T00:29:48.133Z",
-          productCategory: {
-            createdAt: "2020-09-02T15:56:12.997Z",
-            updatedAt: "2020-09-02T15:56:12.997Z",
-            productId: 4,
-            categoryId: 2,
-          },
-        },
-      ],
-    },
-  ]);
+  const [products, setProducts] = useState([]);
+  const [formik, setFormik] = useState();
+
+  useEffect(() => {
+    (async () => {
+      const result = await getAll();
+      setProducts(result);
+    })();
+  }, []);
+
+  const getValues = async (id) => {
+    const result = await getById(id);
+    return {
+      id: result.id,
+      name: result.name,
+      description: result.description,
+      price: result.price,
+      stock: result.stock,
+      categories: result.categories
+        ? result.categories.map((category) => ({
+            id: category.id,
+            name: category.name,
+            description: category.description,
+          }))
+        : [],
+    };
+  };
+  const handleView = async (id) => {
+    setFormik({
+      initialValues: await getValues(id),
+      readOnly: true,
+    });
+  };
+  const handleUpdate = async (id) => {
+    const initialValues = await getValues(id);
+    setFormik({
+      initialValues,
+      onSubmit: async (values) => {
+        const { name, description, price, stock, categories } = values;
+        await update(id, name, description, price, stock);
+        for (const category of categories) {
+          if (!initialValues.categories.includes(category))
+            await addCategoryToProduct(id, category.id);
+        }
+        for (const category of initialValues.categories) {
+          if (!categories.includes(category))
+            await removeCategoryToProduct(id, category.id);
+        }
+        const result = await getAll();
+        setProducts(result);
+        setFormik(undefined);
+      },
+      update: true,
+      suggestions: await getCategories(),
+    });
+  };
+  const handleCreate = async () => {
+    setFormik({
+      initialValues: {
+        name: "",
+        description: "",
+        price: 1,
+        stock: 0,
+        imageUrl: "",
+        categories: [],
+      },
+      onSubmit: async (values) => {
+        let { name, description, price, stock, imageUrl, categories } = values;
+        imageUrl = imageUrl
+          ? imageUrl.length > 0
+            ? imageUrl
+            : undefined
+          : undefined;
+        const product = await create(name, description, price, stock, imageUrl);
+        if (categories.length > 0) {
+          for (const category of categories) {
+            await addCategoryToProduct(product.id, category.id);
+          }
+        }
+        const result = await getAll();
+        setProducts(result);
+        setFormik(undefined);
+      },
+      create: true,
+      suggestions: await getCategories(),
+    });
+  };
+  const handleDelete = async (id, name) => {
+    var r = window.confirm(`Desea eliminar ${name}`);
+    if (r === true) {
+      await remove(id);
+      const result = await getAll();
+      setProducts(result);
+    }
+  };
   return (
     <section>
       <table className={style.table}>
@@ -86,7 +116,7 @@ const Products = () => {
             <th>Precio:</th>
             <th>Stock:</th>
             <th style={{ width: "11rem" }}>
-              <button>
+              <button onClick={() => handleCreate()}>
                 <i className="fas fa-plus"></i> Agregar
               </button>
             </th>
@@ -100,13 +130,13 @@ const Products = () => {
               <td>{product.price}</td>
               <td>{product.stock}</td>
               <td style={{ display: "flex" }}>
-                <button>
+                <button onClick={() => handleView(product.id)}>
                   <i className="fas fa-search"></i>
                 </button>
-                <button>
+                <button onClick={() => handleUpdate(product.id)}>
                   <i className="fas fa-edit"></i>
                 </button>
-                <button>
+                <button onClick={() => handleDelete(product.id, product.name)}>
                   <i className="fas fa-trash-alt"></i>
                 </button>
               </td>
@@ -114,6 +144,9 @@ const Products = () => {
           ))}
         </tbody>
       </table>
+      {formik && (
+        <CRUD formikData={formik} onClose={() => setFormik(undefined)} />
+      )}
     </section>
   );
 };

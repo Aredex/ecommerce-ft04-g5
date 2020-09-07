@@ -1,23 +1,22 @@
-import getById from "services/products/getById"
-import getAll from "services/products/getAll"
+import getById from "services/products/getById";
 
-var arrayPrueba = [{
-  img: "https://laslandas.com/wp-content/uploads/2019/11/abbaye-cluny1.jpg",
-  title: "Planta 1",
-  price: 450,
-  id: 1
-}, {
-  img: "https://laslandas.com/wp-content/uploads/2019/11/abbaye-cluny1.jpg",
-  title: "Planta 2",
-  price: 150,
-  id: 2
-}, {
-  img: "https://laslandas.com/wp-content/uploads/2019/11/abbaye-cluny1.jpg",
-  title: "Planta 3",
-  price: 12450,
-  id: 3
-}]
-
+var arrayPrueba = [
+  {
+    title: "Planta 1",
+    price: 450,
+    id: 1,
+  },
+  {
+    title: "Planta 2",
+    price: 150,
+    id: 2,
+  },
+  {
+    title: "Planta 3",
+    price: 12450,
+    id: 3,
+  },
+];
 
 export function addProduct(payload) {
   return { type: "ADD_PRODUCT", payload };
@@ -30,11 +29,10 @@ export function getProducts() {
 }
 export function getProductDetail(id) {
   return function (dispatch) {
-    return getById(id)
-      .then(function (data) {
-        dispatch({ type: "GET_PRODUCT_DETAIL", payload: data })
-      })
-  }
+    return getById(id).then(function (data) {
+      dispatch({ type: "GET_PRODUCT_DETAIL", payload: data });
+    });
+  };
 }
 
 export function searchProduct(filter) {
@@ -44,10 +42,10 @@ export function searchProduct(filter) {
       payload: arrayPrueba.filter(function (e) {
         for (const prop in e) {
           if (e[prop].toString().includes(filter)) {
-            return true
+            return true;
           }
         }
-      })
-    })
-  }
+      }),
+    });
+  };
 }

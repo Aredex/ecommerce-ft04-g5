@@ -4,10 +4,23 @@ module.exports = (sequelize, DataTypes) => {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true,
+            validate: {
+                notEmpty: false,
+            },
+            set(value) {
+                this.setDataValue("name", value.trim().toLowerCase());
+            },
         },
         description: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false,
+            validate: {
+                notEmpty: false,
+            },
+            set(value) {
+                this.setDataValue("description", value.trim());
+            },
         },
     });
 };

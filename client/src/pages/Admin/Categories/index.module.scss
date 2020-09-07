@@ -42,3 +42,22 @@
     }
   }
 }
+.modal {
+  z-index: 100;
+  position: relative;
+  width: 20rem;
+  height: 20rem;
+  margin: auto;
+
+  &:before {
+    content: " ";
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    backdrop-filter: blur(2px);
+    background: #ffffff55;
+    z-index: 0;
+  }
+}
