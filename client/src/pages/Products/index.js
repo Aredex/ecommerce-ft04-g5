@@ -8,7 +8,6 @@ const Products = () => {
   const query = useQuery();
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    console.log(query.name);
     if (query.name) {
       (async () => {
         const result = await search(query.name);

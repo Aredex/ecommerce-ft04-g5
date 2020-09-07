@@ -4,20 +4,30 @@ import { useParams } from "react-router";
 import AddToCart from "components/AddToCart";
 import noImage from "noImage.svg";
 import style from "./index.module.scss";
+import { getProductDetail } from "store/Actions/Products/ProductsActions";
+import { useDispatch, useSelector } from "react-redux";
 
-const Product = () => {
+const Product = (props) => {
   const [count, setCount] = useState(1);
 
   const [product, setProduct] = useState(null);
 
   let { id } = useParams();
 
+  const dispatch = useDispatch();
+
+  const { productDetail } = useSelector((x) => x.ProductsReducer);
+
   useEffect(() => {
     (async () => {
-      const result = await getById(id);
-      setProduct(result);
+      dispatch(await getProductDetail(id));
     })();
   }, [id]);
+
+  useEffect(() => {
+    setProduct(productDetail);
+    console.log(productDetail);
+  }, [productDetail]);
 
   const handleOnAdd = () => {
     setCount(count + 1);
@@ -32,7 +42,8 @@ const Product = () => {
   };
 
   if (product) {
-    const imageURL = product.images[0]?.url || noImage;
+    const imageURL = noImage;
+    // const imageURL = product.images[0]?.url || noImage;
     return (
       <div className={style.page}>
         <div className={style.carusel}>

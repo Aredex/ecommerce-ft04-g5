@@ -15,13 +15,18 @@ export function getProducts() {
     });
   };
 }
-export function getProductDetail(id) {
-  return function (dispatch) {
-    return getById(id).then(function (data) {
-      dispatch({ type: "GET_PRODUCT_DETAIL", payload: data });
-    });
-  };
+export async function getProductDetail(id) {
+  const payload = await getById(id);
+  return { type: "GET_PRODUCT_DETAIL", payload };
 }
+// export function getProductDetail(id) {
+//   return function (dispatch) {
+//     return getById(id).then(function (data) {
+//       console.log("ENTRO AL PRODUCTO" + data);
+//       dispatch({ type: "GET_PRODUCT_DETAIL", payload: data });
+//     });
+//   };
+// }
 
 export function searchProduct(filter) {
   return function (dispatch) {

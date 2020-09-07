@@ -4,7 +4,7 @@ import getAll from "services/products/getAll";
 import { getAll as getCategories } from "services/categories";
 import CRUD from "./CRUD";
 import getById from "services/products/getById";
-import update from "services/products/editar";
+import update from "services/products/update";
 import create from "services/products/create";
 import remove from "services/products/delete";
 import addCategoryToProduct from "services/products/addCategoryToProduct";
