@@ -1,16 +1,22 @@
 import React from "react";
 import { Route } from "react-router-dom";
-import Home from "pages/Home";
+import CrudComponent from "pages/Crud";
 import Product from "pages/Product";
 import SignIn from "pages/SignIn";
+import Admin from "pages/Admin";
+import Home from "pages/Home";
+import Products from "pages/Products";
 
 const Routes = () => {
   return (
-    <div>
+    <>
       <Route exact path="/" component={Home}></Route>
-      <Route exact path="/product/:id" component={Product}></Route>
+      <Route exact path="/products" component={Products} />
+      <Route exact path="/products/:id" component={Product}></Route>
       <Route exact path="/sign-in" component={SignIn}></Route>
-    </div>
+      <Route path="/admin" component={Admin}></Route>
+      <Route exact path="/CRUD/" component={CrudComponent}></Route>
+    </>
   );
 };
 

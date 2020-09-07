@@ -1,0 +1,51 @@
+.inputField {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: solid 1px #a3a3a3;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.25rem;
+  font-size: 0.85rem;
+  margin: 0.5rem;
+}
+.prefix {
+  width: stretch;
+  text-align: left;
+  padding: 0.25rem 0.5rem;
+  background: #e3e3e3;
+  color: #3e3e3e;
+}
+.input {
+  width: stretch;
+
+  display: flex;
+
+  $border: solid 1px #a3a3a3;
+  border-top: $border;
+  border-bottom: $border;
+
+  margin: -1px 0;
+  textarea {
+    width: 100%;
+    height: auto;
+    border: none;
+    font-size: inherit;
+    font-family: inherit;
+    padding: 0.25rem;
+    resize: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+.inputPrefix {
+  padding: 0 0.5rem;
+}
+.inputSufix {
+  padding: 0 0.5rem;
+}
+.sufix {
+}
