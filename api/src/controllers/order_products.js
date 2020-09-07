@@ -83,21 +83,8 @@ const removeProductToOrder = async (idProduct, idOrder) => {
     });
 };
 
-// Crea una orden type (In creation)
-const createOrderInCreation = async (idProduct) => {
-    const Product = await getProduct(idProduct);
-    const Order = await createOrder("IN CREATION", null);
-
-    return new Promise((resolve, reject) => {
-        Order.addProduct(Product)
-            .then((product_category) => resolve(product_category))
-            .catch((err) => reject({ error: err }));
-    });
-};
-
 module.exports = {
     addProductToOrder,
     removeProductToOrder,
-    createOrderInCreation,
     findByProduct,
 };
