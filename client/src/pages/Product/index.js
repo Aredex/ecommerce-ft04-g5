@@ -10,24 +10,17 @@ import { useDispatch, useSelector } from "react-redux";
 const Product = (props) => {
   const [count, setCount] = useState(1);
 
-  const [product, setProduct] = useState(null);
-
   let { id } = useParams();
 
   const dispatch = useDispatch();
 
-  const { productDetail } = useSelector((x) => x.ProductsReducer);
+  const product = useSelector((x) => x.ProductsReducer.productDetail);
 
   useEffect(() => {
     (async () => {
       dispatch(await getProductDetail(id));
     })();
   }, [id]);
-
-  useEffect(() => {
-    setProduct(productDetail);
-    console.log(productDetail);
-  }, [productDetail]);
 
   const handleOnAdd = () => {
     setCount(count + 1);
@@ -42,8 +35,7 @@ const Product = (props) => {
   };
 
   if (product) {
-    const imageURL = noImage;
-    // const imageURL = product.images[0]?.url || noImage;
+    const imageURL = product.images[0]?.url || noImage;
     return (
       <div className={style.page}>
         <div className={style.carusel}>

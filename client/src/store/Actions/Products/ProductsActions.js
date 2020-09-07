@@ -8,12 +8,9 @@ export function createProduct(name, description, price, stock) {
   };
 }
 
-export function getProducts() {
-  return function (dispatch) {
-    return getAll().then(function (data) {
-      dispatch({ type: "GET_PRODUCTS", payload: data });
-    });
-  };
+export async function getProducts() {
+  const payload = await getAll();
+  return { type: "GET_PRODUCTS", payload };
 }
 export async function getProductDetail(id) {
   const payload = await getById(id);

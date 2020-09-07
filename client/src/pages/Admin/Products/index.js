@@ -17,7 +17,7 @@ const Products = () => {
   useEffect(() => {
     (async () => {
       const result = await getAll();
-      setProducts(result);
+      result && setProducts(result);
     })();
   }, []);
 

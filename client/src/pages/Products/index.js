@@ -2,21 +2,24 @@ import React, { useEffect, useState } from "react";
 import useQuery from "hooks/useQuery";
 import search from "services/products/search";
 import Catalogue from "components/Catalogue";
-import getAll from "services/products/getAll";
+import { getProducts } from "store/Actions/Products/ProductsActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const Products = () => {
   const query = useQuery();
-  const [products, setProducts] = useState([]);
+
+  const dispatch = useDispatch();
+  const products = useSelector((x) => x.ProductsReducer.productCards);
+
   useEffect(() => {
     if (query.name) {
       (async () => {
         const result = await search(query.name);
-        setProducts(result);
+        //setProducts(result);
       })();
     } else {
       (async () => {
-        const result = await getAll(query.name);
-        setProducts(result);
+        dispatch(await getProducts());
       })();
     }
   }, [query.name]);
