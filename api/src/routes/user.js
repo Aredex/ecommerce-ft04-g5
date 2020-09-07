@@ -41,7 +41,7 @@ router
     });
 
 router
-    .route("/:id/order")
+    .route("/:id/orders")
     .get((req, res)=>{
         const { id } = req.params;
         returnOrder(id)

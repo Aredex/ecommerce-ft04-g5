@@ -2,14 +2,13 @@ const {Order} = require('../db');
 
 const returnOrder = (id) => {
     return new Promise( (resolve, reject) => {
-            Orders.findAll({
+            Order.findAll({
             where: {
-                userId: `${id}`
+                userId: id
             }
-        })//
-        
+        })        
         .then((orders)=> {
-            if(orders == {}){
+            if(!id){
                 return reject({
                     error: {
                         errors: [
