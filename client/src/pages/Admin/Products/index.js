@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import style from "./index.module.scss";
 import getAll from "services/products/getAll";
+import { getAll as getCategories } from "services/categories";
 import CRUD from "./CRUD";
 import getById from "services/products/getById";
 import update from "services/products/editar";
 import create from "services/products/create";
 import remove from "services/products/delete";
+import addCategoryToProduct from "services/products/addCategoryToProduct";
+import removeCategoryToProduct from "services/products/removeCategoryToProduct";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -26,28 +29,42 @@ const Products = () => {
       description: result.description,
       price: result.price,
       stock: result.stock,
+      categories: result.categories
+        ? result.categories.map((category) => ({
+            id: category.id,
+            name: category.name,
+            description: category.description,
+          }))
+        : [],
     };
   };
   const handleView = async (id) => {
     setFormik({
       initialValues: await getValues(id),
-      onSubmit: (values) => {
-        alert(JSON.stringify(values, null, 2));
-      },
       readOnly: true,
     });
   };
   const handleUpdate = async (id) => {
+    const initialValues = await getValues(id);
     setFormik({
-      initialValues: await getValues(id),
+      initialValues,
       onSubmit: async (values) => {
-        const { name, description, price, stock } = values;
+        const { name, description, price, stock, categories } = values;
         await update(id, name, description, price, stock);
+        for (const category of categories) {
+          if (!initialValues.categories.includes(category))
+            await addCategoryToProduct(id, category.id);
+        }
+        for (const category of initialValues.categories) {
+          if (!categories.includes(category))
+            await removeCategoryToProduct(id, category.id);
+        }
         const result = await getAll();
         setProducts(result);
         setFormik(undefined);
       },
       update: true,
+      suggestions: await getCategories(),
     });
   };
   const handleCreate = async () => {
@@ -58,25 +75,32 @@ const Products = () => {
         price: 1,
         stock: 0,
         imageUrl: "",
+        categories: [],
       },
       onSubmit: async (values) => {
-        let { name, description, price, stock, imageUrl } = values;
+        let { name, description, price, stock, imageUrl, categories } = values;
         imageUrl = imageUrl
           ? imageUrl.length > 0
             ? imageUrl
             : undefined
           : undefined;
-        await create(name, description, price, stock, imageUrl);
+        const product = await create(name, description, price, stock, imageUrl);
+        if (categories.length > 0) {
+          for (const category of categories) {
+            await addCategoryToProduct(product.id, category.id);
+          }
+        }
         const result = await getAll();
         setProducts(result);
         setFormik(undefined);
       },
       create: true,
+      suggestions: await getCategories(),
     });
   };
   const handleDelete = async (id, name) => {
     var r = window.confirm(`Desea eliminar ${name}`);
-    if (r == true) {
+    if (r === true) {
       await remove(id);
       const result = await getAll();
       setProducts(result);
@@ -121,9 +145,7 @@ const Products = () => {
         </tbody>
       </table>
       {formik && (
-        <div className={style.modal}>
-          <CRUD formikData={formik} onClose={() => setFormik(undefined)} />
-        </div>
+        <CRUD formikData={formik} onClose={() => setFormik(undefined)} />
       )}
     </section>
   );

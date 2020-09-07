@@ -3,6 +3,12 @@ module.exports = (sequelize, DataTypes) => {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
+            validate: {
+                notEmpty: false,
+            },
+            set(value) {
+                this.setDataValue("name", value.trim().toLowerCase());
+            },
         },
         email: {
             type: DataTypes.STRING,
@@ -10,16 +16,31 @@ module.exports = (sequelize, DataTypes) => {
             unique: true,
             validate: {
                 isEmail: true,
+                notEmpty: false,
+            },
+            set(value) {
+                this.setDataValue("email", value.trim().toLowerCase());
             },
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
+            validate: {
+                notEmpty: false,
+            },
+            set(value) {
+                this.setDataValue("password", value.trim());
+            },
         },
         role: {
             type: DataTypes.ENUM,
             values: ["ADMIN", "GUEST"],
             defaultValue: "GUEST",
+        },
+        status: {
+            type: DataTypes.ENUM,
+            values: ["ACTIVE", "INACTIVE"],
+            defaultValue: "ACTIVE",
         },
     });
 };

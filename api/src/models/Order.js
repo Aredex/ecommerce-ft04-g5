@@ -15,7 +15,13 @@ module.exports = (sequelize, DataTypes) => {
         },
         address: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
+            validate: {
+                notEmpty: false,
+            },
+            set(value) {
+                this.setDataValue("address", value.trim().toLowerCase());
+            },
         },
     });
 };

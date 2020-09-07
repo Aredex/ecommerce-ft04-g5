@@ -1,8 +1,9 @@
 .catalogue {
   width: stretch;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 10rem));
   grid-template-rows: 1fr;
   gap: 1rem;
-  place-items: center;
+  justify-content: center;
+  padding: 0.5rem;
 }

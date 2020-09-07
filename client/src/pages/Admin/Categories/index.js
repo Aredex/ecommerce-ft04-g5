@@ -60,7 +60,7 @@ const Categories = () => {
   };
   const handleDelete = async (id, name) => {
     var r = window.confirm(`Desea eliminar ${name}`);
-    if (r == true) {
+    if (r === true) {
       await remove(id);
       const result = await getAll();
       setCategories(result);
@@ -104,9 +104,7 @@ const Categories = () => {
         </tbody>
       </table>
       {formik && (
-        <div className={style.modal}>
-          <CRUD formikData={formik} onClose={() => setFormik(undefined)} />
-        </div>
+        <CRUD formikData={formik} onClose={() => setFormik(undefined)} />
       )}
     </section>
   );
