@@ -27,7 +27,7 @@ const createOne = (status, address) => {
     });
 };
 
-const editOne = (id, status, address) => {
+const editOne = ({ id, status, address }) => {
     return new Promise((resolve, reject) => {
         getOne(id)
             .then((order) => {

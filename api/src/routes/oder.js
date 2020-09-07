@@ -4,6 +4,7 @@ const {
     createOne,
     deleteOne,
     getOne,
+    editOne,
 } = require("../controllers/orders");
 const {
     removeProductToOrder,
@@ -64,6 +65,54 @@ router.route("/product/:idProduct").post((req, res) => {
     const { amount } = req.body;
 
     addProductToOrder({ idProduct, amount })
+        .then((order_product) => res.json(order_product))
+        .catch((err) => res.status(400).json(err));
+});
+
+router.route("/:id/confirmed").put((req, res) => {
+    const { id } = req.params;
+
+    editOne({ id, status: "CONFIRMED" })
+        .then((order_product) => res.json(order_product))
+        .catch((err) => res.status(400).json(err));
+});
+
+router.route("/:id/rejected").put((req, res) => {
+    const { id } = req.params;
+
+    editOne({ id, status: "REJECTED" })
+        .then((order_product) => res.json(order_product))
+        .catch((err) => res.status(400).json(err));
+});
+
+router.route("/:id/preparing").put((req, res) => {
+    const { id } = req.params;
+
+    editOne({ id, status: "PREPARING" })
+        .then((order_product) => res.json(order_product))
+        .catch((err) => res.status(400).json(err));
+});
+
+router.route("/:id/sent").put((req, res) => {
+    const { id } = req.params;
+
+    editOne({ id, status: "SENT" })
+        .then((order_product) => res.json(order_product))
+        .catch((err) => res.status(400).json(err));
+});
+
+router.route("/:id/delivered").put((req, res) => {
+    const { id } = req.params;
+
+    editOne({ id, status: "DELIVERED" })
+        .then((order_product) => res.json(order_product))
+        .catch((err) => res.status(400).json(err));
+});
+
+router.route("/:id/finalized").put((req, res) => {
+    const { id } = req.params;
+
+    editOne({ id, status: "FINALIZED" })
         .then((order_product) => res.json(order_product))
         .catch((err) => res.status(400).json(err));
 });
