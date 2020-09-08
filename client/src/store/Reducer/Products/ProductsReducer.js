@@ -3,7 +3,7 @@ import { Switch } from "react-router";
 const initialState = {
   productCards: [],
   productSearch: [],
-  productDetail: {},
+  productDetail: undefined,
   productCreate: {},
 };
 

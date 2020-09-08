@@ -18,25 +18,25 @@ export function removeCategory(id) {
   };
 }
 
-export function getById(id) {
+export function getCategoryById(id) {
   return function (dispatch) {
     return getById(id)
-      .then(function (data) {
+      .then((data) => {
         dispatch({ type: "GET_CATEGORY_BY_ID", payload: data });
       })
   };
 }
-export function getAll() {
+export function getAllCategories() {
   return function (dispatch) {
     return getAll()
-      .then(function (data) {
+      .then((data) => {
         dispatch({ type: "GET_ALL_CATEGORIES", payload: data });
       })
   };
 }
 
 
-export function update(id, name, description) {
+export function updateCategory(id, name, description) {
   return function (dispatch) {
     return update(id, name, description)
       .then(function (data) {
