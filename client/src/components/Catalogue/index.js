@@ -18,6 +18,7 @@ const Catalogue = ({ products }) => {
             img={imageURL}
             title={e.name}
             price={e.price}
+            stock={e.stock}
             onClick={() => history.push(`/products/${e.id}`)}
           />
         );

@@ -2,7 +2,7 @@ import React from "react";
 import style from "./index.module.scss";
 import noImage from "noImage.svg";
 
-const ProductCard = ({ img, title, price, onClick }) => {
+const ProductCard = ({ img, title, price, onClick, stock }) => {
   return (
     <div className={style.card} onClick={onClick}>
       {img ? (
@@ -10,6 +10,7 @@ const ProductCard = ({ img, title, price, onClick }) => {
       ) : (
         <img className={style.noImage} src={noImage} alt={title} />
       )}
+      {stock === 0 && <div className={style.noStock}>sin stock</div>}
       <section>
         <span className={style.price}>
           {"$ "}
