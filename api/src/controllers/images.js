@@ -66,9 +66,11 @@ const setMultipleProductAsociations = async (idProduct, arrayUrls) => {
 
         Promise.all(images).then((imgs) => {
             imgs.forEach((image) => {
-                setProductAsociation(image.id, idProduct)
-                    .then((createdAsociation) => resolve(createdAsociation))
-                    .catch((err) => reject(err));
+                if (image) {
+                    setProductAsociation(image.id, idProduct)
+                        .then((createdAsociation) => resolve(createdAsociation))
+                        .catch((err) => reject(err));
+                }
             });
         });
     });

@@ -10,6 +10,7 @@ const ImageModel = require("./models/Image");
 const OrderModel = require("./models/Order");
 const OrderProductModel = require("./models/Order_product");
 const UserModel = require("./models/User");
+const ReviewModel = require("./models/Review");
 
 // Haciendo la conexion a la BD
 const sequelize = new Sequelize(
@@ -28,6 +29,7 @@ const Image = ImageModel(sequelize, DataTypes);
 const Order = OrderModel(sequelize, DataTypes);
 const Order_product = OrderProductModel(sequelize, DataTypes);
 const User = UserModel(sequelize, DataTypes);
+const Review = ReviewModel(sequelize, DataTypes);
 
 // Relación entre productos y categorías
 Product.belongsToMany(Category, { through: ProductCategory });
@@ -56,4 +58,5 @@ module.exports = {
     Op,
     User,
     ProductCategory,
+    Review,
 };
