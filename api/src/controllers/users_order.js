@@ -1,4 +1,4 @@
-const { Order_user } = require("../db");
+const { Order_user, Order } = require("../db");
 
 const getOrderByUser = (userId) => {
   return new Promise((resolve, reject) => {
@@ -7,6 +7,28 @@ const getOrderByUser = (userId) => {
       .catch((err) => reject({ error: err }));
   });
 };
+
+
+//id de pedido y usuario es el mismo, de prueba
+const addOrderOnUser = (status, address, id) => {
+
+  return new Promise((resolve, reject)=>{
+  	Order.findOne({where: {
+  		id: id
+  	}})
+            .then((order) => {
+            	order.updateAttributes({
+            		userId: id
+            	})
+
+            return order})
+            .then((order) => resolve(order))
+            .catch((err) => reject({ error: err }));
+        })
+
+}
+
+
 // const returnOrder = (id) => {
 //     return new Promise( (resolve, reject) => {
 //             Order.findAll({
@@ -38,5 +60,6 @@ const getOrderByUser = (userId) => {
 
 module.exports = {
   //   returnOrder,
-  getOrderByUser,
+  getOrderByUser, 
+  addOrderOnUser
 };
