@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import getById from "services/products/getById";
-import { useParams } from "react-router";
+import { useParams, useHistory } from "react-router";
 import AddToCart from "components/AddToCart";
 import noImage from "noImage.svg";
 import style from "./index.module.scss";
 
 const Product = () => {
   const [count, setCount] = useState(1);
-
   const [product, setProduct] = useState(null);
+  const history = useHistory();
 
   let { id } = useParams();
 
@@ -61,7 +61,14 @@ const Product = () => {
             <div className={style.separator}>Categorias</div>
             <section>
               {product.categories.map((category, key) => (
-                <span key={key}>{category.name}</span>
+                <span
+                  key={key}
+                  onClick={() =>
+                    history.push(`/products?category=${category.id}`)
+                  }
+                >
+                  {category.name}
+                </span>
               ))}
             </section>
           </div>
