@@ -4,6 +4,7 @@ import { useParams, useHistory } from "react-router";
 import AddToCart from "components/AddToCart";
 import noImage from "noImage.svg";
 import style from "./index.module.scss";
+import ReviewButton from "components/ReviewButton";
 
 const Product = () => {
   const [count, setCount] = useState(1);
@@ -46,6 +47,7 @@ const Product = () => {
             <label>$</label>
             <p>{product.price}</p>
           </div>
+          <ReviewButton rating={2.3} />
           {product.stock > 0 ? (
             <AddToCart
               onAdd={handleOnAdd}

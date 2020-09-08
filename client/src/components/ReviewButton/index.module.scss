@@ -1,0 +1,13 @@
+@import "var.scss";
+
+.rating {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  span {
+    margin: 0.5rem;
+  }
+  svg {
+    margin: 0.25rem;
+  }
+}
