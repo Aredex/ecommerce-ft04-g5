@@ -36,6 +36,18 @@
     height: 100%;
   }
 }
+.info {
+  display: flex;
+  flex-direction: column;
+  width: stretch;
+  @include respond-to("default") {
+    align-items: center;
+  }
+  @include respond-to("small") {
+    align-items: flex-start;
+    padding-left: 1rem;
+  }
+}
 .name {
   display: flex;
   flex-direction: column;
@@ -54,12 +66,10 @@
   margin-bottom: 1rem;
   align-items: flex-start;
   padding: 1rem;
-  margin-left: 1rem;
   box-sizing: border-box;
   width: stretch;
 
   @include respond-to("small") {
-    margin-left: 1rem;
     max-width: 20rem;
     margin-right: auto;
   }
@@ -78,7 +88,6 @@
 .category {
   width: stretch;
   @include respond-to("small") {
-    margin-left: 1rem;
   }
   section {
     width: stretch;

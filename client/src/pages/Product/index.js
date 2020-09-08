@@ -38,31 +38,33 @@ const Product = () => {
         <div className={style.carusel}>
           <img width="200" height="200" src={imageURL} alt="" />
         </div>
-        <div className={style.name}>
-          <h1>{product.name}</h1>
-        </div>
-        <div className={style.price}>
-          <label>$</label>
-          <p>{product.price}</p>
-        </div>
-        {product.stock > 0 ? (
-          <AddToCart
-            onAdd={handleOnAdd}
-            onSubstract={hableOnSubstract}
-            value={count}
-            disableAdd={count === product.stock}
-            disableSubstract={count === 1}
-          />
-        ) : (
-          <h1>No contamos con stock</h1>
-        )}
-        <div className={style.category}>
-          <div className={style.separator}>Categorias</div>
-          <section>
-            {product.categories.map((category, key) => (
-              <span key={key}>{category.name}</span>
-            ))}
-          </section>
+        <div className={style.info}>
+          <div className={style.name}>
+            <h1>{product.name}</h1>
+          </div>
+          <div className={style.price}>
+            <label>$</label>
+            <p>{product.price}</p>
+          </div>
+          {product.stock > 0 ? (
+            <AddToCart
+              onAdd={handleOnAdd}
+              onSubstract={hableOnSubstract}
+              value={count}
+              disableAdd={count === product.stock}
+              disableSubstract={count === 1}
+            />
+          ) : (
+            <h1>No contamos con stock</h1>
+          )}
+          <div className={style.category}>
+            <div className={style.separator}>Categorias</div>
+            <section>
+              {product.categories.map((category, key) => (
+                <span key={key}>{category.name}</span>
+              ))}
+            </section>
+          </div>
         </div>
         <div className={style.description}>
           <div className={style.separator}>
