@@ -106,10 +106,7 @@
 }
 
 .description {
-  @include respond-to("small") {
-    grid-area: 5 / 1 / span 1 / span 2;
-  }
-  width: calc(100vw - 2rem);
+  width: stretch;
   display: flex;
   flex-direction: column;
   text-align: left;
