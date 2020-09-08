@@ -7,6 +7,7 @@
   width: stretch;
   height: auto;
   padding: 0 1rem;
+  padding-bottom: 1rem;
 
   @include respond-to("default") {
     grid-template-columns: 1fr;
