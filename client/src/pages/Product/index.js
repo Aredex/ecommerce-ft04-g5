@@ -65,12 +65,12 @@ const Product = () => {
               ))}
             </section>
           </div>
-        </div>
-        <div className={style.description}>
-          <div className={style.separator}>
-            <span>Descripción</span>
+          <div className={style.description}>
+            <div className={style.separator}>
+              <span>Descripción</span>
+            </div>
+            {product.description}
           </div>
-          {product.description}
         </div>
       </div>
     );
