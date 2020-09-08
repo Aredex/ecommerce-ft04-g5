@@ -16,6 +16,14 @@ const Products = () => {
   const query = useQuery();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [showFilter, setShowFilter] = useState(false);
+
+  function isActive(key) {
+    return query.category
+      ? query.category.toString() === key.toString()
+      : false;
+  }
+
   useEffect(() => {
     (async () => setCategories(await getAllCategories()))();
   }, []);
@@ -40,16 +48,37 @@ const Products = () => {
   return (
     <section className={style.page}>
       <div className={style.filter}>
-        <div className={style.filterButton}>boton abrir filtro</div>
-        <ul className={style.filterBody}>
+        <div className={style.filterButton}>
+          <span>Filtrar por categoría</span>
+          <button onClick={() => setShowFilter(!showFilter)}>
+            Filtrar{" "}
+            <i
+              className={[
+                "fas",
+                showFilter ? "fa-caret-up" : "fa-caret-down",
+              ].join(" ")}
+            ></i>
+          </button>
+        </div>
+        <ul
+          className={[style.filterBody, showFilter ? style.show : ""].join(" ")}
+        >
           {categories.map((category) => (
             <li
               key={category.id}
               onClick={() => history.push(`/products?category=${category.id}`)}
+              className={isActive(category.id) ? style.active : ""}
             >
               {category.name}
             </li>
           ))}
+          <li
+            key={"all"}
+            onClick={() => history.push(`/products`)}
+            className={!query.category ? style.active : ""}
+          >
+            Mostrar todos los articulos
+          </li>
         </ul>
       </div>
       <Catalogue products={products} />
