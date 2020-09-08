@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 notEmpty: false,
             },
+            defaultValue: 'Not specified',
             set(value) {
                 this.setDataValue("address", value.trim().toLowerCase());
             },
