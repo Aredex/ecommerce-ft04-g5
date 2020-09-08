@@ -57,8 +57,8 @@ const Product = (props) => {
             disableSubstract={count === 1}
           />
         ) : (
-          <h1>No contamos con stock</h1>
-        )}
+            <h1>No contamos con stock</h1>
+          )}
         <div className={style.category}>
           <div className={style.separator}>Categorias</div>
           <section>

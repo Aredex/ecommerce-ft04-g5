@@ -1,17 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { getProducts } from "store/Actions/Actions";
 import style from "./index.module.scss";
 import { useHistory } from "react-router";
 import logo from "logo.svg";
 
 const Home = (props) => {
   const history = useHistory();
-  React.useEffect(() => {
-    if (props.search.length === 0) {
-      props.getProducts();
-    }
-  });
 
   return (
     <div className={style.home}>
@@ -43,9 +37,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    getProducts: () => dispatch(getProducts()),
-  };
+  return {};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

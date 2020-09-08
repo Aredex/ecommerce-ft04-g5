@@ -1,12 +1,12 @@
 const initialState = {
-  categories: [],
+  categories: undefined,
   catogoryCreate: null,
   categoryUpdate: {},
   categoryRemove: {},
-  categoryID: {},
+  categoryId: undefined,
 };
 
-export default function UsersReducer(state = initialState, action) {
+export default function CategoriesReducer(state = initialState, action) {
   switch (action.type) {
     case "GET_ALL_CATEGORIES":
       return {
@@ -33,14 +33,14 @@ export default function UsersReducer(state = initialState, action) {
       };
 
     case "GET_CATEGORY_BY_ID":
+      console.log("ENTRA AL REDUCER")
       return {
         ...state,
-        categoryID: action.payload,
+        categoryId: action.payload,
       };
 
     default:
       return state;
   }
 
-  return state;
 }

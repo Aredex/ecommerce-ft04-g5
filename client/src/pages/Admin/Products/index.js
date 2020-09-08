@@ -9,16 +9,22 @@ import create from "services/products/create";
 import remove from "services/products/delete";
 import addCategoryToProduct from "services/products/addCategoryToProduct";
 import removeCategoryToProduct from "services/products/removeCategoryToProduct";
+import { getProducts } from "store/Actions/Products/ProductsActions";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const Products = () => {
-  const [products, setProducts] = useState([]);
   const [formik, setFormik] = useState();
+
+  const dispatch = useDispatch();
+
+  const products = useSelector((x) => x.ProductsReducer.productCards);
 
   useEffect(() => {
     (async () => {
-      const result = await getAll();
-      result && setProducts(result);
-    })();
+      dispatch(await getProducts());
+    })()
+
   }, []);
 
   const getValues = async (id) => {
@@ -31,10 +37,10 @@ const Products = () => {
       stock: result.stock,
       categories: result.categories
         ? result.categories.map((category) => ({
-            id: category.id,
-            name: category.name,
-            description: category.description,
-          }))
+          id: category.id,
+          name: category.name,
+          description: category.description,
+        }))
         : [],
     };
   };
@@ -59,8 +65,7 @@ const Products = () => {
           if (!categories.includes(category))
             await removeCategoryToProduct(id, category.id);
         }
-        const result = await getAll();
-        setProducts(result);
+        dispatch(await getProducts())
         setFormik(undefined);
       },
       update: true,
@@ -90,8 +95,7 @@ const Products = () => {
             await addCategoryToProduct(product.id, category.id);
           }
         }
-        const result = await getAll();
-        setProducts(result);
+        dispatch(await getProducts())
         setFormik(undefined);
       },
       create: true,
@@ -102,8 +106,7 @@ const Products = () => {
     var r = window.confirm(`Desea eliminar ${name}`);
     if (r === true) {
       await remove(id);
-      const result = await getAll();
-      setProducts(result);
+      dispatch(await getProducts())
     }
   };
   return (
@@ -123,7 +126,7 @@ const Products = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product, key) => (
+          {products != undefined && products.map((product, key) => (
             <tr key={key}>
               <td>{product.name}</td>
               <td>{product.description}</td>
