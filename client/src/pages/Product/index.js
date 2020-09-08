@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import getById from "services/products/getById";
-import { useParams } from "react-router";
+import { useParams, useHistory } from "react-router";
 import AddToCart from "components/AddToCart";
 import noImage from "noImage.svg";
 import style from "./index.module.scss";
 
 const Product = () => {
   const [count, setCount] = useState(1);
-
   const [product, setProduct] = useState(null);
+  const history = useHistory();
 
   let { id } = useParams();
 
@@ -38,37 +38,46 @@ const Product = () => {
         <div className={style.carusel}>
           <img width="200" height="200" src={imageURL} alt="" />
         </div>
-        <div className={style.name}>
-          <h1>{product.name}</h1>
-        </div>
-        <div className={style.price}>
-          <label>$</label>
-          <p>{product.price}</p>
-        </div>
-        {product.stock > 0 ? (
-          <AddToCart
-            onAdd={handleOnAdd}
-            onSubstract={hableOnSubstract}
-            value={count}
-            disableAdd={count === product.stock}
-            disableSubstract={count === 1}
-          />
-        ) : (
-          <h1>No contamos con stock</h1>
-        )}
-        <div className={style.category}>
-          <div className={style.separator}>Categorias</div>
-          <section>
-            {product.categories.map((category, key) => (
-              <span key={key}>{category.name}</span>
-            ))}
-          </section>
-        </div>
-        <div className={style.description}>
-          <div className={style.separator}>
-            <span>Descripción</span>
+        <div className={style.info}>
+          <div className={style.name}>
+            <h1>{product.name}</h1>
           </div>
-          {product.description}
+          <div className={style.price}>
+            <label>$</label>
+            <p>{product.price}</p>
+          </div>
+          {product.stock > 0 ? (
+            <AddToCart
+              onAdd={handleOnAdd}
+              onSubstract={hableOnSubstract}
+              value={count}
+              disableAdd={count === product.stock}
+              disableSubstract={count === 1}
+            />
+          ) : (
+            <h1>No contamos con stock</h1>
+          )}
+          <div className={style.category}>
+            <div className={style.separator}>Categorias</div>
+            <section>
+              {product.categories.map((category, key) => (
+                <span
+                  key={key}
+                  onClick={() =>
+                    history.push(`/products?category=${category.id}`)
+                  }
+                >
+                  {category.name}
+                </span>
+              ))}
+            </section>
+          </div>
+          <div className={style.description}>
+            <div className={style.separator}>
+              <span>Descripción</span>
+            </div>
+            {product.description}
+          </div>
         </div>
       </div>
     );
