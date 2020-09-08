@@ -10,7 +10,6 @@ const Catalogue = ({ products }) => {
   return (
     <div className={style.catalogue}>
       {products.map(function (e) {
-        console.log(e);
         const imageURL = e.images ? e.images[0]?.url || undefined : undefined;
         return (
           <ProductCard
@@ -19,6 +18,7 @@ const Catalogue = ({ products }) => {
             img={imageURL}
             title={e.name}
             price={e.price}
+            stock={e.stock}
             onClick={() => history.push(`/products/${e.id}`)}
           />
         );
