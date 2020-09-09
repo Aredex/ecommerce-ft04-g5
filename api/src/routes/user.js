@@ -6,7 +6,7 @@ const {
   editOne,
   deleteOne,
 } = require("../controllers/users");
-const { getOrderByUser, addOrderOnUser } = require("../controllers/users_order");
+const { getOrderByUser, addOrderOnUser, setUsertoOrder } = require("../controllers/users_order");
 router
   .route("/")
   .post((req, res) => {
@@ -58,9 +58,9 @@ router.route("/:id/orders").get((req, res) => {
 //-------------------------------------------------------\\
 //solo para probar la petición de ordenes
 
-router.route("/:id/orders").put((req, res) => {
-    const { id } = req.params;
- addOrderOnUser("IN CREATION", address, id)
+router.route("/:id/orders/:idOrder").put((req, res) => {
+    const { id, idOrder } = req.params;
+ setUsertoOrder(id, idOrder)
     .then((orders) => res.json(orders).status(200))
     .catch((err) => res.json(err));
 
