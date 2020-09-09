@@ -38,7 +38,7 @@ const getAllWithStock = (page, pageSize) => {
                     return reject({
                         error: {
                             name: "ApiFindError",
-                            type: 'Products Error',
+                            type: "Products Error",
                             errors: [
                                 {
                                     message:
@@ -55,7 +55,7 @@ const getAllWithStock = (page, pageSize) => {
             })
             .catch((err) => reject({ error: err }));
     });
-}
+};
 
 const getAll = (page, pageSize) => {
     return new Promise((resolve, reject) => {
@@ -72,7 +72,7 @@ const getAll = (page, pageSize) => {
                     return reject({
                         error: {
                             name: "ApiFindError",
-                            type: 'Products Error',
+                            type: "Products Error",
                             errors: [
                                 {
                                     message:
@@ -138,6 +138,7 @@ const getOne = (id) => {
                     return reject({
                         error: {
                             name: "ApiFindError",
+                            type: "Products Error",
                             errors: [
                                 {
                                     message:
@@ -235,11 +236,7 @@ const getByQuery = (query, page, pageSize) => {
 
                 resolve(products);
             })
-            .catch(() =>
-                reject({
-                    error: "No hay productos que conicidan con la búsqueda",
-                })
-            );
+            .catch((err) => reject({ error: err }));
     });
 };
 
@@ -263,5 +260,5 @@ module.exports = {
     getByQuery,
     deleteOne,
     setViews,
-    getAllWithStock
+    getAllWithStock,
 };
