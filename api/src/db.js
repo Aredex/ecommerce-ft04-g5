@@ -47,6 +47,14 @@ Order.belongsToMany(Product, { through: Order_product });
 User.hasMany(Order);
 Order.belongsTo(User);
 
+// Relación entre Reviews y Products
+Product.hasMany(Review);
+Review.belongsTo(Product);
+
+// Relacion entre Reviews y Usuarios
+User.hasMany(Review);
+Review.belongsTo(User);
+
 module.exports = {
     conn: sequelize, // para importart la conexión { conn } = require('./db.js');
     DataTypes,
