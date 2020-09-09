@@ -6,7 +6,7 @@ const {
   editOne,
   deleteOne,
 } = require("../controllers/users");
-const { getOrderByUser, addOrderOnUser, setUsertoOrder } = require("../controllers/users_order");
+const { getOrderByUser, setUsertoOrder } = require("../controllers/users_order");
 router
   .route("/")
   .post((req, res) => {
