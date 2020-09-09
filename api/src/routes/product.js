@@ -11,6 +11,7 @@ const {
     getByQuery,
     deleteOne,
     setViews,
+    getAllWithStock,
 } = require("../controllers/products");
 
 router
@@ -19,9 +20,7 @@ router
         const { page, pageSize } = req.body;
 
         return getAll(page, pageSize)
-            .then((products) => {
-                res.send(products);
-            })
+            .then((products) => res.json(products))
             .catch((err) => res.status(404).json(err));
     })
     .post((req, res) => {
@@ -33,6 +32,14 @@ router
             .then((product) => res.status(201).json(product))
             .catch((err) => res.status(400).json(err));
     });
+
+router.route("/withstock").get((req, res) => {
+    const { page, pageSize } = req.body;
+
+    getAllWithStock(page, pageSize)
+        .then((products) => res.json(products))
+        .catch((err) => res.status(404).json(err));
+});
 
 router.route("/search").get((req, res) => {
     const { name } = req.query;
