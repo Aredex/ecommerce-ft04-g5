@@ -17,12 +17,10 @@ const { setUsertoOrder } = require("../controllers/users_order");
 // Rutas para obtener todas las ordenes y crear una orden
 router
     .route("/")
-    .get((req, res, next) => {
+    .get((req, res) => {
         getAll()
-            .then((orders) => {
-                res.send(orders);
-            })
-            .catch(next);
+            .then((orders) => res.json(orders))
+            .catch((err) => res.status(400).json(err));
     })
     .post((req, res) => {
         const { address } = req.body;
