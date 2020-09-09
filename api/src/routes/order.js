@@ -61,9 +61,9 @@ router
 // Si la orden aún no está creada, la crea y le agrrega el producto
 router.route("/product/:idProduct").post((req, res) => {
     const { idProduct } = req.params;
-    const { amount, address } = req.body;
+    const { amount, address, idUser } = req.body;
 
-    addProductToOrder({ idProduct, amount, address })
+    addProductToOrder({ idProduct, amount, address, idUser })
         .then((order_product) => res.json(order_product))
         .catch((err) => res.status(400).json(err));
 });
@@ -71,18 +71,18 @@ router.route("/product/:idProduct").post((req, res) => {
 // Agrega muchos productos a una orden ya definida
 router.route("/:idOrder/products").post((req, res) => {
     const { idOrder } = req.params;
-    const { products } = req.body;
+    const { products, idUser } = req.body;
 
-    addMultipleProductsToOrder({ idOrder, arrayProducts: products })
+    addMultipleProductsToOrder({ idOrder, arrayProducts: products, idUser })
         .then((order_product) => res.json(order_product))
         .catch((err) => res.status(400).json(err));
 });
 
 // Agrega muchos productos a una orden aunque esta no esté definida. La crea
 router.route("/products").post((req, res) => {
-    const { products } = req.body;
+    const { products, idUser } = req.body;
 
-    addMultipleProductsToOrder({ arrayProducts: products })
+    addMultipleProductsToOrder({ arrayProducts: products, idUser })
         .then((order_product) => res.json(order_product))
         .catch((err) => res.status(400).json(err));
 });
@@ -94,9 +94,9 @@ router
     .route("/:idOrder/product/:idProduct")
     .post((req, res) => {
         const { idOrder, idProduct } = req.params;
-        const { amount } = req.body;
+        const { amount, idUser } = req.body;
 
-        addProductToOrder({ idProduct, idOrder, amount })
+        addProductToOrder({ idProduct, idOrder, amount, idUser })
             .then((order_product) => res.json(order_product))
             .catch((err) => res.status(400).json(err));
     })
