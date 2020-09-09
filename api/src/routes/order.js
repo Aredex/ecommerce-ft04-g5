@@ -12,6 +12,7 @@ const {
     addProductToOrder,
     addMultipleProductsToOrder,
 } = require("../controllers/order_products");
+const { setUsertoOrder } = require("../controllers/users_order");
 
 // Rutas para obtener todas las ordenes y crear una orden
 router
@@ -174,6 +175,14 @@ router.route("/:id/finalized").put((req, res) => {
     const { id } = req.params;
 
     editOne({ id, status: "FINALIZED" })
+        .then((order_product) => res.json(order_product))
+        .catch((err) => res.status(400).json(err));
+});
+
+router.route("/:idOrder/user/:idUser").post((req, res) => {
+    const { idOrder, idUser } = req.params;
+
+    setUsertoOrder(idUser, idOrder)
         .then((order_product) => res.json(order_product))
         .catch((err) => res.status(400).json(err));
 });
