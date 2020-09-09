@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import style from "./index.module.scss";
+import Modal from "components/Modal";
 
 const Star = ({ size, fill, stroke }) => (
   <svg
@@ -17,36 +18,92 @@ const Star = ({ size, fill, stroke }) => (
   </svg>
 );
 
-const ReviewButton = ({ rating }) => {
+const ModalReview = ({ reviews, onClose }) => {
   return (
-    <div className={style.rating}>
-      <span>Calificación</span>
-      <Star
-        fill={rating >= 0.5 ? "#00cc76" : "transparent"}
-        stroke={"#00cc76"}
-        size={"1rem"}
-      />
-      <Star
-        fill={rating >= 1.5 ? "#00cc76" : "transparent"}
-        stroke={"#00cc76"}
-        size={"1rem"}
-      />
-      <Star
-        fill={rating >= 2.5 ? "#00cc76" : "transparent"}
-        stroke={"#00cc76"}
-        size={"1rem"}
-      />
-      <Star
-        fill={rating >= 3.5 ? "#00cc76" : "transparent"}
-        stroke={"#00cc76"}
-        size={"1rem"}
-      />
-      <Star
-        fill={rating >= 4.5 ? "#00cc76" : "transparent"}
-        stroke={"#00cc76"}
-        size={"1rem"}
-      />
-    </div>
+    <Modal>
+      <Modal.Header>Calificaciones:</Modal.Header>
+      <Modal.Body>
+        {reviews &&
+          Array.isArray(reviews) &&
+          reviews.map(({ id, rating, message }) => (
+            <article key={id} className={style.review}>
+              <div className={style.rating}>
+                <Star
+                  fill={rating >= 0.5 ? "#00cc76" : "transparent"}
+                  stroke={"#00cc76"}
+                  size={"1rem"}
+                />
+                <Star
+                  fill={rating >= 1.5 ? "#00cc76" : "transparent"}
+                  stroke={"#00cc76"}
+                  size={"1rem"}
+                />
+                <Star
+                  fill={rating >= 2.5 ? "#00cc76" : "transparent"}
+                  stroke={"#00cc76"}
+                  size={"1rem"}
+                />
+                <Star
+                  fill={rating >= 3.5 ? "#00cc76" : "transparent"}
+                  stroke={"#00cc76"}
+                  size={"1rem"}
+                />
+                <Star
+                  fill={rating >= 4.5 ? "#00cc76" : "transparent"}
+                  stroke={"#00cc76"}
+                  size={"1rem"}
+                />
+              </div>
+              <div className={style.message}>{message}</div>
+            </article>
+          ))}
+      </Modal.Body>
+      <Modal.Footer>
+        <button type="button" onClick={onClose}>
+          Cerrar
+        </button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
+const ReviewButton = ({ rating, reviews }) => {
+  const [showModal, setShowModal] = useState(false);
+
+  return (
+    <>
+      <div className={style.reviewButton} onClick={() => setShowModal(true)}>
+        <span>Calificación:</span>
+        <Star
+          fill={rating >= 0.5 ? "#00cc76" : "transparent"}
+          stroke={"#00cc76"}
+          size={"1rem"}
+        />
+        <Star
+          fill={rating >= 1.5 ? "#00cc76" : "transparent"}
+          stroke={"#00cc76"}
+          size={"1rem"}
+        />
+        <Star
+          fill={rating >= 2.5 ? "#00cc76" : "transparent"}
+          stroke={"#00cc76"}
+          size={"1rem"}
+        />
+        <Star
+          fill={rating >= 3.5 ? "#00cc76" : "transparent"}
+          stroke={"#00cc76"}
+          size={"1rem"}
+        />
+        <Star
+          fill={rating >= 4.5 ? "#00cc76" : "transparent"}
+          stroke={"#00cc76"}
+          size={"1rem"}
+        />
+      </div>
+      {showModal && (
+        <ModalReview reviews={reviews} onClose={() => setShowModal(false)} />
+      )}
+    </>
   );
 };
 

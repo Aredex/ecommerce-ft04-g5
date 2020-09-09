@@ -47,7 +47,16 @@ const Product = () => {
             <label>$</label>
             <p>{product.price}</p>
           </div>
-          <ReviewButton rating={2.3} />
+          <ReviewButton
+            rating={2.3}
+            reviews={[
+              {
+                id: 1,
+                rating: 2,
+                message: "Porque tenemos que pelear con redux?🤬",
+              },
+            ]}
+          />
           {product.stock > 0 ? (
             <AddToCart
               onAdd={handleOnAdd}
