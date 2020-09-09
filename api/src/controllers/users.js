@@ -69,7 +69,7 @@ const deleteOne = (id) => {
 };
 
 // Cambia rol de usuario de GUEST por ADMIN
-// TODO : avergiguar si puedo hacer un if dentro del audate para intercambiar los roles
+// TODO : avergiguar si puedo hacer un if dentro del audate para intercambiar los roles para no tener otra funcion
 const changeRole = (id) => {
   return new Promise((resolve, reject) => {
     User.update(
@@ -90,23 +90,23 @@ const changeRole = (id) => {
 };
 
 // Cambia rol de usuario de ADMIN por GUEST
-const AdminToGuest = () => {
-  return new Promise((resolve, reject) => {
-    User.update(
-      { role: "GUEST" },
-      {
-        where: {
-          role: "ADMIN",
-        },
-      }
-    )
-      .then((user) => {
-        resolve({ description: "successfully updated users" });
-        return user.save();
-      })
-      .catch((err) => reject(err));
-  });
-};
+// const AdminToGuest = () => {
+//   return new Promise((resolve, reject) => {
+//     User.update(
+//       { role: "GUEST" },
+//       {
+//         where: {
+//           role: "ADMIN",
+//         },
+//       }
+//     )
+//       .then((user) => {
+//         resolve({ description: "successfully updated users" });
+//         return user.save();
+//       })
+//       .catch((err) => reject(err));
+//   });
+// };
 
 module.exports = {
   createOne,
@@ -115,5 +115,4 @@ module.exports = {
   editOne,
   deleteOne,
   changeRole,
-  AdminToGuest,
 };
