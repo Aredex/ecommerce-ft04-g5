@@ -69,6 +69,7 @@ const deleteOne = (id) => {
 };
 
 // Cambia rol de usuario de GUEST por ADMIN
+// TODO : avergiguar si puedo hacer un if dentro del audate para intercambiar los roles
 const changeRole = (id) => {
   return new Promise((resolve, reject) => {
     User.update(
