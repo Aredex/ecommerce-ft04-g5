@@ -95,8 +95,7 @@ const addProductToOrder = async ({
                 }
 
                 return findOne(Product.id, Order.id)
-                    .then((product_order) => product_order)
-                    .catch((err) => err);
+                    .then((product_order) => product_order)                    
             })
             .then((product_order) => {
                 if (Array.isArray(product_order)) return product_order[0];
@@ -108,7 +107,10 @@ const addProductToOrder = async ({
                 return product_order.save();
             })
             .then((product_order) => resolve(product_order))
-            .catch((err) => reject({ error: err }));
+            .catch((err) => {
+                
+                reject({ error: err })
+            });
     });
 };
 

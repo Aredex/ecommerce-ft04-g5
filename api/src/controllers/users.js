@@ -3,7 +3,26 @@ const { User } = require("../db");
 const getAll = () => {
     return new Promise((resolve, reject) => {
         User.findAll()
-            .then((users) => resolve(users))
+            .then((users) => {
+                if (users.length === 0) {
+                    return reject({
+                        error: {
+                            name: "ApiFindError",
+                            type: "Users Error",
+                            errors: [
+                                {
+                                    message:
+                                        "there are no users in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
+                        },
+                    });
+                }
+
+                resolve(users);
+            })
             .catch((err) => reject(err));
     });
 };
@@ -51,24 +70,41 @@ const editOne = (id, name, email, password, role) => {
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
         User.findOne({ where: { id } })
-            .then((user) => resolve(user))
+            .then((user) => {
+                if (!user) {
+                    return reject({
+                        error: {
+                            name: "ApiFindError",
+                            type: "Users Error",
+                            errors: [
+                                {
+                                    message:
+                                        "user does not exist in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
+                        },
+                    });
+                }
+
+                resolve(user);
+            })
             .catch((err) => reject(err));
     });
 };
 
 const deleteOne = (id) => {
     return new Promise((resolve, reject) => {
-      getOne(id)
-        .then((user) => {
-          user.destroy();
-  
-          resolve({ description: "successfully deleted user" });
-        })
-        .catch((err) => reject(err));
+        getOne(id)
+            .then((user) => {
+                user.destroy();
+
+                resolve({ description: "successfully deleted user" });
+            })
+            .catch((err) => reject(err));
     });
-  };
-
-
+};
 
 module.exports = {
     createOne,

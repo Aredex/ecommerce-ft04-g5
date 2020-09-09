@@ -32,7 +32,26 @@ const getAll = () => {
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
         Order.findOne({ where: { id }, include: [Product] })
-            .then((order) => resolve(order))
+            .then((order) => {
+                if (!order) {
+                    return reject({
+                        error: {
+                            name: "ApiFindError",
+                            type: "Orders error",
+                            errors: [
+                                {
+                                    message:
+                                        "order does not exist in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
+                        },
+                    });
+                }
+
+                resolve(order);
+            })
             .catch((err) => reject({ error: err }));
     });
 };
