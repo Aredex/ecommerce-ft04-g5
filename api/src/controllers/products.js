@@ -32,7 +32,7 @@ const getAll = (page, pageSize) => {
             offset: pagination.offset,
         })
             .then((products) => {
-                if (products.length === 0)
+                if (products.length === 0) {
                     return reject({
                         error: {
                             name: "ApiFindError",
@@ -46,6 +46,7 @@ const getAll = (page, pageSize) => {
                             ],
                         },
                     });
+                }
 
                 resolve(products);
             })
