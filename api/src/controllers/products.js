@@ -3,6 +3,7 @@ const {
     createOne: createImage,
     setProductAsociation,
     setMultipleProductAsociations,
+    getByUrl,
 } = require("../controllers/images");
 
 // ==============================================
@@ -54,12 +55,15 @@ const getAll = (page, pageSize) => {
     });
 };
 
-const verifyImagesUrl = (imageUrl, product, resolve, reject) => {
+const verifyImagesUrl = async (imageUrl, product, resolve, reject) => {
     if (!Array.isArray(imageUrl)) {
-        createImage(imageUrl)
-            .then((image) => image.id)
-            .then((id) => setProductAsociation(id, product.id))
-            .catch((err) => reject(err));
+        const imagen = await getByUrl(imageUrl);
+        if (!imagen) {
+            createImage(imageUrl)
+                .then((image) => image.id)
+                .then((id) => setProductAsociation(id, product.id))
+                .catch((err) => reject(err));
+        }
     } else {
         setMultipleProductAsociations(product.id, imageUrl)
             .then((resp) => resolve(resp))
