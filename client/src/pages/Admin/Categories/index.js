@@ -1,72 +1,64 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import style from "./index.module.scss";
-import { getAll, getById, update, create, remove } from "services/categories";
 import CRUD from "./CRUD";
-import { getAllCategories, getCategoryById } from "store/Actions/Categories/CategoriesActions";
-import { useDispatch, useSelector } from "react-redux";
+import * as actionsCategories from "store/Actions/Categories/CategoriesActions"
 import { connect } from "react-redux";
-
+import { bindActionCreators } from 'redux'
 
 const Categories = (props) => {
-
-  const categories = props.categories
-  const [formik, setFormik] = useState();
   useEffect(() => {
-    async function get() {
-      props.getCategories()
-    }
-    get()
-  }, [])
+    props.getAllCategories()
+  }, []);
+  useEffect(() => {
+    props.getAllCategories()
+  }, [props.estado.categoryRemove,
+  props.estado.categoryCreate,
+  props.estado.categoryReadOnly,
+  props.estado.categoryUpdate]);
 
-  const getValues = async (id) => {
-    const result = await getById(id);
-    return {
-      id: result.id,
-      name: result.name,
-      description: result.description,
-    };
-  };
+  const categories = props.estado.categories;
+  const bandera = {
+    readOnly: props.estado.categoryReadOnly,
+    create: props.estado.categoryCreate,
+    update: props.estado.categoryUpdate,
+  }
 
   const handleView = async (id) => {
-    setFormik({
-      initialValues: await getValues(id),
-      readOnly: true,
-    });
+    await props.handleViewCategory(id)
   };
   const handleUpdate = async (id) => {
-    setFormik({
-      initialValues: await getValues(id),
-      onSubmit: async (values) => {
-        const { name, description } = values;
-        await update(id, name, description);
-        props.getCategories()
-        setFormik(undefined);
-      },
-      update: true,
-    });
+    await props.handleUpdateCategory(id)
   };
   const handleCreate = async () => {
-    setFormik({
-      initialValues: {
-        name: "",
-        description: "",
-      },
-      onSubmit: async (values) => {
-        const { name, description } = values;
-        await create(name, description);
-        props.getCategories()
-        setFormik(undefined);
-      },
-      create: true,
-    });
+    await props.handleCreateCategory()
   };
   const handleDelete = async (id, name) => {
     var r = window.confirm(`Desea eliminar ${name}`);
     if (r === true) {
-      await remove(id);
-      props.getCategories()
+      await props.removeCategory(id);
     }
-  };
+  }
+
+  var onSubmit
+  if (bandera) {
+    if (bandera.update) {
+      onSubmit = (values) => {
+        props.updateCategory(values.id, values.name, values.description)
+        props.disabledCRUD()
+      }
+    }
+    if (bandera.readOnly) {
+      onSubmit = () => {
+        props.disabledCRUD()
+      }
+    }
+    if (bandera.create) {
+      onSubmit = (values) => {
+        props.createCategory(values.name, values.description)
+        props.disabledCRUD()
+      }
+    }
+  }
 
   return (
     <section>
@@ -104,8 +96,14 @@ const Categories = (props) => {
           ))}
         </tbody>
       </table>
-      {formik && (
-        <CRUD formikData={formik} onClose={() => setFormik(undefined)} />
+      {(bandera.readOnly || bandera.update || bandera.create) && (
+        //condicional para visualizacion del CRUD
+        <CRUD
+          onClose={() => props.disabledCRUD()}
+          onSubmit={onSubmit}
+          category={props.estado.categoryId}
+          estado={bandera}
+        />
       )}
     </section>
   );
@@ -113,16 +111,11 @@ const Categories = (props) => {
 
 function mapStateToProps(state) {
   return {
-    categories: state.CategoriesReducer.categories,
-    category: state.CategoriesReducer.categoryId
+    estado: state.CategoriesReducer
   };
 }
-
 function mapDispatchToProps(dispatch) {
-  return {
-    getCategories: () => dispatch(getAllCategories()),
-    getCategoryById: (id) => dispatch(getCategoryById(id))
-  };
+  return bindActionCreators(actionsCategories, dispatch)
 }
 
 export default connect(

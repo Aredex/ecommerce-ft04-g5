@@ -6,20 +6,20 @@ import TextareaField from "components/TextareaField";
 import Modal from "components/Modal";
 import TagField from "components/TagField";
 
-const CRUD = ({ formikData, onClose }) => {
+const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
   const prefixStyle = { width: "8rem" };
   return (
     <Formik
-      initialValues={formikData.initialValues}
-      onSubmit={formikData.onSubmit}
+      initialValues={formikData}
+      onSubmit={onSubmit}
     >
       {({ values, handleSubmit }) => (
         <Modal>
           <Modal.Header>
             <>
-              {formikData.readOnly && `${values.name}`}
-              {formikData.update && `Modificar ${values.name}`}
-              {formikData.create && "Crear nuevo producto"}
+              {estado.readOnly && `${values.name}`}
+              {estado.update && `Modificar ${values.name}`}
+              {estado.create && "Crear nuevo producto"}
             </>
           </Modal.Header>
           <Modal.Body>
@@ -28,34 +28,34 @@ const CRUD = ({ formikData, onClose }) => {
                 prefix="Nombre"
                 prefixStyle={prefixStyle}
                 name="name"
-                readOnly={formikData.readOnly}
+                readOnly={estado.readOnly}
               />
               <TextareaField
                 prefix="Descripción"
                 name="description"
-                readOnly={formikData.readOnly}
+                readOnly={estado.readOnly}
               />
               <InputField
                 prefix="Precio"
                 prefixStyle={prefixStyle}
                 inputPrefix="$"
                 name="price"
-                readOnly={formikData.readOnly}
+                readOnly={estado.readOnly}
               />
               <InputField
                 prefix="Stock"
                 prefixStyle={prefixStyle}
                 inputSufix="unidades"
                 name="stock"
-                readOnly={formikData.readOnly}
+                readOnly={estado.readOnly}
               />
-              {formikData.create && (
+              {estado.create && (
                 <>
                   <InputField
                     prefix="URL de imagen"
                     name="imageUrl"
                     prefixStyle={prefixStyle}
-                    readOnly={formikData.readOnly}
+                    readOnly={estado.readOnly}
                   />
                 </>
               )}
@@ -63,20 +63,20 @@ const CRUD = ({ formikData, onClose }) => {
                 prefix="Categorías"
                 name="categories"
                 placeholder="agregar categoría"
-                readOnly={formikData.readOnly}
-                suggestions={formikData.suggestions}
+                readOnly={estado.readOnly}
+                suggestions={estado.suggestions}
                 suggestionProp="name"
               />
             </form>
           </Modal.Body>
           <Modal.Footer>
             <>
-              {formikData.readOnly && (
+              {estado.readOnly && (
                 <button type="button" onClick={onClose}>
                   Cerrar
                 </button>
               )}
-              {formikData.update && (
+              {estado.update && (
                 <>
                   <button type="button" onClick={onClose}>
                     Cancelar
@@ -90,7 +90,7 @@ const CRUD = ({ formikData, onClose }) => {
                   </button>
                 </>
               )}
-              {formikData.create && (
+              {estado.create && (
                 <>
                   <button type="button" onClick={onClose}>
                     Cancelar
