@@ -91,7 +91,7 @@ router
             .catch((err) => res.json(err));
     });
 
-router.route("/:id/views").post((req, res) => {
+router.route("/:id/setviews").put((req, res) => {
     const { id } = req.params;
 
     setViews(id)

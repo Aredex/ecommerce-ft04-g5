@@ -16,6 +16,14 @@ const getAll = () => {
     });
 };
 
+const getByUrl = (url) => {
+    return new Promise((resolve, reject) => {
+        Image.findOne({ where: { url } })
+            .then((image) => resolve(image))
+            .catch((err) => reject(err));
+    });
+};
+
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
         Image.findOne({ where: { id } })
@@ -59,9 +67,13 @@ const setProductAsociation = (idImage, idProduct) => {
 const setMultipleProductAsociations = async (idProduct, arrayUrls) => {
     return new Promise((resolve, reject) => {
         let images = arrayUrls.map((url) => {
-            return createOne(url)
-                .then((image) => image)
-                .catch((err) => reject(err));
+            return getByUrl(url).then((image) => {
+                if (!image) {
+                    return createOne(url)
+                        .then((image) => image)
+                        .catch((err) => reject(err));
+                }
+            });
         });
 
         Promise.all(images).then((imgs) => {
@@ -84,4 +96,5 @@ module.exports = {
     setMultipleProductAsociations,
     deleteOne,
     deleteMultiple,
+    getByUrl,
 };
