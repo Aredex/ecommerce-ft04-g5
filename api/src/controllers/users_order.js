@@ -1,4 +1,4 @@
-const { Order } = require("../db");
+const { Order, Product } = require("../db");
 const { getOne: getUser } = require("./users");
 const { getOne: getOrder } = require("./orders");
 
@@ -6,7 +6,7 @@ const getOrderByUser = (userId) => {
     return new Promise((resolve, reject) => {
         getUser(userId).then((user)=>{
             if (user) {
-        Order.findAll({ where: { userId } })
+        Order.findAll({ where: { userId }, include: Product })
             .then((user_order) => resolve(user_order))
             .catch((err) => reject({ error: err }));} else {
                  return reject({
