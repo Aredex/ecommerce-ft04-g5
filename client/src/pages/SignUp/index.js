@@ -11,8 +11,11 @@ export default function SignIn() {
 
   const formik = useFormik({
     initialValues: {
+      name: "",
+      surname: "",
       email: "",
       password: "",
+      passwordConfirm: "",
     },
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
@@ -28,14 +31,14 @@ export default function SignIn() {
           <form onSubmit={formik.handleSubmit}>
             <span className={style.title}>Registrarte</span>
             <input
-              name="text"
-              type="name"
+              type="text"
+              name="name"
               placeholder="nombre"
               onChange={formik.handleChange}
             />
             <input
-              name="text"
-              type="surname"
+              type="text"
+              name="surname"
               placeholder="apellido"
               onChange={formik.handleChange}
             />
@@ -49,6 +52,12 @@ export default function SignIn() {
               name="password"
               type="password"
               placeholder="contraseña"
+              onChange={formik.handleChange}
+            />
+            <input
+              name="passwordConfirm"
+              type="password"
+              placeholder="repetir contraseña"
               onChange={formik.handleChange}
             />
             <input
