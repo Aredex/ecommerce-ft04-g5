@@ -55,7 +55,13 @@ export function handleUpdateProduct(id) {
   }
 }
 export function handleCreateProduct(id) {
-  return { type: "HANDLE_CREATE_PRODUCT" }
+  return function (dispatch) {
+    dispatch(suggestions())
+      .then(function () {
+        dispatch({ type: "HANDLE_CREATE_PRODUCT" })
+      })
+  }
+
 }
 
 export function getProducts() {
