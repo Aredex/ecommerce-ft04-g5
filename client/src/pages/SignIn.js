@@ -1,15 +1,17 @@
 import React from "react";
 import { useFormik } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 import style from "./Sign.module.scss";
 
 import logo from "logo.svg";
 
 export default function SignIn() {
+  const history = useHistory();
   const formik = useFormik({
     initialValues: {
       email: "",
+      password: "",
     },
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
@@ -24,11 +26,17 @@ export default function SignIn() {
 
           <form onSubmit={formik.handleSubmit}>
             <span className={style.title}>Iniciar sesión</span>
-            <input type="email" placeholder="email" />
             <input
+              name="email"
+              type="email"
+              placeholder="email"
+              onChange={formik.handleChange}
+            />
+            <input
+              name="password"
               type="password"
               placeholder="contraseña"
-              autocomplete="current-password"
+              onChange={formik.handleChange}
             />
             <input
               type="submit"
@@ -49,79 +57,15 @@ export default function SignIn() {
               </button>
             </div>
             <div className={style.buttonGroup}>
-              <Link
-                to="/sign-up"
-                component={() => (
-                  <span className={style.a}>No tengo cuenta</span>
-                )}
-              ></Link>
+              <span
+                className={style.a}
+                onClick={() => history.push("/sign-up")}
+              >
+                No tengo cuenta
+              </span>
             </div>
           </div>
         </section>
-        <section className={style.infoSection}>
-          <motion.div
-            initial="pageInitial"
-            animate="pageAnimate"
-            variants={{
-              pageInitial: {
-                opacity: 0,
-                transform: "translate(50px)",
-              },
-              pageAnimate: {
-                opacity: 1,
-                transform: "translate(0px)",
-                transition: {
-                  delay: 0.2,
-                },
-              },
-            }}
-          >
-            <img className={style.logo} src={logo} alt="" />
-          </motion.div>
-          <motion.div
-            initial="pageInitial"
-            animate="pageAnimate"
-            variants={{
-              pageInitial: {
-                opacity: 0,
-                transform: "translate(50px)",
-              },
-              pageAnimate: {
-                opacity: 1,
-                transform: "translate(0px)",
-                transition: {
-                  delay: 0.3,
-                },
-              },
-            }}
-          >
-            <span className="title">Nombre del vivero jejeje</span>
-          </motion.div>
-          <motion.div
-            initial="pageInitial"
-            animate="pageAnimate"
-            variants={{
-              pageInitial: {
-                opacity: 0,
-                transform: "translate(50px)",
-              },
-              pageAnimate: {
-                opacity: 1,
-                transform: "translate(0px)",
-                transition: {
-                  delay: 0.35,
-                },
-              },
-            }}
-          >
-            <span className={style.subtitle}>eco vivero</span>
-          </motion.div>
-          <img
-            className={style.backgroundImg}
-            src="https://images.photowall.com/products/60831/summer-park.jpg?h=699&q=85"
-            alt=""
-          />
-        </section>{" "}
       </main>
     </>
   );

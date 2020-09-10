@@ -4,60 +4,8 @@
   display: flex;
   flex-direction: row;
   position: relative;
-  height: 90vh;
   width: 100%;
   overflow: hidden;
-}
-.infoSection {
-  position: relative;
-  width: stretch;
-  height: 90vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #00cc7688;
-
-  @include respond-to("default") {
-    visibility: collapse;
-    width: 0;
-    padding: 0rem;
-  }
-
-  @include respond-to("small") {
-    // visibility: visible;
-    // width: stretch;
-    // padding: 2rem;
-
-    visibility: collapse;
-    width: 0;
-    padding: 0rem;
-  }
-
-  .logo {
-    width: 15rem;
-    padding: 2.5rem;
-  }
-  .title {
-    font-size: 2rem;
-    color: #ffffff;
-  }
-  .subtitle {
-    font-size: 1rem;
-    color: #ffffff;
-    font-weight: 100;
-  }
-  .backgroundImg {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    object-fit: cover;
-    z-index: -1;
-  }
 }
 .formSection {
   width: 100%;
@@ -68,7 +16,7 @@
   flex-direction: column;
   background-color: #ffffff;
   img {
-    width: 15rem;
+    width: 10rem;
     padding: 2.5rem;
     padding-bottom: 0.5rem;
   }
