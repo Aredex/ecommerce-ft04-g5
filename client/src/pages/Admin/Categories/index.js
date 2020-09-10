@@ -12,7 +12,6 @@ const Categories = (props) => {
   }, []);
   useEffect(() => {
     props.getAllCategories()
-    console.log("Renderizo")
   }, [props.estado.categoryRemove,
   props.estado.categoryCreate,
   props.estado.categoryReadOnly,

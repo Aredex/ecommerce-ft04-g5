@@ -70,21 +70,27 @@ const Products = (props) => {
     }
     if (bandera.create) {
       onSubmit = async (values) => {
-        let { name, description, price, stock, imageUrl, categories } = values;
+        var { name, description, price, stock, imageUrl, categories } = values;
         imageUrl = imageUrl
           ? imageUrl.length > 0
             ? imageUrl
             : undefined
           : undefined;
-        await props.createProduct(name, description, price, stock, imageUrl)
+        var creado = await props.createProduct(name, description, price, stock, imageUrl)
         if (categories.length > 0) {
           for (const category of categories) {
-            await props.addCategoryProduct(props.state.productDetail.id, category.id);
+            await props.addCategoryProduct(creado.id, category.id);
           }
         }
         props.disabledProductCRUD()
       }
     }
+  }
+  async function create(name, description, price, stock, imageUrl) {
+
+  }
+  async function agregar(categories) {
+
   }
 
   return (

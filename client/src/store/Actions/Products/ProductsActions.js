@@ -1,14 +1,6 @@
 import { create, remove, getById, getAll, update, addCategoryToProduct, removeCategoryToProduct } from "services/products";
 import getCategories from "services/categories/getAll";
 
-export function createProduct(name, description, price, stock, imageUrl) {
-  return function (dispatch) {
-    return create(name, description, price, stock, imageUrl)
-      .then(function (data) {
-        dispatch({ type: "CREATE_PRODUCT", payload: data });
-      });
-  }
-}
 export function addCategoryProduct(productId, categoryId) {
   return function (dispatch) {
     return addCategoryToProduct(productId, categoryId)
@@ -111,6 +103,15 @@ export function updateProduct(id, name, description, price, stock) {
       dispatch({ type: "UPDATE_PRODUCT", payload: data });
     });
   };
+}
+
+export function createProduct(name, description, price, stock, imageUrl) {
+  return function (dispatch) {
+    return create(name, description, price, stock, imageUrl).then(function (data) {
+      dispatch({ type: "CREATE_PRODUCT", payload: data });
+      return data
+    });
+  }
 }
 
 export function disabledProductCRUD() {

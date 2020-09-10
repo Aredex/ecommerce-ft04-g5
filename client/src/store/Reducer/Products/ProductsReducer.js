@@ -16,6 +16,7 @@ export default function ProductsReducer(state = initialState, action) {
     case "CREATE_PRODUCT":
       return {
         ...state,
+        productDetail: action.payload
       };
     case "GET_PRODUCTS":
       return {
