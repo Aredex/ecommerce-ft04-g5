@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export default async function create(address) {
+export default async function removeEmptyOrder(id) {
   return axios
-    .post(`http://localhost:3001/orders`, { address })
+    .delete(`http://localhost:3001/order/${id}/empty`)
     .then((response) => {
       return response.data;
     })
