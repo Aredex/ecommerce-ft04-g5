@@ -2,7 +2,6 @@ const { getOne: getProduct } = require("./products");
 const { getOne: getOrder, createOne: createOrder } = require("./orders");
 const { Order_product } = require("../db");
 const { setUsertoOrder } = require("./users_order");
-const orders = require("./orders");
 
 const findByProduct = (productId) => {
     return new Promise((resolve, reject) => {
@@ -54,7 +53,7 @@ const addMultipleProductsToOrder = async ({
     return new Promise((resolve, reject) => {
         // if (orders) return resolve(orders);
         Promise.all(orders)
-            .then((product_order) => resolve(product_order))
+            .then((order) => resolve(order[0]))
             .catch((err) => reject({ error: err }));
     });
 };
