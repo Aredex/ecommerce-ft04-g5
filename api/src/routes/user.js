@@ -6,10 +6,7 @@ const {
     editOne,
     deleteOne,
 } = require("../controllers/users");
-const {
-    getOrderByUser,
-    setUsertoOrder,
-} = require("../controllers/users_order");
+const { getOrderByUser } = require("../controllers/users_order");
 const { getAll: getReviews } = require("../controllers/reviews");
 
 router
@@ -68,13 +65,4 @@ router.route("/:id/reviews").get((req, res) => {
         .catch((err) => res.json(err));
 });
 
-//-------------------------------------------------------\\
-//solo para probar la petición de ordenes
-
-router.route("/:id/orders/:idOrder").put((req, res) => {
-    const { id, idOrder } = req.params;
-    setUsertoOrder(id, idOrder)
-        .then((orders) => res.json(orders).status(200))
-        .catch((err) => res.json(err));
-});
 module.exports = router;

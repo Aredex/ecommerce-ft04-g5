@@ -3,7 +3,7 @@ const { Order, Product } = require("../db");
 // Obtiene todas las ordenes hechas
 const getAll = () => {
     return new Promise((resolve, reject) => {
-        Order.findAll({ include: [Product] })
+        Order.findAll({ include: [Product], order: [["id", "ASC"]] })
             .then((orders) => {
                 if (orders.length === 0) {
                     return reject({
