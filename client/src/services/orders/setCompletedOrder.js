@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default async function completedOrder(idOrder) {
+export default async function setCompletedOrder(idOrder) {
   return axios
     .put(`http://localhost:3001/orders/${idOrder}/finalized`)
     .then((response) => {

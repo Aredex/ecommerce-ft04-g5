@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default async function deleteProduct(idOrder, idProduct) {
+export default async function removeProduct(idOrder, idProduct) {
   return axios
     .delete(`http://localhost:3001/orders/${idOrder}/product/${idProduct}`)
     .then((respose) => {

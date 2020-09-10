@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default async function update(id, status, address) {
+export default async function setUpdateOrder(id, status, address) {
   return axios
     .put(`http://localhost:3001/orders/${id}`, { status, address })
     .then((response) => {

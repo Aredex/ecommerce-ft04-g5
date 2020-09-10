@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default async function getAll() {
+export default async function getAllOrders() {
   return axios
     .get(`http://localhost:3001/orders`)
     .then((response) => {
