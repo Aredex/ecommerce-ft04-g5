@@ -9,7 +9,11 @@ const getAll = ({ idUser, idProduct }) => {
         if (idUser) where.userId = idUser;
         if (idProduct) where.productId = idProduct;
 
-        Review.findAll({ where })
+        Review.findAll({
+            where,
+            order: [["id", "ASC"]],
+            include: [Product, User],
+        })
             .then((reviews) => {
                 if (reviews.length === 0) {
                     return reject({

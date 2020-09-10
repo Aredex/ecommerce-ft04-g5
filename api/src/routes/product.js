@@ -13,6 +13,7 @@ const {
     setViews,
     getAllWithStock,
 } = require("../controllers/products");
+const { getAll: getReviews } = require("../controllers/reviews");
 
 router
     .route("/")
@@ -72,6 +73,14 @@ router
             .then((result) => res.status(200).json(result))
             .catch((err) => res.json(err).status(404));
     });
+
+router.route("/:id/reviews").get((req, res) => {
+    const { id } = req.params;
+
+    getReviews({ idProduct: id })
+        .then((reviews) => res.json(reviews).status(200))
+        .catch((err) => res.json(err));
+});
 
 router
     .route("/:id/category/:idCategory")

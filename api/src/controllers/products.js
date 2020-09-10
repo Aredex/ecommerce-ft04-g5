@@ -1,4 +1,4 @@
-const { Product, Category, Op, Image } = require("../db");
+const { Product, Category, Op, Image, Review } = require("../db");
 const {
     createOne: createImage,
     setProductAsociation,
@@ -132,7 +132,7 @@ const createOne = (name, description, price, stock, imageUrl) => {
 
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
-        Product.findOne({ where: { id }, include: [Category, Image] })
+        Product.findOne({ where: { id }, include: [Category, Image, Review] })
             .then((product) => {
                 if (!product) {
                     return reject({

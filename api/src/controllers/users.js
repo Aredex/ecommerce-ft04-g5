@@ -1,4 +1,4 @@
-const { User } = require("../db");
+const { User, Review, Product } = require("../db");
 
 const getAll = () => {
     return new Promise((resolve, reject) => {
@@ -69,7 +69,10 @@ const editOne = (id, name, email, password, role) => {
 
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
-        User.findOne({ where: { id } })
+        User.findOne({
+            where: { id },
+            include: [{ model: Review, include: Product }],
+        })
             .then((user) => {
                 if (!user) {
                     return reject({

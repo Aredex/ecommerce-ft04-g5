@@ -10,6 +10,8 @@ const {
     getOrderByUser,
     setUsertoOrder,
 } = require("../controllers/users_order");
+const { getAll: getReviews } = require("../controllers/reviews");
+
 router
     .route("/")
     .post((req, res) => {
@@ -54,6 +56,15 @@ router.route("/:id/orders").get((req, res) => {
 
     getOrderByUser(id)
         .then((orders) => res.json(orders).status(200))
+        .catch((err) => res.json(err));
+});
+
+// Retorna todas las reviews hechas por el usuario según su id
+router.route("/:id/reviews").get((req, res) => {
+    const { id } = req.params;
+
+    getReviews({ idUser: id })
+        .then((reviews) => res.json(reviews).status(200))
         .catch((err) => res.json(err));
 });
 
