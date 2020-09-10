@@ -11,6 +11,7 @@ const OrderModel = require("./models/Order");
 const OrderProductModel = require("./models/Order_product");
 const UserModel = require("./models/User");
 const ReviewModel = require("./models/Review");
+const AddressModel = require("./models/Address");
 
 // Haciendo la conexion a la BD
 const sequelize = new Sequelize(
@@ -30,6 +31,7 @@ const Order = OrderModel(sequelize, DataTypes);
 const Order_product = OrderProductModel(sequelize, DataTypes);
 const User = UserModel(sequelize, DataTypes);
 const Review = ReviewModel(sequelize, DataTypes);
+const Address = AddressModel(sequelize, DataTypes);
 
 // Relación entre productos y categorías
 Product.belongsToMany(Category, { through: ProductCategory });
@@ -55,6 +57,10 @@ Review.belongsTo(Product);
 User.hasMany(Review);
 Review.belongsTo(User);
 
+// Relación entre Direcciones y Usuarios
+User.hasMany(Address);
+Address.hasMany(User);
+
 module.exports = {
     conn: sequelize, // para importart la conexión { conn } = require('./db.js');
     DataTypes,
@@ -67,4 +73,5 @@ module.exports = {
     User,
     ProductCategory,
     Review,
+    Address,
 };
