@@ -82,7 +82,7 @@ const changeRole = (id) => {
     );
     getOne(id)
       .then((user) => {
-        resolve({ description: "successfully updated users" });
+        resolve({ description: "successfully updated user role" });
         return user.save();
       })
       .catch((err) => reject(err));
