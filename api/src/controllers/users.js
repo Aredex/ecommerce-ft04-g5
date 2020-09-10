@@ -72,5 +72,4 @@ module.exports = {
     getOne,
     editOne,
     deleteOne,
-    // changeRole,
 };
