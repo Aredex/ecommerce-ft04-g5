@@ -40,45 +40,46 @@ const Products = (props) => {
     var r = window.confirm(`Desea eliminar ${name}`);
     if (r === true) {
       await props.removeProduct(id)
+      props.disabledProductCRUD()
+
     }
-    props.disabledProductCRUD()
 
   };
 
   var onSubmit
   if (bandera) {
     if (bandera.update) {
-      onSubmit = (values) => {
+      onSubmit = async (values) => {
         const { name, description, price, stock, categories } = values;
-        props.updateProduct(props.state.productDetail.id, name, description, price, stock);
+        await props.updateProduct(props.state.productDetail.id, name, description, price, stock);
         for (const category of categories) {
           if (!props.state.productDetail.categories.includes(category))
-            props.addCategoryProduct(props.state.productDetail.id, category.id);
+            await props.addCategoryProduct(props.state.productDetail.id, category.id);
         }
         for (const category of props.state.productDetail.categories) {
           if (!categories.includes(category))
-            props.removeCategoryProduct(props.state.productDetail.id, category.id);
+            await props.removeCategoryProduct(props.state.productDetail.id, category.id);
         }
         props.disabledProductCRUD()
       }
     }
     if (bandera.readOnly) {
-      onSubmit = () => {
-        props.disabledProductCRUD()
+      onSubmit = async () => {
+        await props.disabledProductCRUD()
       }
     }
     if (bandera.create) {
-      onSubmit = (values) => {
+      onSubmit = async (values) => {
         let { name, description, price, stock, imageUrl, categories } = values;
         imageUrl = imageUrl
           ? imageUrl.length > 0
             ? imageUrl
             : undefined
           : undefined;
-        props.createProduct(name, description, price, stock, imageUrl)
+        await props.createProduct(name, description, price, stock, imageUrl)
         if (categories.length > 0) {
           for (const category of categories) {
-            props.addCategoryProduct(props.state.productDetail.id, category.id);
+            await props.addCategoryProduct(props.state.productDetail.id, category.id);
           }
         }
         props.disabledProductCRUD()

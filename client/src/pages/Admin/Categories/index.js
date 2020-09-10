@@ -5,12 +5,14 @@ import * as actionsCategories from "store/Actions/Categories/CategoriesActions"
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux'
 
+
 const Categories = (props) => {
   useEffect(() => {
     props.getAllCategories()
   }, []);
   useEffect(() => {
     props.getAllCategories()
+    console.log("Renderizo")
   }, [props.estado.categoryRemove,
   props.estado.categoryCreate,
   props.estado.categoryReadOnly,
@@ -36,25 +38,26 @@ const Categories = (props) => {
     var r = window.confirm(`Desea eliminar ${name}`);
     if (r === true) {
       await props.removeCategory(id);
+      props.disabledCRUD()
     }
   }
 
   var onSubmit
   if (bandera) {
     if (bandera.update) {
-      onSubmit = (values) => {
-        props.updateCategory(values.id, values.name, values.description)
+      onSubmit = async (values) => {
+        await props.updateCategory(values.id, values.name, values.description)
         props.disabledCRUD()
       }
     }
     if (bandera.readOnly) {
-      onSubmit = () => {
-        props.disabledCRUD()
+      onSubmit = async () => {
+        await props.disabledCRUD()
       }
     }
     if (bandera.create) {
-      onSubmit = (values) => {
-        props.createCategory(values.name, values.description)
+      onSubmit = async (values) => {
+        await props.createCategory(values.name, values.description)
         props.disabledCRUD()
       }
     }
