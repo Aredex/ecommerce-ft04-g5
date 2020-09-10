@@ -185,4 +185,14 @@ router.route("/:idOrder/user/:idUser").post((req, res) => {
         .catch((err) => res.status(400).json(err));
 });
 
+router
+    .route('/:id/product/:idProduct').put((req, res) => {
+        const { id, idProduct } = req.params;
+        const { amount } = req.body;
+
+        addProductToOrder({ idOrder: id, idProduct, amount })
+            .then((order) => res.json(order).res.status(204))
+            .catch((err) => res.status(400).json(err));
+    });
+
 module.exports = router;
