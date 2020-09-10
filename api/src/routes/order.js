@@ -22,7 +22,7 @@ router
 
         getAll({ status })
             .then((orders) => res.json(orders))
-            .catch((err) => res.status(400).json(err));
+            .catch((err) => res.status(404).json(err));
     })
     .post((req, res) => {
         const { address } = req.body;
@@ -42,7 +42,7 @@ router
         const { id } = req.params;
         getOne(id)
             .then((order) => res.json(order).status(201))
-            .catch((err) => res.status(400).json(err));
+            .catch((err) => res.status(404).json(err));
     })
 
     .delete((req, res) => {
@@ -66,7 +66,7 @@ router.route("/product/:idProduct").post((req, res) => {
     const { amount, address, idUser } = req.body;
 
     addProductToOrder({ idProduct, amount, address, idUser })
-        .then((order_product) => res.json(order_product))
+        .then((order_product) => res.json(order_product).status(201))
         .catch((err) => res.status(400).json(err));
 });
 
@@ -76,7 +76,7 @@ router.route("/:idOrder/products").post((req, res) => {
     const { products, idUser } = req.body;
 
     addMultipleProductsToOrder({ idOrder, arrayProducts: products, idUser })
-        .then((order_product) => res.json(order_product))
+        .then((order_product) => res.json(order_product).status(201))
         .catch((err) => res.status(400).json(err));
 });
 
@@ -85,7 +85,7 @@ router.route("/products").post((req, res) => {
     const { products, idUser } = req.body;
 
     addMultipleProductsToOrder({ arrayProducts: products, idUser })
-        .then((order_product) => res.json(order_product))
+        .then((order_product) => res.json(order_product).status(201))
         .catch((err) => res.status(400).json(err));
 });
 
@@ -141,7 +141,7 @@ router.route("/:id/confirmed").put((req, res) => {
     const { address } = req.body;
 
     editOne({ id, status: "CONFIRMED", address })
-        .then((order_product) => res.json(order_product))
+        .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
 
@@ -151,7 +151,7 @@ router.route("/:id/rejected").put((req, res) => {
     const { address } = req.body;
 
     editOne({ id, status: "REJECTED", address })
-        .then((order_product) => res.json(order_product))
+        .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
 
@@ -162,7 +162,7 @@ router.route("/:id/preparing").put((req, res) => {
     const { address } = req.body;
 
     editOne({ id, status: "PREPARING", address })
-        .then((order_product) => res.json(order_product))
+        .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
 
@@ -172,7 +172,7 @@ router.route("/:id/sent").put((req, res) => {
     const { id } = req.params;
 
     editOne({ id, status: "SENT" })
-        .then((order_product) => res.json(order_product))
+        .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
 
@@ -181,7 +181,7 @@ router.route("/:id/delivered").put((req, res) => {
     const { id } = req.params;
 
     editOne({ id, status: "DELIVERED" })
-        .then((order_product) => res.json(order_product))
+        .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
 
@@ -191,50 +191,50 @@ router.route("/:id/finalized").put((req, res) => {
     const { id } = req.params;
 
     editOne({ id, status: "FINALIZED" })
-        .then((order_product) => res.json(order_product))
+        .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
 
 router.route("/increation").get((req, res) => {
     getAll({ status: "IN CREATION" })
         .then((orders) => res.json(orders))
-        .catch((err) => res.status(400).json(err));
+        .catch((err) => res.status(404).json(err));
 });
 
 router.route("/sent").get((req, res) => {
     getAll({ status: "sent" })
         .then((orders) => res.json(orders))
-        .catch((err) => res.status(400).json(err));
+        .catch((err) => res.status(404).json(err));
 });
 
 router.route("/confirmed").get((req, res) => {
     getAll({ status: "confirmed" })
         .then((orders) => res.json(orders))
-        .catch((err) => res.status(400).json(err));
+        .catch((err) => res.status(404).json(err));
 });
 
 router.route("/rejected").get((req, res) => {
     getAll({ status: "rejected" })
         .then((orders) => res.json(orders))
-        .catch((err) => res.status(400).json(err));
+        .catch((err) => res.status(404).json(err));
 });
 
 router.route("/preparing").get((req, res) => {
     getAll({ status: "preparing" })
         .then((orders) => res.json(orders))
-        .catch((err) => res.status(400).json(err));
+        .catch((err) => res.status(404).json(err));
 });
 
 router.route("/delivered").get((req, res) => {
     getAll({ status: "delivered" })
         .then((orders) => res.json(orders))
-        .catch((err) => res.status(400).json(err));
+        .catch((err) => res.status(404).json(err));
 });
 
 router.route("/finalized").get((req, res) => {
     getAll({ status: "finalized" })
         .then((orders) => res.json(orders))
-        .catch((err) => res.status(400).json(err));
+        .catch((err) => res.status(404).json(err));
 });
 
 module.exports = router;
