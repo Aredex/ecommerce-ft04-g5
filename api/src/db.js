@@ -57,7 +57,7 @@ Review.belongsTo(Product);
 User.hasMany(Review);
 Review.belongsTo(User);
 
-// Relación entre Direcciones y Usuarios
+// Relación entre Address y Usuarios
 User.hasMany(Address);
 Address.hasMany(User);
 
