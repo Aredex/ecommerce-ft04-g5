@@ -1,9 +1,16 @@
 const { Order, Product } = require("../db");
 
 // Obtiene todas las ordenes hechas
-const getAll = () => {
+const getAll = ({ status }) => {
+    let where = {};
+
+    if (status) {
+        status = status.toUpperCase();
+        where.status = status;
+    }
+
     return new Promise((resolve, reject) => {
-        Order.findAll({ include: [Product], order: [["id", "ASC"]] })
+        Order.findAll({ where, include: [Product], order: [["id", "ASC"]] })
             .then((orders) => {
                 if (orders.length === 0) {
                     return reject({

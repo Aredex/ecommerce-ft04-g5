@@ -18,7 +18,9 @@ const { setUsertoOrder } = require("../controllers/users_order");
 router
     .route("/")
     .get((req, res) => {
-        getAll()
+        const { status } = req.body;
+
+        getAll({ status })
             .then((orders) => res.json(orders))
             .catch((err) => res.status(400).json(err));
     })
@@ -106,7 +108,23 @@ router
         removeProductToOrder(idProduct, idOrder)
             .then((order_product) => res.json(order_product).status(204))
             .catch((err) => res.status(400).json(err));
+    })
+    .put((req, res) => {
+        const { idOrder, idProduct } = req.params;
+        const { amount } = req.body;
+
+        addProductToOrder({ idOrder, idProduct, amount })
+            .then((order) => res.json(order).res.status(204))
+            .catch((err) => res.status(400).json(err));
     });
+
+router.route("/:idOrder/user/:idUser").post((req, res) => {
+    const { idOrder, idUser } = req.params;
+
+    setUsertoOrder(idUser, idOrder)
+        .then((order_product) => res.json(order_product))
+        .catch((err) => res.status(400).json(err));
+});
 
 // Ruta alternativa para vaciar una orden
 router.route("/:id/empty").delete((req, res) => {
@@ -177,22 +195,46 @@ router.route("/:id/finalized").put((req, res) => {
         .catch((err) => res.status(400).json(err));
 });
 
-router.route("/:idOrder/user/:idUser").post((req, res) => {
-    const { idOrder, idUser } = req.params;
-
-    setUsertoOrder(idUser, idOrder)
-        .then((order_product) => res.json(order_product))
+router.route("/increation").get((req, res) => {
+    getAll({ status: "IN CREATION" })
+        .then((orders) => res.json(orders))
         .catch((err) => res.status(400).json(err));
 });
 
-router
-    .route('/:id/product/:idProduct').put((req, res) => {
-        const { id, idProduct } = req.params;
-        const { amount } = req.body;
+router.route("/sent").get((req, res) => {
+    getAll({ status: "sent" })
+        .then((orders) => res.json(orders))
+        .catch((err) => res.status(400).json(err));
+});
 
-        addProductToOrder({ idOrder: id, idProduct, amount })
-            .then((order) => res.json(order).res.status(204))
-            .catch((err) => res.status(400).json(err));
-    });
+router.route("/confirmed").get((req, res) => {
+    getAll({ status: "confirmed" })
+        .then((orders) => res.json(orders))
+        .catch((err) => res.status(400).json(err));
+});
+
+router.route("/rejected").get((req, res) => {
+    getAll({ status: "rejected" })
+        .then((orders) => res.json(orders))
+        .catch((err) => res.status(400).json(err));
+});
+
+router.route("/preparing").get((req, res) => {
+    getAll({ status: "preparing" })
+        .then((orders) => res.json(orders))
+        .catch((err) => res.status(400).json(err));
+});
+
+router.route("/delivered").get((req, res) => {
+    getAll({ status: "delivered" })
+        .then((orders) => res.json(orders))
+        .catch((err) => res.status(400).json(err));
+});
+
+router.route("/finalized").get((req, res) => {
+    getAll({ status: "finalized" })
+        .then((orders) => res.json(orders))
+        .catch((err) => res.status(400).json(err));
+});
 
 module.exports = router;
