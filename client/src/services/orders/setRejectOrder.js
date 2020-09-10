@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default async function rejectOrder(idOrder, address) {
+export default async function setRejectOrder(idOrder, address) {
   return axios
     .put(`http://localhost:3001/orders/${idOrder}/rejected`, { address })
     .then((response) => {
