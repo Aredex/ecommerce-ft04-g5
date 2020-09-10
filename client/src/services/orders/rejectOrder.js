@@ -10,3 +10,5 @@ export default async function rejectOrder(idOrder, address) {
       return undefined;
     });
 }
+
+// TODO - importante para usar - PONE COMO REJECTED UNA ORDEN

@@ -10,3 +10,5 @@ export default async function completedOrder(idOrder) {
       return undefined;
     });
 }
+
+// TODO - importante para usar - PONE UNA ORDEN COMO FINALIZADA

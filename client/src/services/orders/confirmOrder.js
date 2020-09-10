@@ -10,3 +10,6 @@ export default async function confirmOrder(idOrder, address) {
       return undefined;
     });
 }
+
+// TODO - importante para usar - PONE UNA ORDEN COMO CONFIRMED
+// * PARA CUANDO SE CONFIRMA LA COMPRA

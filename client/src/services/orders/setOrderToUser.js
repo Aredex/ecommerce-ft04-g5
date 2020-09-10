@@ -10,3 +10,6 @@ export default async function sendOrder(idOrder, idUser) {
       return undefined;
     });
 }
+
+// TODO - importante para usar
+// TODO - Agrega una producto a una orden

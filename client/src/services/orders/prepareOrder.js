@@ -10,3 +10,5 @@ export default async function prepareOrder(idOrder, address) {
       return undefined;
     });
 }
+
+// TODO - importante para usar - PONE COMO PREPARING UNA ORDEN

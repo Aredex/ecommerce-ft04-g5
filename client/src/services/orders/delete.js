@@ -10,3 +10,6 @@ export default async function remove(id) {
       return undefined;
     });
 }
+
+// TODO - importante para usar - ELIMINA UNA ORDENES
+// * RECOMIENDO USARLO PARA VACIAR UNA ORDEN TAMBIÉN

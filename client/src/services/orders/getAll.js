@@ -10,3 +10,5 @@ export default async function getAll() {
       return undefined;
     });
 }
+
+// TODO - importante para usar - OBTIENE TODAS LAS ORDENES

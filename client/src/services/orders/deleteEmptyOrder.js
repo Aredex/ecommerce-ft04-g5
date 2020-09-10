@@ -10,3 +10,6 @@ export default async function removeEmptyOrder(id) {
       return undefined;
     });
 }
+
+// PONE UNA ORDEN COMO VACÍA
+// ! NO RECOMIENDO USAR ESTE MÉTODO
