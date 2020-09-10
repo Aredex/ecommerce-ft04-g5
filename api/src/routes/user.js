@@ -21,11 +21,6 @@ router
       .then((users) => res.json(users).status(200))
       .catch((err) => res.status(404).json(err));
   });
-//   .patch((req, res) => {
-//     changeRole()
-//       .then((user_role) => res.json(user_role))
-//       .catch((err) => res.status(400).json({ err }));
-//   });
 
 router
   .route("/:id")

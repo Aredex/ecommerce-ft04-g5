@@ -89,25 +89,6 @@ const changeRole = (id) => {
   });
 };
 
-// Cambia rol de usuario de ADMIN por GUEST
-// const AdminToGuest = () => {
-//   return new Promise((resolve, reject) => {
-//     User.update(
-//       { role: "GUEST" },
-//       {
-//         where: {
-//           role: "ADMIN",
-//         },
-//       }
-//     )
-//       .then((user) => {
-//         resolve({ description: "successfully updated users" });
-//         return user.save();
-//       })
-//       .catch((err) => reject(err));
-//   });
-// };
-
 module.exports = {
   createOne,
   getAll,
