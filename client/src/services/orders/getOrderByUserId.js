@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export default async function getOrderByUserId(id) {
+export default async function getOrderByUserId(idUser) {
   return axios
-    .get(`http://localhost:3001/users/${id}/orders`)
+    .get(`http://localhost:3001/users/${idUser}/orders`)
     .then((response) => {
       return response.data;
     })
