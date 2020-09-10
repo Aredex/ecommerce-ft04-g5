@@ -2,6 +2,7 @@ const { getOne: getProduct } = require("./products");
 const { getOne: getOrder, createOne: createOrder } = require("./orders");
 const { Order_product } = require("../db");
 const { setUsertoOrder } = require("./users_order");
+const orders = require("./orders");
 
 const findByProduct = (productId) => {
     return new Promise((resolve, reject) => {
@@ -95,7 +96,7 @@ const addProductToOrder = async ({
                 }
 
                 return findOne(Product.id, Order.id)
-                    .then((product_order) => product_order)                    
+                    .then((product_order) => product_order)
             })
             .then((product_order) => {
                 if (Array.isArray(product_order)) return product_order[0];
@@ -106,9 +107,14 @@ const addProductToOrder = async ({
                 product_order.amount = amount;
                 return product_order.save();
             })
-            .then((product_order) => resolve(product_order))
+            .then((product_order) => {
+                return getOrder(product_order.orderId)
+            })
+            .then((order) => {
+                resolve(order);
+            })
             .catch((err) => {
-                
+
                 reject({ error: err })
             });
     });
