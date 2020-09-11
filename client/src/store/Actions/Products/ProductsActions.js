@@ -1,42 +1,86 @@
-import { create, remove, getById, getAll, update } from "services/products";
+import { search, create, remove, getById, getAll, update, addCategoryToProduct, removeCategoryToProduct } from "services/products";
+import getCategories from "services/categories/getAll";
 
-export function createProduct(name, description, price, stock) {
+export function addCategoryProduct(productId, categoryId) {
   return function (dispatch) {
-    return create(name, description, price, stock).then(function (data) {
-      dispatch({ type: "CREATE_PRODUCT", payload: data });
-    });
+    return addCategoryToProduct(productId, categoryId)
+      .then(function (data) {
+        dispatch({ type: "ADD_CATEGORY_PRODUCT", payload: data });
+      });
+  }
+}
+
+export function removeCategoryProduct(productId, categoryId) {
+  return function (dispatch) {
+    return removeCategoryToProduct(productId, categoryId)
+      .then(function (data) {
+        dispatch({ type: "REMOVE_CATEGORY_PRODUCT", payload: data });
+      });
+  }
+}
+
+export function handleViewProduct(id) {
+  return function (dispatch) {
+    dispatch(getProductDetail(id))
+      .then(function () {
+        dispatch({ type: "HANDLE_VIEW_PRODUCT" })
+      })
+  }
+}
+export function suggestions() {
+  return function (dispatch) {
+    return getCategories()
+      .then(function (data) {
+        dispatch({ type: "SUGGESTIONS", payload: data })
+      })
+  }
+}
+export function handleUpdateProduct(id) {
+  return function (dispatch) {
+    dispatch(getProductDetail(id))
+      .then(function () {
+        dispatch(suggestions())
+      })
+      .then(function () {
+        dispatch({ type: "HANDLE_UPDATE_PRODUCT" })
+      })
+  }
+}
+export function handleCreateProduct(id) {
+  return function (dispatch) {
+    dispatch(suggestions())
+      .then(function () {
+        dispatch({ type: "HANDLE_CREATE_PRODUCT" })
+      })
+  }
+}
+
+export function getProducts() {
+  return function (dispatch) {
+    return getAll()
+      .then(function (data) {
+        dispatch({ type: "GET_PRODUCTS", payload: data })
+      })
+  }
+}
+export function getProductDetail(id) {
+  return function (dispatch) {
+    if (!id) {
+      return dispatch({ type: "GET_PRODUCT_DETAIL", payload: null })
+    }
+    return getById(id)
+      .then((data) => {
+        dispatch({ type: "GET_PRODUCT_DETAIL", payload: data });
+      })
   };
 }
 
-export async function getProducts() {
-  const payload = await getAll();
-  return { type: "GET_PRODUCTS", payload };
-}
-export async function getProductDetail(id) {
-  const payload = await getById(id);
-  return { type: "GET_PRODUCT_DETAIL", payload };
-}
-// export function getProductDetail(id) {
-//   return function (dispatch) {
-//     return getById(id).then(function (data) {
-//       console.log("ENTRO AL PRODUCTO" + data);
-//       dispatch({ type: "GET_PRODUCT_DETAIL", payload: data });
-//     });
-//   };
-// }
-
-export function searchProduct(filter) {
+export function searchProduct(name) {
   return function (dispatch) {
-    return dispatch({
-      type: "SEARCH_PRODUCT",
-      // payload: arrayPrueba.filter(function (e) {
-      //   for (const prop in e) {
-      //     if (e[prop].toString().includes(filter)) {
-      //       return true;
-      //     }
-      //   }
-      // }),
-    });
+    return search(name)
+      .then(function (data) {
+        dispatch({ type: "SEARCH_PRODUCT", payload: data })
+      })
   };
 }
 
@@ -54,4 +98,17 @@ export function updateProduct(id, name, description, price, stock) {
       dispatch({ type: "UPDATE_PRODUCT", payload: data });
     });
   };
+}
+
+export function createProduct(name, description, price, stock, imageUrl) {
+  return function (dispatch) {
+    return create(name, description, price, stock, imageUrl).then(function (data) {
+      dispatch({ type: "CREATE_PRODUCT", payload: data });
+      return data
+    });
+  }
+}
+
+export function disabledProductCRUD() {
+  return { type: "DISABLED_PRODUCT_CRUD" }
 }

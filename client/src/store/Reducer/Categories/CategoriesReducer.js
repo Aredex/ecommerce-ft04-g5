@@ -1,9 +1,10 @@
 const initialState = {
   categories: undefined,
-  catogoryCreate: null,
-  categoryUpdate: {},
-  categoryRemove: {},
   categoryId: undefined,
+  categoryRemove: null,
+  categoryCreate: null,
+  categoryReadOnly: null,
+  categoryUpdate: null
 };
 
 export default function CategoriesReducer(state = initialState, action) {
@@ -13,34 +14,51 @@ export default function CategoriesReducer(state = initialState, action) {
         ...state,
         categories: action.payload,
       };
-
-    case "CREATE_CATEGORY":
-      return {
-        ...state,
-        catogoryCreate: true,
-      };
-
-    case "UPDATE_CATEGORY":
-      return {
-        ...state,
-        categoryUpdate: action.payload,
-      };
-
-    case "REMOVE_PRODUCT":
-      return {
-        ...state,
-        categoryRemove: action.payload,
-      };
-
     case "GET_CATEGORY_BY_ID":
-      console.log("ENTRA AL REDUCER")
       return {
         ...state,
         categoryId: action.payload,
       };
+    case "CREATE_CATEGORY":
+      return {
+        ...state,
+      };
+    case "UPDATE_CATEGORY":
+      return {
+        ...state,
+      };
+    case "REMOVE_CATEGORY":
+      return {
+        ...state,
+        categoryRemove: action.payload,
+      };
+    case "HANDLE_VIEW_CATEGORY":
+      console.log("entra")
 
+      return {
+        ...state,
+        categoryReadOnly: true,
+      };
+    case "HANDLE_UPDATE_CATEGORY":
+      return {
+        ...state,
+        categoryUpdate: true
+      };
+    case "HANDLE_CREATE_CATEGORY":
+      return {
+        ...state,
+        categoryId: { name: '', description: '' },
+        categoryCreate: true
+      };
+    case "DISABLED_CRUD":
+      return {
+        ...state,
+        categoryRemove: null,
+        categoryCreate: null,
+        categoryReadOnly: null,
+        categoryUpdate: null
+      };
     default:
       return state;
   }
-
 }

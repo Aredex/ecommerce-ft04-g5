@@ -5,20 +5,26 @@ import InputField from "components/InputField";
 import TextareaField from "components/TextareaField";
 import Modal from "components/Modal";
 
-const CRUD = ({ formikData, onClose }) => {
+const CRUD = ({ onClose, onSubmit, category, estado }) => {
+
   const prefixStyle = { width: "8rem" };
+
   return (
     <Formik
-      initialValues={formikData.initialValues}
-      onSubmit={formikData.onSubmit}
+      initialValues={{
+        id: category.id,
+        name: category.name,
+        description: category.description,
+      }}
+      onSubmit={onSubmit}
     >
       {({ values, handleSubmit }) => (
         <Modal>
           <Modal.Header>
             <>
-              {formikData.readOnly && `${values.name}`}
-              {formikData.update && `Modificar ${values.name}`}
-              {formikData.create && "Crear nueva categoría"}
+              {estado.readOnly && `${values.name}`}
+              {estado.update && `Modificar ${values.name}`}
+              {estado.create && "Crear nueva categoría"}
             </>
           </Modal.Header>
           <Modal.Body>
@@ -28,23 +34,23 @@ const CRUD = ({ formikData, onClose }) => {
                 prefix="Nombre"
                 prefixStyle={prefixStyle}
                 name="name"
-                readOnly={formikData.readOnly}
+                readOnly={estado.readOnly}
               />
               <TextareaField
                 prefix="Descripción"
                 name="description"
-                readOnly={formikData.readOnly}
+                readOnly={estado.readOnly}
               />
             </form>
           </Modal.Body>
           <Modal.Footer>
             <>
-              {formikData.readOnly && (
+              {estado.readOnly && (
                 <button type="button" onClick={onClose}>
                   Cerrar
                 </button>
               )}
-              {formikData.update && (
+              {estado.update && (
                 <>
                   <button type="button" onClick={onClose}>
                     Cancelar
@@ -58,7 +64,7 @@ const CRUD = ({ formikData, onClose }) => {
                   </button>
                 </>
               )}
-              {formikData.create && (
+              {estado.create && (
                 <>
                   <button type="button" onClick={onClose}>
                     Cancelar

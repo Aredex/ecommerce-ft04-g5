@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
-import useQuery from "hooks/useQuery";
-import search from "services/products/search";
-import Catalogue from "components/Catalogue";
-import getAll from "services/products/getAll";
-import {
-  getAll as getAllCategories,
-  getProductsFromCategory,
-} from "services/categories";
+import { getAll as getAllCategories } from "services/categories";
 import { useHistory } from "react-router";
+import useQuery from "hooks/useQuery";
+import Catalogue from "components/Catalogue";
+import { connect } from "react-redux";
+import * as actionsProducts from "store/Actions/Products/ProductsActions";
+import { bindActionCreators } from "redux";
 
 import style from "./index.module.scss";
 
-const Products = () => {
-  const history = useHistory();
+const Products = ({ searchProduct, getProducts, state }) => {
   const query = useQuery();
-  const [products, setProducts] = useState([]);
+  const history = useHistory();
+  var products;
+
   const [categories, setCategories] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
 
@@ -27,24 +26,18 @@ const Products = () => {
   useEffect(() => {
     (async () => setCategories(await getAllCategories()))();
   }, []);
+
   useEffect(() => {
     if (query.name) {
-      (async () => {
-        const result = await search(query.name);
-        setProducts(result);
-      })();
-    } else if (query.category) {
-      (async () => {
-        const result = await getProductsFromCategory(query.category);
-        setProducts(result);
-      })();
+      searchProduct(query.name);
     } else {
-      (async () => {
-        const result = await getAll(query.name);
-        setProducts(result);
-      })();
+      getProducts();
     }
-  }, [query.name, query.category]);
+  }, [query.name]);
+  query.name
+    ? (products = state.productSearch)
+    : (products = state.productCards);
+
   return (
     <section className={style.page}>
       <div className={style.filter}>
@@ -86,4 +79,13 @@ const Products = () => {
   );
 };
 
-export default Products;
+function mapStateToProps(state) {
+  return {
+    state: state.ProductsReducer,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(actionsProducts, dispatch);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Products);

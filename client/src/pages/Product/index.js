@@ -1,29 +1,26 @@
 import React, { useState, useEffect } from "react";
-import getById from "services/products/getById";
-import { useParams, useHistory } from "react-router";
 import AddToCart from "components/AddToCart";
 import noImage from "noImage.svg";
 import style from "./index.module.scss";
 import { getProductDetail } from "store/Actions/Products/ProductsActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ReviewButton from "components/ReviewButton";
 import useOrders from "hooks/useOrders";
+import { useHistory, useParams } from "react-router";
 
 const Product = (props) => {
   const [count, setCount] = useState(1);
-
-  let { id } = useParams();
-
   const dispatch = useDispatch();
+  const { id } = useParams();
+  useEffect(() => {
+    dispatch(getProductDetail(id));
+    return () => {
+      dispatch(getProductDetail());
+    };
+  }, []);
+
   const history = useHistory();
   const product = useSelector((x) => x.ProductsReducer.productDetail);
-
-  useEffect(() => {
-    (async () => {
-      dispatch(await getProductDetail(id));
-    })();
-  }, [id]);
-
   const handleOnAdd = () => {
     setCount(count + 1);
   };

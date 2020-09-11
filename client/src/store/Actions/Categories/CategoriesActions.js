@@ -35,6 +35,24 @@ export function getAllCategories() {
   };
 }
 
+export function handleViewCategory(id) {
+  return function (dispatch) {
+    dispatch(getCategoryById(id))
+      .then(function () {
+        dispatch({ type: "HANDLE_VIEW_CATEGORY" })
+      })
+  };
+}
+
+export function handleUpdateCategory(id) {
+  return function (dispatch) {
+    dispatch(getCategoryById(id))
+      .then(function () {
+        dispatch({ type: "HANDLE_UPDATE_CATEGORY" })
+      })
+  };
+}
+
 
 export function updateCategory(id, name, description) {
   return function (dispatch) {
@@ -43,4 +61,11 @@ export function updateCategory(id, name, description) {
         dispatch({ type: "UPDATE_CATEGORY", payload: data });
       })
   };
+}
+export function handleCreateCategory() {
+  return { type: "HANDLE_CREATE_CATEGORY" }
+}
+
+export function disabledCRUD() {
+  return { type: "DISABLED_CRUD" }
 }

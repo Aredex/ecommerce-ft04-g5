@@ -1,114 +1,93 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import style from "./index.module.scss";
-import getAll from "services/products/getAll";
-import { getAll as getCategories } from "services/categories";
 import CRUD from "./CRUD";
-import getById from "services/products/getById";
-import update from "services/products/update";
-import create from "services/products/create";
-import remove from "services/products/delete";
-import addCategoryToProduct from "services/products/addCategoryToProduct";
-import removeCategoryToProduct from "services/products/removeCategoryToProduct";
-import { getProducts } from "store/Actions/Products/ProductsActions";
-import { useDispatch, useSelector } from "react-redux";
+import * as actionsProducts from "store/Actions/Products/ProductsActions"
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux'
 
 
-const Products = () => {
-  const [formik, setFormik] = useState();
-
-  const dispatch = useDispatch();
-
-  const products = useSelector((x) => x.ProductsReducer.productCards);
+const Products = ({ state, updateProduct, createProduct, addCategoryProduct,
+  removeCategoryProduct, disabledProductCRUD, removeProduct, getProducts,
+  handleViewProduct, handleUpdateProduct, handleCreateProduct }) => {
 
   useEffect(() => {
-    (async () => {
-      dispatch(await getProducts());
-    })()
-
+    getProducts();
   }, []);
 
-  const getValues = async (id) => {
-    const result = await getById(id);
-    return {
-      id: result.id,
-      name: result.name,
-      description: result.description,
-      price: result.price,
-      stock: result.stock,
-      categories: result.categories
-        ? result.categories.map((category) => ({
-          id: category.id,
-          name: category.name,
-          description: category.description,
-        }))
-        : [],
-    };
-  };
+  useEffect(() => {
+    getProducts();
+  }, [state.productReadOnly,
+  state.productUpdate,
+  state.productCreate,
+  state.productRemove]);
+
+  const products = state.productCards
+  const bandera = {
+    readOnly: state.productReadOnly,
+    update: state.productUpdate,
+    create: state.productCreate,
+    suggestions: state.suggestions
+  }
+
   const handleView = async (id) => {
-    setFormik({
-      initialValues: await getValues(id),
-      readOnly: true,
-    });
+    await handleViewProduct(id)
   };
   const handleUpdate = async (id) => {
-    const initialValues = await getValues(id);
-    setFormik({
-      initialValues,
-      onSubmit: async (values) => {
-        const { name, description, price, stock, categories } = values;
-        await update(id, name, description, price, stock);
-        for (const category of categories) {
-          if (!initialValues.categories.includes(category))
-            await addCategoryToProduct(id, category.id);
-        }
-        for (const category of initialValues.categories) {
-          if (!categories.includes(category))
-            await removeCategoryToProduct(id, category.id);
-        }
-        dispatch(await getProducts())
-        setFormik(undefined);
-      },
-      update: true,
-      suggestions: await getCategories(),
-    });
+    await handleUpdateProduct(id)
   };
   const handleCreate = async () => {
-    setFormik({
-      initialValues: {
-        name: "",
-        description: "",
-        price: 1,
-        stock: 0,
-        imageUrl: "",
-        categories: [],
-      },
-      onSubmit: async (values) => {
-        let { name, description, price, stock, imageUrl, categories } = values;
+    await handleCreateProduct()
+  };
+  const handleDelete = async (id, name) => {
+    var r = window.confirm(`Desea eliminar ${name}`);
+    if (r === true) {
+      await removeProduct(id)
+      disabledProductCRUD()
+
+    }
+  };
+
+  var onSubmit
+  if (bandera) {
+    if (bandera.update) {
+      onSubmit = async (values) => {
+        const { name, description, price, stock, categories } = values;
+        await updateProduct(state.productDetail.id, name, description, price, stock);
+        for (const category of categories) {
+          if (!state.productDetail.categories.includes(category))
+            await addCategoryProduct(state.productDetail.id, category.id);
+        }
+        for (const category of state.productDetail.categories) {
+          if (!categories.includes(category))
+            await removeCategoryProduct(state.productDetail.id, category.id);
+        }
+        disabledProductCRUD()
+      }
+    }
+    if (bandera.readOnly) {
+      onSubmit = async () => {
+        await disabledProductCRUD()
+      }
+    }
+    if (bandera.create) {
+      onSubmit = async (values) => {
+        var { name, description, price, stock, imageUrl, categories } = values;
         imageUrl = imageUrl
           ? imageUrl.length > 0
             ? imageUrl
             : undefined
           : undefined;
-        const product = await create(name, description, price, stock, imageUrl);
+        var creado = await createProduct(name, description, price, stock, imageUrl)
         if (categories.length > 0) {
           for (const category of categories) {
-            await addCategoryToProduct(product.id, category.id);
+            await addCategoryProduct(creado.id, category.id);
           }
         }
-        dispatch(await getProducts())
-        setFormik(undefined);
-      },
-      create: true,
-      suggestions: await getCategories(),
-    });
-  };
-  const handleDelete = async (id, name) => {
-    var r = window.confirm(`Desea eliminar ${name}`);
-    if (r === true) {
-      await remove(id);
-      dispatch(await getProducts())
+        disabledProductCRUD()
+      }
     }
-  };
+  }
+
   return (
     <section>
       <table className={style.table}>
@@ -147,11 +126,28 @@ const Products = () => {
           ))}
         </tbody>
       </table>
-      {formik && (
-        <CRUD formikData={formik} onClose={() => setFormik(undefined)} />
+      {(bandera.readOnly || bandera.update || bandera.create) && (
+        <CRUD
+          formikData={state.productDetail}
+          onClose={() => disabledProductCRUD()}
+          onSubmit={onSubmit}
+          estado={bandera}
+        />
       )}
     </section>
   );
 };
 
-export default Products;
+function mapStateToProps(state) {
+  return {
+    state: state.ProductsReducer
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(actionsProducts, dispatch)
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Products);
