@@ -15,7 +15,7 @@ const Product = (props) => {
   let { id } = useParams();
 
   const dispatch = useDispatch();
-
+  const history = useHistory();
   const product = useSelector((x) => x.ProductsReducer.productDetail);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const Product = (props) => {
               {
                 id: 1,
                 rating: 2,
-                message: "Porque tenemos que pelear con redux?🤬",
+                message: "Mensaje de la review!",
               },
             ]}
           />
@@ -81,7 +81,14 @@ const Product = (props) => {
             <div className={style.separator}>Categorias</div>
             <section>
               {product.categories.map((category, key) => (
-                <span key={key}>{category.name}</span>
+                <span
+                  key={key}
+                  onClick={() =>
+                    history.push(`/products?category=${category.id}`)
+                  }
+                >
+                  {category.name}
+                </span>
               ))}
             </section>
           </div>
@@ -89,6 +96,7 @@ const Product = (props) => {
             <div className={style.separator}>
               <span>Descripción</span>
             </div>
+            {product.description}
           </div>
         </div>
       </div>
