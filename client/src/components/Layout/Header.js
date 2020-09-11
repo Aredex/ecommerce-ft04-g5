@@ -3,6 +3,7 @@ import SearchBar from "components/SearchBar";
 import style from "./index.module.scss";
 import logo from "logo.svg";
 import { NavLink, useLocation, useHistory } from "react-router-dom";
+import UserInit from "components/userInit";
 
 const Header = () => {
   const [showNav, setShowNav] = useState(false);
@@ -52,7 +53,9 @@ const Header = () => {
               Administración
             </NavLink>
           </section>
-          <section></section>
+          <section className={style.navLink}>
+            <UserInit />
+          </section>
         </nav>
       </div>
       <div className={style.headerBrand} onClick={() => history.push("/")}>

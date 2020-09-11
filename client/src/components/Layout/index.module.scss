@@ -13,7 +13,6 @@
   grid-template-rows: 4rem;
   align-items: center;
   width: stretch;
-
   .logo {
     width: 2rem;
     padding: 1rem;
@@ -38,6 +37,7 @@
       height: calc(100vh - 4rem);
       transform: translateX(-100%);
       transition: transform 0.25s;
+      justify-content: space-between;
 
       section {
         display: flex;
