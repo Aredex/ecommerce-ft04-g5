@@ -1,9 +1,15 @@
+@import "bp.scss";
+
 .catalogue {
   width: stretch;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(10rem, 10rem));
   grid-template-rows: 1fr;
-  gap: 1rem;
   justify-content: center;
+  gap: 1rem;
   padding: 0.5rem;
+  @include respond-to("default") {
+    padding: 0rem;
+    gap: 0.5rem;
+  }
 }

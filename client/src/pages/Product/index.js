@@ -1,34 +1,26 @@
 import React, { useState, useEffect } from "react";
-import getById from "services/products/getById";
-import { useParams } from "react-router";
 import AddToCart from "components/AddToCart";
 import noImage from "noImage.svg";
 import style from "./index.module.scss";
 import { getProductDetail } from "store/Actions/Products/ProductsActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import ReviewButton from "components/ReviewButton";
+import useOrders from "hooks/useOrders";
+import { useHistory, useParams } from "react-router";
 
 const Product = (props) => {
   const [count, setCount] = useState(1);
-
-  const [product, setProduct] = useState(null);
-
-  let { id } = useParams();
-
   const dispatch = useDispatch();
-
-  const { productDetail } = useSelector((x) => x.ProductsReducer);
-
+  const { id } = useParams();
   useEffect(() => {
-    (async () => {
-      dispatch(await getProductDetail(id));
-    })();
-  }, [id]);
+    dispatch(getProductDetail(id));
+    return () => {
+      dispatch(getProductDetail());
+    };
+  }, []);
 
-  useEffect(() => {
-    setProduct(productDetail);
-    console.log(productDetail);
-  }, [productDetail]);
-
+  const history = useHistory();
+  const product = useSelector((x) => x.ProductsReducer.productDetail);
   const handleOnAdd = () => {
     setCount(count + 1);
   };
@@ -41,45 +33,68 @@ const Product = (props) => {
     setCount(count - 1);
   };
 
+  const { addProduct } = useOrders();
+
   if (product) {
-    const imageURL = noImage;
-    // const imageURL = product.images[0]?.url || noImage;
+    const imageURL = product.images[0]?.url || noImage;
     return (
       <div className={style.page}>
         <div className={style.carusel}>
           <img width="200" height="200" src={imageURL} alt="" />
         </div>
-        <div className={style.name}>
-          <h1>{product.name}</h1>
-        </div>
-        <div className={style.price}>
-          <label>$</label>
-          <p>{product.price}</p>
-        </div>
-        {product.stock > 0 ? (
-          <AddToCart
-            onAdd={handleOnAdd}
-            onSubstract={hableOnSubstract}
-            value={count}
-            disableAdd={count === product.stock}
-            disableSubstract={count === 1}
-          />
-        ) : (
-          <h1>No contamos con stock</h1>
-        )}
-        <div className={style.category}>
-          <div className={style.separator}>Categorias</div>
-          <section>
-            {product.categories.map((category, key) => (
-              <span key={key}>{category.name}</span>
-            ))}
-          </section>
-        </div>
-        <div className={style.description}>
-          <div className={style.separator}>
-            <span>Descripción</span>
+        <div className={style.info}>
+          <div className={style.name}>
+            <h1>{product.name}</h1>
           </div>
-          {product.description}
+          <div className={style.price}>
+            <label>$</label>
+            <p>{product.price}</p>
+          </div>
+          <ReviewButton
+            rating={2.3}
+            reviews={[
+              {
+                id: 1,
+                rating: 2,
+                message: "Mensaje de la review!",
+              },
+            ]}
+          />
+          {product.stock > 0 ? (
+            <AddToCart
+              onAdd={handleOnAdd}
+              onSubstract={hableOnSubstract}
+              value={count}
+              disableAdd={count === product.stock}
+              disableSubstract={count === 1}
+              onSubmit={() =>
+                addProduct(product.id, product.name, product.price, count)
+              }
+            />
+          ) : (
+            <h1>No contamos con stock</h1>
+          )}
+          <div className={style.category}>
+            <div className={style.separator}>Categorias</div>
+            <section>
+              {product.categories.map((category, key) => (
+                <span
+                  key={key}
+                  onClick={() =>
+                    history.push(`/products?category=${category.id}`)
+                  }
+                >
+                  {category.name}
+                </span>
+              ))}
+            </section>
+          </div>
+          <div className={style.description}>
+            <div className={style.separator}>
+              <span>Descripción</span>
+            </div>
+            {product.description}
+          </div>
         </div>
       </div>
     );

@@ -1,9 +1,28 @@
-const { User } = require("../db");
+const { User, Review, Product } = require("../db");
 
 const getAll = () => {
     return new Promise((resolve, reject) => {
         User.findAll()
-            .then((users) => resolve(users))
+            .then((users) => {
+                if (users.length === 0) {
+                    return reject({
+                        error: {
+                            name: "ApiFindError",
+                            type: "Users Error",
+                            errors: [
+                                {
+                                    message:
+                                        "there are no users in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
+                        },
+                    });
+                }
+
+                resolve(users);
+            })
             .catch((err) => reject(err));
     });
 };
@@ -30,16 +49,14 @@ const createOne = (name, email, password, role) => {
     });
 };
 
-const editOne = (id, name, email, password, role) => {
+const editOne = ({ id, name, email, password, role }) => {
     return new Promise((resolve, reject) => {
         getOne(id)
             .then((user) => {
-                user.name = name;
-                user.email = email;
-                user.password = password;
-                if (role) {
-                    user.role = role;
-                }
+                if (name) user.name = name;
+                if (email) user.email = email;
+                if (password) user.password = password;
+                if (role) user.role = role;
 
                 return user.save();
             })
@@ -50,8 +67,42 @@ const editOne = (id, name, email, password, role) => {
 
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
-        User.findOne({ where: { id } })
-            .then((user) => resolve(user))
+        User.findOne({
+            where: { id },
+            include: [{ model: Review, include: Product }],
+        })
+            .then((user) => {
+                if (!user) {
+                    return reject({
+                        error: {
+                            name: "ApiFindError",
+                            type: "Users Error",
+                            errors: [
+                                {
+                                    message:
+                                        "user does not exist in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
+                        },
+                    });
+                }
+
+                resolve(user);
+            })
+            .catch((err) => reject(err));
+    });
+};
+
+const deleteOne = (id) => {
+    return new Promise((resolve, reject) => {
+        getOne(id)
+            .then((user) => {
+                user.destroy();
+
+                resolve({ description: "successfully deleted user" });
+            })
             .catch((err) => reject(err));
     });
 };
@@ -61,4 +112,5 @@ module.exports = {
     getAll,
     getOne,
     editOne,
+    deleteOne,
 };

@@ -36,5 +36,13 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: false,
             },
         },
+        views: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
+        errors: {
+            type: DataTypes.STRING,
+            defaultValue: null,
+        },
     });
 };

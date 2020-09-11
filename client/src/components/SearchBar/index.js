@@ -1,6 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
-import { searchProduct } from "../../store/Actions/Actions.js";
 import style from "./index.module.scss";
 import { useFormik } from "formik";
 import { useHistory } from "react-router";
@@ -32,14 +30,5 @@ const SearchBar = () => {
   );
 };
 
-function mapStateToProps(state) {
-  return {};
-}
 
-function mapDispatchToProps(dispatch) {
-  return {
-    searchProduct: (filter) => dispatch(searchProduct(filter)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
+export default SearchBar

@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
             set(value) {
                 this.setDataValue("url", value.trim());
             },
-            // unique: true
+            unique: true
         },
     });
 };

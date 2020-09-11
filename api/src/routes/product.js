@@ -10,15 +10,18 @@ const {
     getOne,
     getByQuery,
     deleteOne,
+    setViews,
+    getAllWithStock,
 } = require("../controllers/products");
+const { getAll: getReviews } = require("../controllers/reviews");
 
 router
     .route("/")
     .get((req, res) => {
-        return getAll()
-            .then((products) => {
-                res.send(products);
-            })
+        const { page, pageSize } = req.body;
+
+        return getAll(page, pageSize)
+            .then((products) => res.json(products))
             .catch((err) => res.status(404).json(err));
     })
     .post((req, res) => {
@@ -31,10 +34,19 @@ router
             .catch((err) => res.status(400).json(err));
     });
 
+router.route("/withstock").get((req, res) => {
+    const { page, pageSize } = req.body;
+
+    getAllWithStock(page, pageSize)
+        .then((products) => res.json(products))
+        .catch((err) => res.status(404).json(err));
+});
+
 router.route("/search").get((req, res) => {
     const { name } = req.query;
+    const { page, pageSize } = req.body;
 
-    getByQuery(name)
+    getByQuery(name, page, pageSize)
         .then((products) => res.json(products))
         .catch((err) => res.status(404).json(err));
 });
@@ -62,6 +74,14 @@ router
             .catch((err) => res.json(err).status(404));
     });
 
+router.route("/:id/reviews").get((req, res) => {
+    const { id } = req.params;
+
+    getReviews({ idProduct: id })
+        .then((reviews) => res.json(reviews).status(200))
+        .catch((err) => res.json(err));
+});
+
 router
     .route("/:id/category/:idCategory")
     .put((req, res) => {
@@ -79,4 +99,13 @@ router
             .then((productCategory) => res.json(productCategory).status(200))
             .catch((err) => res.json(err));
     });
+
+router.route("/:id/setviews").put((req, res) => {
+    const { id } = req.params;
+
+    setViews(id)
+        .then((views) => res.json(views).status(200))
+        .catch((err) => res.status(404).json(err));
+});
+
 module.exports = router;

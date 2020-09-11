@@ -1,26 +1,91 @@
 import React, { useEffect, useState } from "react";
+import { getAll as getAllCategories } from "services/categories";
+import { useHistory } from "react-router";
 import useQuery from "hooks/useQuery";
-import search from "services/products/search";
 import Catalogue from "components/Catalogue";
-import getAll from "services/products/getAll";
+import { connect } from "react-redux";
+import * as actionsProducts from "store/Actions/Products/ProductsActions";
+import { bindActionCreators } from "redux";
 
-const Products = () => {
+import style from "./index.module.scss";
+
+const Products = ({ searchProduct, getProducts, state }) => {
   const query = useQuery();
-  const [products, setProducts] = useState([]);
+  const history = useHistory();
+  var products;
+
+  const [categories, setCategories] = useState([]);
+  const [showFilter, setShowFilter] = useState(false);
+
+  function isActive(key) {
+    return query.category
+      ? query.category.toString() === key.toString()
+      : false;
+  }
+
+  useEffect(() => {
+    (async () => setCategories(await getAllCategories()))();
+  }, []);
+
   useEffect(() => {
     if (query.name) {
-      (async () => {
-        const result = await search(query.name);
-        setProducts(result);
-      })();
+      searchProduct(query.name);
     } else {
-      (async () => {
-        const result = await getAll(query.name);
-        setProducts(result);
-      })();
+      getProducts();
     }
   }, [query.name]);
-  return <Catalogue products={products} />;
+  query.name
+    ? (products = state.productSearch)
+    : (products = state.productCards);
+
+  return (
+    <section className={style.page}>
+      <div className={style.filter}>
+        <div className={style.filterButton}>
+          <span>Filtrar por categoría</span>
+          <button onClick={() => setShowFilter(!showFilter)}>
+            Filtrar{" "}
+            <i
+              className={[
+                "fas",
+                showFilter ? "fa-caret-up" : "fa-caret-down",
+              ].join(" ")}
+            ></i>
+          </button>
+        </div>
+        <ul
+          className={[style.filterBody, showFilter ? style.show : ""].join(" ")}
+        >
+          {categories.map((category) => (
+            <li
+              key={category.id}
+              onClick={() => history.push(`/products?category=${category.id}`)}
+              className={isActive(category.id) ? style.active : ""}
+            >
+              {category.name}
+            </li>
+          ))}
+          <li
+            key={"all"}
+            onClick={() => history.push(`/products`)}
+            className={!query.category ? style.active : ""}
+          >
+            Mostrar todos los articulos
+          </li>
+        </ul>
+      </div>
+      <Catalogue products={products} />
+    </section>
+  );
 };
 
-export default Products;
+function mapStateToProps(state) {
+  return {
+    state: state.ProductsReducer,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(actionsProducts, dispatch);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Products);
