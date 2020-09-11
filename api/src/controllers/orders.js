@@ -1,19 +1,44 @@
 const { getOne: getProduct } = require("./products");
-const { Order, Product, User } = require("../db");
+const { Order, Product, User, Op } = require("../db");
 
-// Obtiene todas las ordenes hechas
-const getAll = ({ status }) => {
+// Obtiene todas las ordenes hechas y puede filtrar según su status
+
+const getAllFiler = ({ search }) => {
+    return new Promise((resolve, reject) => {
+        if (!isNaN(search)) {
+            search = Number(search);
+            console.log(search);
+
+            getOne(search)
+                .then((order) => resolve(order))
+                .catch((err) => reject(err));
+        } else {
+            getAll({ search })
+                .then((order) => resolve(order))
+                .catch((err) => reject(err));
+        }
+    });
+};
+
+const getAll = ({ status, search }) => {
     let where = {};
+    let obj = {};
+    let include = [Product, User];
 
     if (status) {
         status = status.toUpperCase();
         where.status = status;
     }
 
+    if (search) {
+        obj = { model: User, where: { name: { [Op.substring]: search } } };
+        include[1] = obj;
+    }
+
     return new Promise((resolve, reject) => {
         Order.findAll({
             where,
-            include: [Product, User],
+            include,
             order: [["id", "ASC"]],
         })
             .then((orders) => {
@@ -171,4 +196,5 @@ module.exports = {
     deleteOne,
     emptyOrder,
     confirmedOrder,
+    getAllFiler,
 };

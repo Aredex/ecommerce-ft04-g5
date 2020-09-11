@@ -7,6 +7,7 @@ const {
     editOne,
     emptyOrder,
     confirmedOrder,
+    getAllFiler,
 } = require("../controllers/orders");
 const {
     removeProductToOrder,
@@ -20,8 +21,15 @@ router
     .route("/")
     .get((req, res) => {
         const { status } = req.body;
+        const { search } = req.query;
 
-        getAll({ status })
+        if (!search) {
+            return getAll({ status })
+                .then((orders) => res.json(orders))
+                .catch((err) => res.status(404).json(err));
+        }
+
+        getAllFiler({ search })
             .then((orders) => res.json(orders))
             .catch((err) => res.status(404).json(err));
     })
