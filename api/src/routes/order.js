@@ -3,7 +3,7 @@ const {
     getAll,
     createOne,
     deleteOne,
-    getOne,
+    // getOne,
     editOne,
     emptyOrder,
 } = require("../controllers/orders");
@@ -15,7 +15,7 @@ const {
 const { setUsertoOrder } = require("../controllers/users_order");
 
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\\
-const { ordersDevolution } = require("../controllers/order_id_string")
+const { ordersDevolution } = require("../controllers/order_id_string");
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\\
 
 // Rutas para obtener todas las ordenes y crear una orden
@@ -39,7 +39,9 @@ router
 //      Solo edita el status y address
 //      Eliminar una orden sirve como método para vaciar
 router
-    .route("/id")/*
+    .route(
+        "/id"
+    ) /*
     .get((req, res) => {
         const { id } = req.params;
         getOne(id)
@@ -189,14 +191,10 @@ router.route("/:idOrder/user/:idUser").post((req, res) => {
         .catch((err) => res.status(400).json(err));
 });
 
-
-router
-      .route("/:variable")
-      .get((req, res) => {
-        const { variable } = req.params;
-       ordersDevolution(variable)
+router.route("/:variable").get((req, res) => {
+    const { variable } = req.params;
+    ordersDevolution(variable)
         .then((orders) => res.json(orders))
         .catch((err) => res.status(400).json(err));
-
-      })
+});
 module.exports = router;
