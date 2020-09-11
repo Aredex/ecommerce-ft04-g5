@@ -2,6 +2,7 @@ import React from "react";
 import SearchBar from "components/SearchBar";
 import style from "./index.module.scss";
 import logo from "logo.svg";
+import UserInit from "components/userInit";
 
 const Header = () => {
   return (
@@ -13,6 +14,7 @@ const Header = () => {
         <img className={style.logo} src={logo} alt="Logo" />
         <span className={style.brand}>GardenRy</span>
       </div>
+      <UserInit />
       <SearchBar />
     </header>
   );
