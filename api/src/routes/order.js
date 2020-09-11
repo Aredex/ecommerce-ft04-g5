@@ -39,7 +39,7 @@ router
 //      Solo edita el status y address
 //      Eliminar una orden sirve como método para vaciar
 router
-    .route("/id")
+    .route("/:id")
     .get((req, res) => {
         const { id } = req.params;
         getOne(id)
