@@ -79,6 +79,12 @@
   width: stretch;
   margin: 0.25rem 1rem;
   background: #fff;
+  transition: box-shadow 0.5s;
+  box-shadow: 0 0 4px transparent;
+
+  &:hover {
+    box-shadow: 0 0 4px #d3d3d3;
+  }
 
   .productName {
     font-weight: 600;
