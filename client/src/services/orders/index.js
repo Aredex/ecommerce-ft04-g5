@@ -7,7 +7,7 @@ export { default as removeEmptyOrder } from "./removeEmptyOrder";
 export { default as removeOrder } from "./removeOrder";
 export { default as removeProduct } from "./removeProduct";
 export { default as setCompletedOrder } from "./setCompletedOrder";
-export { default as setComfirmOrder } from "./setComfirmOrder";
+export { default as setComfirmOrder } from "./setConfirmOrder";
 export { default as setDeliveredOrder } from "./setDeliveredOrder";
 export { default as setEmptyOrder } from "./setEmptyOrder";
 export { default as setOrderToUser } from "./setOrderToUser";

@@ -5,14 +5,49 @@ import Products from "./Products";
 import Categories from "./Categories";
 import { NavLink } from "react-router-dom";
 import Users from "./Users";
+import Orders from "./Orders";
+import OrderDetail from "./Orders/OrderDetail";
 
 const Admin = () => {
   return (
     <section className={style.page}>
       <aside>
-        <NavLink to="/admin/products">Productos</NavLink>
-        <NavLink to="/admin/categories">Categorías</NavLink>
-        <NavLink to="/admin/users">Usuarios</NavLink>
+        <NavLink
+          className={style.navLink}
+          activeClassName={style.activeNav}
+          to="/admin"
+          exact
+        >
+          Dashboard
+        </NavLink>
+        <NavLink
+          className={style.navLink}
+          activeClassName={style.activeNav}
+          to="/admin/products"
+        >
+          Productos
+        </NavLink>
+        <NavLink
+          className={style.navLink}
+          activeClassName={style.activeNav}
+          to="/admin/categories"
+        >
+          Categorías
+        </NavLink>
+        <NavLink
+          className={style.navLink}
+          activeClassName={style.activeNav}
+          to="/admin/orders"
+        >
+          Ordenes
+        </NavLink>
+        <NavLink
+          className={style.navLink}
+          activeClassName={style.activeNav}
+          to="/admin/users"
+        >
+          Usuarios
+        </NavLink>
       </aside>
       <section>
         <Route exact path="/admin">
@@ -23,6 +58,12 @@ const Admin = () => {
         </Route>
         <Route path="/admin/categories">
           <Categories />
+        </Route>
+        <Route exact path="/admin/orders">
+          <Orders />
+        </Route>
+        <Route path="/admin/orders/:id">
+          <OrderDetail />
         </Route>
         <Route path="/admin/users">
           <Users />
