@@ -2,11 +2,15 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import ProductCard from "components/ProductCard";
 import style from "./index.module.scss";
+import { useDispatch } from "react-redux";
+import { getProductDetail } from "store/Actions/Products/ProductsActions";
+
 
 const Catalogue = ({ products }) => {
   //Modificar to de NavLink por {`/product/${props.id}`}
   const history = useHistory();
   //eliminar el Style una vez definido los estilos en css externo
+  const dispatch = useDispatch()
   return (
     <div className={style.catalogue}>
       {products &&
@@ -19,7 +23,12 @@ const Catalogue = ({ products }) => {
               img={imageURL}
               title={e.name}
               price={e.price}
-              onClick={() => history.push(`/products/${e.id}`)}
+              onClick={() => {
+                dispatch(getProductDetail(e.id))
+                  .then(() => {
+                    history.push(`/products/${e.id}`)
+                  })
+              }}
             />
           );
         })}
