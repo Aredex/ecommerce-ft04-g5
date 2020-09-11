@@ -3,6 +3,7 @@ import SearchBar from "components/SearchBar";
 import style from "./index.module.scss";
 import logo from "logo.svg";
 import { NavLink, useLocation, useHistory } from "react-router-dom";
+import UserInit from "components/userInit";
 
 const Header = () => {
   const [showNav, setShowNav] = useState(false);
@@ -58,6 +59,8 @@ const Header = () => {
       <div className={style.headerBrand} onClick={() => history.push("/")}>
         <img className={style.logo} src={logo} alt="Logo" />
         <span className={style.brand}>GardenRy</span>
+
+        <UserInit />
       </div>
       <SearchBar />
     </header>
