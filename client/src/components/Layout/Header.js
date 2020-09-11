@@ -53,14 +53,14 @@ const Header = () => {
               Administración
             </NavLink>
           </section>
-          <section></section>
+          <section className={style.navLink}>
+            <UserInit />
+          </section>
         </nav>
       </div>
       <div className={style.headerBrand} onClick={() => history.push("/")}>
         <img className={style.logo} src={logo} alt="Logo" />
         <span className={style.brand}>GardenRy</span>
-
-        <UserInit />
       </div>
       <SearchBar />
     </header>
