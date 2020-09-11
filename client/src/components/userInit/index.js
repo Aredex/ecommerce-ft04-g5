@@ -1,22 +1,25 @@
 import React from "react";
 import style from "./index.module.scss";
+import { useSelector } from "react-redux";
 
-const userInit = (props) => {
-  var props = { login: false, name: "Juan Mercado" };
+
+function UserInit() {
+  const user = useSelector((x) => x.UsersReducer.userLogin)
+
   return (
     <div className={style.divPrincipal}>
       <p className={style.parrafo1}>
-        {props.login ? (
+        {user ? (
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png"
-            className={props.login ? style.imagen1 : style.imagen2}
+            className={user.login ? style.imagen1 : style.imagen2}
           ></img>
         ) : (
-          <i class="fa fa-user"></i>
-        )}
+            <i class="fa fa-user"></i>
+          )}
         <span>
-          {props.login ? "Hola! " + props.name : "Inicia sesion"}
-          {!props.login && (
+          {user ? "Hola! " + user.name : "Inicia sesion"}
+          {!user && (
             <a href="/sign-in" className={style.link1}>
               {" "}
               Ingresá | Registrate
@@ -28,4 +31,4 @@ const userInit = (props) => {
   );
 };
 
-export default userInit;
+export default UserInit;

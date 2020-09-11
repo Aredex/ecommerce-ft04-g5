@@ -3,8 +3,7 @@ import SearchBar from "components/SearchBar";
 import style from "./index.module.scss";
 import logo from "logo.svg";
 import { NavLink, useLocation, useHistory } from "react-router-dom";
-import UserInit from "components/userInit";
-
+import UserInit from "components/UserInit/index"
 const Header = () => {
   const [showNav, setShowNav] = useState(false);
   const location = useLocation();
