@@ -57,13 +57,10 @@ router
         const { id } = req.params;
         getOne(id)
             .then((order) => res.json(order).status(201))
-<<<<<<< HEAD
             .catch((err) => res.status(404).json(err));
     })
-=======
             .catch((err) => res.status(400).json(err));
     })*/
->>>>>>> a-dinamic-route
 
     .delete((req, res) => {
         const { id } = req.params;
