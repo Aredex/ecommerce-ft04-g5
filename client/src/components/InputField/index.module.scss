@@ -9,6 +9,14 @@
   font-size: 0.85rem;
   margin: 0.5rem;
 }
+.ro {
+  cursor: default;
+  user-select: none;
+  input {
+    cursor: default;
+    user-select: none;
+  }
+}
 .prefix {
   text-align: left;
   padding: 0.25rem 0.5rem;
