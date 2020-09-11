@@ -3,7 +3,7 @@ import style from "./index.module.scss";
 import { useSelector } from "react-redux";
 
 
-function UserInit() {
+function UserView() {
   const user = useSelector((x) => x.UsersReducer.userLogin)
 
   return (
@@ -31,4 +31,4 @@ function UserInit() {
   );
 };
 
-export default UserInit;
+export default UserView;

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import style from "./index.module.scss";
-import UserInit from "components/userInit";
 
 function ShoppingCart() {
   const [showCart, setShowCart] = useState(false);

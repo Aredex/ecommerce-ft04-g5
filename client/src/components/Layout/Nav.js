@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import style from "./Nav.module.scss";
 import { NavLink, useLocation } from "react-router-dom";
-import UserInit from "components/userInit";
+import UserView from "components/UserView";
 
 function Nav() {
   const [showNav, setShowNav] = useState(false);
@@ -48,7 +48,7 @@ function Nav() {
           </NavLink>
         </section>
         <section className={style.navLink}>
-          <UserInit />
+          <UserView />
         </section>
       </nav>
     </div>
