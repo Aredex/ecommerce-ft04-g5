@@ -49,16 +49,14 @@ const createOne = (name, email, password, role) => {
     });
 };
 
-const editOne = (id, name, email, password, role) => {
+const editOne = ({ id, name, email, password, role }) => {
     return new Promise((resolve, reject) => {
         getOne(id)
             .then((user) => {
-                user.name = name;
-                user.email = email;
-                user.password = password;
-                if (role) {
-                    user.role = role;
-                }
+                if (name) user.name = name;
+                if (email) user.email = email;
+                if (password) user.password = password;
+                if (role) user.role = role;
 
                 return user.save();
             })
