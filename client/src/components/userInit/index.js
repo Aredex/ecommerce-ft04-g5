@@ -6,14 +6,24 @@ const userInit = (props) => {
   return (
     <div className={style.divPrincipal}>
       <p className={style.parrafo1}>
-        {props.login ? "Hola!  " + props.name : "Inicia sesion"}
+        {props.login ? (
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png"
+            className={props.login ? style.imagen1 : style.imagen2}
+          ></img>
+        ) : (
+          <i class="fa fa-user"></i>
+        )}
+        <span>
+          {props.login ? "Hola! " + props.name : "Inicia sesion"}
+          {!props.login && (
+            <a href="/sign-in" className={style.link1}>
+              {" "}
+              Ingresá | Registrate
+            </a>
+          )}
+        </span>
       </p>
-      {!props.login && (
-        <a href="/sign-in" className={style.link1}>
-          {" "}
-          Ingresá | Registrate
-        </a>
-      )}
     </div>
   );
 };
