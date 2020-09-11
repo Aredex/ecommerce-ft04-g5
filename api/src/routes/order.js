@@ -6,6 +6,7 @@ const {
     getOne,
     editOne,
     emptyOrder,
+    confirmedOrder,
 } = require("../controllers/orders");
 const {
     removeProductToOrder,
@@ -140,7 +141,7 @@ router.route("/:id/confirmed").put((req, res) => {
     const { id } = req.params;
     const { address } = req.body;
 
-    editOne({ id, status: "CONFIRMED", address })
+    confirmedOrder({ id, address })
         .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
