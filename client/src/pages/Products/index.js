@@ -1,29 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import useQuery from "hooks/useQuery";
-import search from "services/products/search";
 import Catalogue from "components/Catalogue";
-import { getProducts } from "store/Actions/Products/ProductsActions";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
+import * as actionsProducts from "store/Actions/Products/ProductsActions"
+import { bindActionCreators } from 'redux'
 
-const Products = () => {
+
+const Products = ({ searchProduct, getProducts, state }) => {
   const query = useQuery();
-
-  const dispatch = useDispatch();
-  const products = useSelector((x) => x.ProductsReducer.productCards);
-
+  var products;
   useEffect(() => {
     if (query.name) {
-      (async () => {
-        const result = await search(query.name);
-        //setProducts(result);
-      })();
+      searchProduct(query.name)
     } else {
-      (async () => {
-        dispatch(await getProducts());
-      })();
+      getProducts()
     }
   }, [query.name]);
+  query.name ? products = state.productSearch : products = state.productCards
+
   return <Catalogue products={products} />;
 };
 
-export default Products;
+function mapStateToProps(state) {
+  return {
+    state: state.ProductsReducer
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(actionsProducts, dispatch)
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Products);

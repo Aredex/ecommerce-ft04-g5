@@ -1,4 +1,4 @@
-import { create, remove, getById, getAll, update, addCategoryToProduct, removeCategoryToProduct } from "services/products";
+import { search, create, remove, getById, getAll, update, addCategoryToProduct, removeCategoryToProduct } from "services/products";
 import getCategories from "services/categories/getAll";
 
 export function addCategoryProduct(productId, categoryId) {
@@ -53,7 +53,6 @@ export function handleCreateProduct(id) {
         dispatch({ type: "HANDLE_CREATE_PRODUCT" })
       })
   }
-
 }
 
 export function getProducts() {
@@ -74,18 +73,12 @@ export function getProductDetail(id) {
 
 }
 
-export function searchProduct(filter) {
+export function searchProduct(name) {
   return function (dispatch) {
-    return dispatch({
-      type: "SEARCH_PRODUCT",
-      // payload: arrayPrueba.filter(function (e) {
-      //   for (const prop in e) {
-      //     if (e[prop].toString().includes(filter)) {
-      //       return true;
-      //     }
-      //   }
-      // }),
-    });
+    return search(name)
+      .then(function (data) {
+        dispatch({ type: "SEARCH_PRODUCT", payload: data })
+      })
   };
 }
 

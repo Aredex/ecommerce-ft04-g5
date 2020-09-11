@@ -1,5 +1,3 @@
-import { Switch } from "react-router";
-
 const initialState = {
   productCards: [],
   productSearch: [],
@@ -18,6 +16,11 @@ export default function ProductsReducer(state = initialState, action) {
         ...state,
         productDetail: action.payload
       };
+    case "SEARCH_PRODUCT":
+      return {
+        ...state,
+        productSearch: action.payload
+      };
     case "GET_PRODUCTS":
       return {
         ...state,
@@ -33,11 +36,6 @@ export default function ProductsReducer(state = initialState, action) {
       return {
         ...state,
         productDetail: action.payload,
-      };
-    case "SEARCH_PRODUCT":
-      return {
-        ...state,
-        productSearch: action.payload,
       };
     case "HANDLE_VIEW_PRODUCT":
       return {

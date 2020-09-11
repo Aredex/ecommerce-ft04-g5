@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import style from "./index.module.scss";
 import CRUD from "./CRUD";
 import * as actionsProducts from "store/Actions/Products/ProductsActions"
@@ -6,44 +6,45 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux'
 
 
-const Products = (props) => {
+const Products = ({ state, updateProduct, createProduct, addCategoryProduct,
+  removeCategoryProduct, disabledProductCRUD, removeProduct, getProducts,
+  handleViewProduct, handleUpdateProduct, handleCreateProduct }) => {
 
   useEffect(() => {
-    props.getProducts();
+    getProducts();
   }, []);
 
   useEffect(() => {
-    props.getProducts();
-  }, [props.state.productReadOnly,
-  props.state.productUpdate,
-  props.state.productCreate,
-  props.state.productRemove]);
+    getProducts();
+  }, [state.productReadOnly,
+  state.productUpdate,
+  state.productCreate,
+  state.productRemove]);
 
-  const products = props.state.productCards
+  const products = state.productCards
   const bandera = {
-    readOnly: props.state.productReadOnly,
-    update: props.state.productUpdate,
-    create: props.state.productCreate,
-    suggestions: props.state.suggestions
+    readOnly: state.productReadOnly,
+    update: state.productUpdate,
+    create: state.productCreate,
+    suggestions: state.suggestions
   }
 
   const handleView = async (id) => {
-    await props.handleViewProduct(id)
+    await handleViewProduct(id)
   };
   const handleUpdate = async (id) => {
-    await props.handleUpdateProduct(id)
+    await handleUpdateProduct(id)
   };
   const handleCreate = async () => {
-    await props.handleCreateProduct()
+    await handleCreateProduct()
   };
   const handleDelete = async (id, name) => {
     var r = window.confirm(`Desea eliminar ${name}`);
     if (r === true) {
-      await props.removeProduct(id)
-      props.disabledProductCRUD()
+      await removeProduct(id)
+      disabledProductCRUD()
 
     }
-
   };
 
   var onSubmit
@@ -51,21 +52,21 @@ const Products = (props) => {
     if (bandera.update) {
       onSubmit = async (values) => {
         const { name, description, price, stock, categories } = values;
-        await props.updateProduct(props.state.productDetail.id, name, description, price, stock);
+        await updateProduct(state.productDetail.id, name, description, price, stock);
         for (const category of categories) {
-          if (!props.state.productDetail.categories.includes(category))
-            await props.addCategoryProduct(props.state.productDetail.id, category.id);
+          if (!state.productDetail.categories.includes(category))
+            await addCategoryProduct(state.productDetail.id, category.id);
         }
-        for (const category of props.state.productDetail.categories) {
+        for (const category of state.productDetail.categories) {
           if (!categories.includes(category))
-            await props.removeCategoryProduct(props.state.productDetail.id, category.id);
+            await removeCategoryProduct(state.productDetail.id, category.id);
         }
-        props.disabledProductCRUD()
+        disabledProductCRUD()
       }
     }
     if (bandera.readOnly) {
       onSubmit = async () => {
-        await props.disabledProductCRUD()
+        await disabledProductCRUD()
       }
     }
     if (bandera.create) {
@@ -76,21 +77,15 @@ const Products = (props) => {
             ? imageUrl
             : undefined
           : undefined;
-        var creado = await props.createProduct(name, description, price, stock, imageUrl)
+        var creado = await createProduct(name, description, price, stock, imageUrl)
         if (categories.length > 0) {
           for (const category of categories) {
-            await props.addCategoryProduct(creado.id, category.id);
+            await addCategoryProduct(creado.id, category.id);
           }
         }
-        props.disabledProductCRUD()
+        disabledProductCRUD()
       }
     }
-  }
-  async function create(name, description, price, stock, imageUrl) {
-
-  }
-  async function agregar(categories) {
-
   }
 
   return (
@@ -133,8 +128,8 @@ const Products = (props) => {
       </table>
       {(bandera.readOnly || bandera.update || bandera.create) && (
         <CRUD
-          formikData={props.state.productDetail}
-          onClose={() => props.disabledProductCRUD()}
+          formikData={state.productDetail}
+          onClose={() => disabledProductCRUD()}
           onSubmit={onSubmit}
           estado={bandera}
         />

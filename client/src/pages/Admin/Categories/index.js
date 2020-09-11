@@ -6,38 +6,41 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux'
 
 
-const Categories = (props) => {
+const Categories = ({ state, disabledCRUD, createCategory, updateCategory,
+  removeCategory, getAllCategories, handleViewCategory, handleUpdateCategory,
+  handleCreateCategory }) => {
+
   useEffect(() => {
-    props.getAllCategories()
+    getAllCategories()
   }, []);
   useEffect(() => {
-    props.getAllCategories()
-  }, [props.estado.categoryRemove,
-  props.estado.categoryCreate,
-  props.estado.categoryReadOnly,
-  props.estado.categoryUpdate]);
+    getAllCategories()
+  }, [state.categoryRemove,
+  state.categoryCreate,
+  state.categoryReadOnly,
+  state.categoryUpdate]);
 
-  const categories = props.estado.categories;
+  const categories = state.categories;
   const bandera = {
-    readOnly: props.estado.categoryReadOnly,
-    create: props.estado.categoryCreate,
-    update: props.estado.categoryUpdate,
+    readOnly: state.categoryReadOnly,
+    create: state.categoryCreate,
+    update: state.categoryUpdate,
   }
 
   const handleView = async (id) => {
-    await props.handleViewCategory(id)
+    await handleViewCategory(id)
   };
   const handleUpdate = async (id) => {
-    await props.handleUpdateCategory(id)
+    await handleUpdateCategory(id)
   };
   const handleCreate = async () => {
-    await props.handleCreateCategory()
+    await handleCreateCategory()
   };
   const handleDelete = async (id, name) => {
     var r = window.confirm(`Desea eliminar ${name}`);
     if (r === true) {
-      await props.removeCategory(id);
-      props.disabledCRUD()
+      await removeCategory(id);
+      disabledCRUD()
     }
   }
 
@@ -45,19 +48,19 @@ const Categories = (props) => {
   if (bandera) {
     if (bandera.update) {
       onSubmit = async (values) => {
-        await props.updateCategory(values.id, values.name, values.description)
-        props.disabledCRUD()
+        await updateCategory(values.id, values.name, values.description)
+        disabledCRUD()
       }
     }
     if (bandera.readOnly) {
       onSubmit = async () => {
-        await props.disabledCRUD()
+        await disabledCRUD()
       }
     }
     if (bandera.create) {
       onSubmit = async (values) => {
-        await props.createCategory(values.name, values.description)
-        props.disabledCRUD()
+        await createCategory(values.name, values.description)
+        disabledCRUD()
       }
     }
   }
@@ -77,7 +80,7 @@ const Categories = (props) => {
           </tr>
         </thead>
         <tbody>
-          {categories != undefined && categories.map((category, key) => (
+          {categories !== undefined && categories.map((category, key) => (
             <tr key={key}>
               <td>{category.name}</td>
               <td>{category.description}</td>
@@ -101,9 +104,9 @@ const Categories = (props) => {
       {(bandera.readOnly || bandera.update || bandera.create) && (
         //condicional para visualizacion del CRUD
         <CRUD
-          onClose={() => props.disabledCRUD()}
+          onClose={() => disabledCRUD()}
           onSubmit={onSubmit}
-          category={props.estado.categoryId}
+          category={state.categoryId}
           estado={bandera}
         />
       )}
@@ -113,7 +116,7 @@ const Categories = (props) => {
 
 function mapStateToProps(state) {
   return {
-    estado: state.CategoriesReducer
+    state: state.CategoriesReducer
   };
 }
 function mapDispatchToProps(dispatch) {

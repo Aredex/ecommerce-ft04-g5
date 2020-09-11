@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import getById from "services/products/getById";
-import { useParams, useHistory } from "react-router";
+import { useParams } from "react-router";
 import AddToCart from "components/AddToCart";
 import noImage from "noImage.svg";
 import style from "./index.module.scss";

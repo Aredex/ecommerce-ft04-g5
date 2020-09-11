@@ -5,3 +5,4 @@ export { default as update } from "./update";
 export { default as remove } from "./delete";
 export { default as addCategoryToProduct } from "./addCategoryToProduct";
 export { default as removeCategoryToProduct } from "./removeCategoryToProduct";
+export { default as search } from "./search";
