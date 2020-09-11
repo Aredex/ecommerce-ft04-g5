@@ -9,7 +9,7 @@ import { bindActionCreators } from "redux";
 
 import style from "./index.module.scss";
 
-const Products = ({ searchProduct, getProducts, state }) => {
+const Products = ({ searchProduct, getProducts, state, productsFromCategory }) => {
   const query = useQuery();
   const history = useHistory();
   var products;
@@ -30,13 +30,28 @@ const Products = ({ searchProduct, getProducts, state }) => {
   useEffect(() => {
     if (query.name) {
       searchProduct(query.name);
-    } else {
+    }
+    else {
       getProducts();
     }
   }, [query.name]);
-  query.name
-    ? (products = state.productSearch)
-    : (products = state.productCards);
+
+  useEffect(() => {
+    if (query.category) {
+      productsFromCategory(query.category);
+    }
+    else {
+      getProducts();
+    }
+  }, [query.category]);
+
+  if (query.name) {
+    products = state.productSearch
+  } else if (query.category) {
+    products = state.categoryFilter
+  } else {
+    products = state.productCards
+  }
 
   return (
     <section className={style.page}>

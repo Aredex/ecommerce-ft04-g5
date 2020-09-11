@@ -1,5 +1,6 @@
 import { search, create, remove, getById, getAll, update, addCategoryToProduct, removeCategoryToProduct } from "services/products";
 import getCategories from "services/categories/getAll";
+import { getProductsFromCategory } from "services/categories/index";
 
 export function addCategoryProduct(productId, categoryId) {
   return function (dispatch) {
@@ -80,6 +81,15 @@ export function searchProduct(name) {
     return search(name)
       .then(function (data) {
         dispatch({ type: "SEARCH_PRODUCT", payload: data })
+      })
+  };
+}
+
+export function productsFromCategory(id) {
+  return function (dispatch) {
+    return getProductsFromCategory(id)
+      .then(function (data) {
+        dispatch({ type: "PRODUCTS_FROM_CATEGORY", payload: data })
       })
   };
 }

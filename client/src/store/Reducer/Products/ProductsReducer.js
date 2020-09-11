@@ -1,6 +1,7 @@
 const initialState = {
   productCards: [],
   productSearch: [],
+  categoryFilter: [],
   productDetail: undefined,
   productCreate: null,
   productReadOnly: null,
@@ -20,6 +21,14 @@ export default function ProductsReducer(state = initialState, action) {
       return {
         ...state,
         productSearch: action.payload
+      };
+
+    case "PRODUCTS_FROM_CATEGORY":
+      console.log("entro")
+      console.log(action.payload)
+      return {
+        ...state,
+        categoryFilter: action.payload
       };
     case "GET_PRODUCTS":
       return {
