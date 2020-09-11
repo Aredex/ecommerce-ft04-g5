@@ -5,7 +5,6 @@ const userInit = (props) => {
   var props = { login: false, name: "Juan Mercado" };
   return (
     <div className={style.divPrincipal}>
-      <img></img>
       <p className={style.parrafo1}>
         {props.login ? "Hola!  " + props.name : "Inicia sesion"}
       </p>

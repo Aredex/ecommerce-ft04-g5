@@ -13,8 +13,9 @@ const Header = () => {
       <div className={style.headerBrand}>
         <img className={style.logo} src={logo} alt="Logo" />
         <span className={style.brand}>GardenRy</span>
+
+        <UserInit />
       </div>
-      <UserInit />
       <SearchBar />
     </header>
   );
