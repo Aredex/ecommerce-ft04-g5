@@ -7,6 +7,7 @@ import style from "./index.module.scss";
 import { getProductDetail } from "store/Actions/Products/ProductsActions";
 import { useDispatch, useSelector } from "react-redux";
 import ReviewButton from "components/ReviewButton";
+import useOrders from "hooks/useOrders";
 
 const Product = (props) => {
   const [count, setCount] = useState(1);
@@ -34,6 +35,8 @@ const Product = (props) => {
 
     setCount(count - 1);
   };
+
+  const { addProduct } = useOrders();
 
   if (product) {
     const imageURL = product.images[0]?.url || noImage;
@@ -67,6 +70,9 @@ const Product = (props) => {
               value={count}
               disableAdd={count === product.stock}
               disableSubstract={count === 1}
+              onSubmit={() =>
+                addProduct(product.id, product.name, product.price, count)
+              }
             />
           ) : (
             <h1>No contamos con stock</h1>

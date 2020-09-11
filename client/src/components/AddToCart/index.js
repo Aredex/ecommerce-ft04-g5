@@ -4,6 +4,7 @@ import style from "./index.module.scss";
 const AddToCart = ({
   onAdd,
   onSubstract,
+  onSubmit,
   value,
   disableAdd,
   disableSubstract,
@@ -19,7 +20,7 @@ const AddToCart = ({
           <i className={["fas", "fa-angle-down"].join(" ")}></i>
         </button>
       </section>
-      <button type="submit" className={style.submit}>
+      <button type="submit" className={style.submit} onClick={onSubmit}>
         <i className={["fas", "fa-shopping-cart"].join(" ")}></i>
         Añadir al Carro
       </button>
