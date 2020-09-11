@@ -12,7 +12,7 @@ const userInit = (props) => {
             className={props.login ? style.imagen1 : style.imagen2}
           ></img>
         ) : (
-          <i class="fa fa-user"></i>
+          <i className="fa fa-user"></i>
         )}
         <span>
           {props.login ? "Hola! " + props.name : "Inicia sesion"}
