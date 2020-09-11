@@ -1,6 +1,7 @@
 const { getOne: getProduct } = require("./products");
 const { getOne: getOrder, createOne: createOrder } = require("./orders");
 const { Order_product } = require("../db");
+const { setUsertoOrder } = require("./users_order");
 
 const findByProduct = (productId) => {
     return new Promise((resolve, reject) => {
@@ -30,18 +31,29 @@ const findOne = (productId, orderId) => {
 // * ArrayProducts debe ser un array de objetos, donde cada objeto tenga:
 // * => El Id del producto en una propiedad id
 // * => La cantidad de ese producto para esa orden en una propiedad amount
-const addMultipleProductsToOrder = ({ idOrder, arrayProducts }) => {
+const addMultipleProductsToOrder = async ({
+    idOrder,
+    arrayProducts,
+    address,
+    idUser,
+}) => {
+    if (!idOrder) {
+        const Order = await createOrder("IN CREATION", address);
+        idOrder = Order.id;
+    }
+
     const orders = arrayProducts.map((product) =>
         addProductToOrder({
             idOrder,
             idProduct: product.id,
             amount: product.amount,
+            idUser,
         })
     );
     return new Promise((resolve, reject) => {
         // if (orders) return resolve(orders);
         Promise.all(orders)
-            .then((product_order) => resolve(product_order))
+            .then((order) => resolve(order[0]))
             .catch((err) => reject({ error: err }));
     });
 };
@@ -51,7 +63,13 @@ const addMultipleProductsToOrder = ({ idOrder, arrayProducts }) => {
 // * Si la orden existe pero aún no tiene el producto asignado, se lo asigna
 // * Si ya la orden tiene el produto, actualiza la candtidad de él
 // * - Esta sirve para acutalizar la cantidad de los mismos productos en la orden
-const addProductToOrder = async ({ idProduct, idOrder, amount, address }) => {
+const addProductToOrder = async ({
+    idProduct,
+    idOrder,
+    amount,
+    address,
+    idUser,
+}) => {
     if (!amount) amount = 1;
 
     const Product = await getProduct(idProduct);
@@ -62,6 +80,8 @@ const addProductToOrder = async ({ idProduct, idOrder, amount, address }) => {
     } else {
         Order = await createOrder("IN CREATION", address);
     }
+
+    if (idUser) await setUsertoOrder(idUser, Order.id);
 
     return new Promise((resolve, reject) => {
         amount = parseInt(amount);
@@ -76,7 +96,6 @@ const addProductToOrder = async ({ idProduct, idOrder, amount, address }) => {
 
                 return findOne(Product.id, Order.id)
                     .then((product_order) => product_order)
-                    .catch((err) => err);
             })
             .then((product_order) => {
                 if (Array.isArray(product_order)) return product_order[0];
@@ -87,8 +106,16 @@ const addProductToOrder = async ({ idProduct, idOrder, amount, address }) => {
                 product_order.amount = amount;
                 return product_order.save();
             })
-            .then((product_order) => resolve(product_order))
-            .catch((err) => reject({ error: err }));
+            .then((product_order) => {
+                return getOrder(product_order.orderId)
+            })
+            .then((order) => {
+                resolve(order);
+            })
+            .catch((err) => {
+
+                reject({ error: err })
+            });
     });
 };
 

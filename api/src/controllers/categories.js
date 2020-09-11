@@ -8,7 +8,26 @@ const { Category, Product, Image } = require("../db");
 const getAll = () => {
     return new Promise((resolve, reject) => {
         Category.findAll({})
-            .then((categories) => resolve(categories))
+            .then((categories) => {
+                if (categories.length === 0) {
+                    return reject({
+                        error: {
+                            name: "ApiFindError",
+                            type: "Categories Error",
+                            errors: [
+                                {
+                                    message:
+                                        "there are no categories in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
+                        },
+                    });
+                }
+
+                resolve(categories);
+            })
             .catch((err) => reject({ error: err.message }));
     });
 };
@@ -22,8 +41,20 @@ const getOne = (id) => {
         })
             .then((category) => {
                 if (!category) {
-                    // Si no encuentra la categoría por el Id, retorna un error
-                    return reject({ error: "No existe en la base de datos" });
+                    return reject({
+                        error: {
+                            name: "ApiFindError",
+                            type: "Categories Error",
+                            errors: [
+                                {
+                                    message:
+                                        "category does not exist in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
+                        },
+                    });
                 }
 
                 resolve(category);

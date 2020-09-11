@@ -1,35 +1,43 @@
-const {Order} = require('../db');
+const { Order, Product, Image } = require("../db");
+const { getOne: getUser } = require("./users");
+const { getOne: getOrder } = require("./orders");
 
-const returnOrder = (id) => {
-    return new Promise( (resolve, reject) => {
-            Order.findAll({
-            where: {
-                userId: id
-            }
-        })        
-        .then((orders)=> {
-            if(!id){
+const getOrderByUser = (userId) => {
+    return new Promise((resolve, reject) => {
+        getUser(userId).then((user) => {
+            if (user) {
+                Order.findAll({
+                    where: { userId },
+                    include: [{ model: Product, include: Image }],
+                })
+                    .then((user_order) => resolve(user_order))
+                    .catch((err) => reject({ error: err }));
+            } else {
                 return reject({
                     error: {
-                        errors: [
-                        {    message:
-                             "Id doesn't exist",
-                             type: "not found"
-                            },
-                        ],
+                        message: "Id doesn't exist",
+                        type: "not found",
                     },
-
                 });
             }
-            
-            resolve(orders);
-            })
-        .catch((err)=>reject ({error : err}))
-    
+        });
+    });
+};
 
-})
-}
+//-------------------------------------------------\\
+
+const setUsertoOrder = async (idUser, idOrder) => {
+    const Order = await getOrder(idOrder);
+    const User = await getUser(idUser);
+
+    return new Promise((resolve, reject) => {
+        Order.setUser(User)
+            .then((order) => resolve(order))
+            .catch((err) => reject({ error: err }));
+    });
+};
 
 module.exports = {
-  returnOrder
-}
+    getOrderByUser,
+    setUsertoOrder,
+};

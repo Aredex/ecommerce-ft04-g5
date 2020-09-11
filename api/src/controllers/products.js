@@ -1,8 +1,9 @@
-const { Product, Category, Op, Image } = require("../db");
+const { Product, Category, Op, Image, Review } = require("../db");
 const {
     createOne: createImage,
     setProductAsociation,
     setMultipleProductAsociations,
+    getByUrl,
 } = require("../controllers/images");
 
 // ==============================================
@@ -21,6 +22,41 @@ const getPagination = (page, pageSize) => {
     return { limit, offset };
 };
 
+const getAllWithStock = (page, pageSize) => {
+    return new Promise((resolve, reject) => {
+        const pagination = getPagination(page, pageSize);
+
+        Product.findAll({
+            include: [Image, Category],
+            order: [["id", "ASC"]],
+            limit: pagination.limit,
+            offset: pagination.offset,
+            where: { stock: { [Op.gt]: 0 } },
+        })
+            .then((products) => {
+                if (products.length === 0) {
+                    return reject({
+                        error: {
+                            name: "ApiFindError",
+                            type: "Products Error",
+                            errors: [
+                                {
+                                    message:
+                                        "there are no products in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
+                        },
+                    });
+                }
+
+                resolve(products);
+            })
+            .catch((err) => reject({ error: err }));
+    });
+};
+
 const getAll = (page, pageSize) => {
     return new Promise((resolve, reject) => {
         const pagination = getPagination(page, pageSize);
@@ -32,10 +68,11 @@ const getAll = (page, pageSize) => {
             offset: pagination.offset,
         })
             .then((products) => {
-                if (products.length === 0)
+                if (products.length === 0) {
                     return reject({
                         error: {
                             name: "ApiFindError",
+                            type: "Products Error",
                             errors: [
                                 {
                                     message:
@@ -46,6 +83,7 @@ const getAll = (page, pageSize) => {
                             ],
                         },
                     });
+                }
 
                 resolve(products);
             })
@@ -53,12 +91,15 @@ const getAll = (page, pageSize) => {
     });
 };
 
-const verifyImagesUrl = (imageUrl, product, resolve, reject) => {
+const verifyImagesUrl = async (imageUrl, product, resolve, reject) => {
     if (!Array.isArray(imageUrl)) {
-        createImage(imageUrl)
-            .then((image) => image.id)
-            .then((id) => setProductAsociation(id, product.id))
-            .catch((err) => reject(err));
+        const imagen = await getByUrl(imageUrl);
+        if (!imagen) {
+            createImage(imageUrl)
+                .then((image) => image.id)
+                .then((id) => setProductAsociation(id, product.id))
+                .catch((err) => reject(err));
+        }
     } else {
         setMultipleProductAsociations(product.id, imageUrl)
             .then((resp) => resolve(resp))
@@ -91,12 +132,13 @@ const createOne = (name, description, price, stock, imageUrl) => {
 
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
-        Product.findOne({ where: { id }, include: [Category, Image] })
+        Product.findOne({ where: { id }, include: [Category, Image, Review] })
             .then((product) => {
                 if (!product) {
                     return reject({
                         error: {
                             name: "ApiFindError",
+                            type: "Products Error",
                             errors: [
                                 {
                                     message:
@@ -194,11 +236,7 @@ const getByQuery = (query, page, pageSize) => {
 
                 resolve(products);
             })
-            .catch(() =>
-                reject({
-                    error: "No hay productos que conicidan con la búsqueda",
-                })
-            );
+            .catch((err) => reject({ error: err }));
     });
 };
 
@@ -222,4 +260,5 @@ module.exports = {
     getByQuery,
     deleteOne,
     setViews,
+    getAllWithStock,
 };

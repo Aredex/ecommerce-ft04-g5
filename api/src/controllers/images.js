@@ -11,7 +11,34 @@ const createOne = (url) => {
 const getAll = () => {
     return new Promise((resolve, reject) => {
         Image.findAll()
-            .then((images) => resolve(images))
+            .then((images) => {
+                if (images.length === 0) {
+                    return reject({
+                        error: {
+                            name: "ApiFindError",
+                            type: "Images Error",
+                            errors: [
+                                {
+                                    message:
+                                        "there are no images in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
+                        },
+                    });
+                }
+
+                resolve(images);
+            })
+            .catch((err) => reject(err));
+    });
+};
+
+const getByUrl = (url) => {
+    return new Promise((resolve, reject) => {
+        Image.findOne({ where: { url } })
+            .then((image) => resolve(image))
             .catch((err) => reject(err));
     });
 };
@@ -19,7 +46,26 @@ const getAll = () => {
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
         Image.findOne({ where: { id } })
-            .then((image) => resolve(image))
+            .then((image) => {
+                if (!image) {
+                    return reject({
+                        error: {
+                            name: "ApiFindError",
+                            type: "Images Error",
+                            errors: [
+                                {
+                                    message:
+                                        "image does not exist in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
+                        },
+                    });
+                }
+
+                resolve(image);
+            })
             .catch((err) => reject(err));
     });
 };
@@ -59,9 +105,13 @@ const setProductAsociation = (idImage, idProduct) => {
 const setMultipleProductAsociations = async (idProduct, arrayUrls) => {
     return new Promise((resolve, reject) => {
         let images = arrayUrls.map((url) => {
-            return createOne(url)
-                .then((image) => image)
-                .catch((err) => reject(err));
+            return getByUrl(url).then((image) => {
+                if (!image) {
+                    return createOne(url)
+                        .then((image) => image)
+                        .catch((err) => reject(err));
+                }
+            });
         });
 
         Promise.all(images).then((imgs) => {
@@ -84,4 +134,5 @@ module.exports = {
     setMultipleProductAsociations,
     deleteOne,
     deleteMultiple,
+    getByUrl,
 };

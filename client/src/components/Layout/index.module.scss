@@ -1,4 +1,5 @@
 @import "bp.scss";
+@import "var.scss";
 
 .layout {
   display: grid;
@@ -23,6 +24,42 @@
     color: #0e0e0e;
   }
 
+  .nav {
+    position: relative;
+
+    nav {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      z-index: 100;
+      background: #fff;
+      width: fit-content;
+      min-width: 15rem;
+      height: calc(100vh - 4rem);
+      transform: translateX(-100%);
+      transition: transform 0.25s;
+
+      section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .navLink {
+        text-decoration: none;
+        color: #111;
+        padding: 0.5rem 1.25rem;
+        border-left: solid 0.25rem transparent;
+      }
+      .activeNav {
+        border-color: $--primary-color;
+      }
+    }
+
+    .showNav {
+      transform: translateX(0%);
+    }
+  }
   .buttonMenu {
     width: 3rem;
     height: 3rem;
@@ -52,6 +89,7 @@
 .headerBrand {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 .content {
   overflow: hidden;

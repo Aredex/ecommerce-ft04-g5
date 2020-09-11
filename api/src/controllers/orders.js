@@ -1,10 +1,36 @@
 const { Order, Product } = require("../db");
 
 // Obtiene todas las ordenes hechas
-const getAll = () => {
+const getAll = ({ status }) => {
+    let where = {};
+
+    if (status) {
+        status = status.toUpperCase();
+        where.status = status;
+    }
+
     return new Promise((resolve, reject) => {
-        Order.findAll({ include: [Product] })
-            .then((order) => resolve(order))
+        Order.findAll({ where, include: [Product], order: [["id", "ASC"]] })
+            .then((orders) => {
+                if (orders.length === 0) {
+                    return reject({
+                        error: {
+                            name: "ApiFindError",
+                            type: "Orders error",
+                            errors: [
+                                {
+                                    message:
+                                        "there are no orders in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
+                        },
+                    });
+                }
+
+                resolve(orders);
+            })
             .catch((err) => reject({ error: err }));
     });
 };
@@ -13,7 +39,26 @@ const getAll = () => {
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
         Order.findOne({ where: { id }, include: [Product] })
-            .then((order) => resolve(order))
+            .then((order) => {
+                if (!order) {
+                    return reject({
+                        error: {
+                            name: "ApiFindError",
+                            type: "Orders error",
+                            errors: [
+                                {
+                                    message:
+                                        "order does not exist in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
+                        },
+                    });
+                }
+
+                resolve(order);
+            })
             .catch((err) => reject({ error: err }));
     });
 };
@@ -27,6 +72,7 @@ const createOne = (status, address) => {
     });
 };
 
+// Edita una orden según el parámetro enviado
 const editOne = ({ id, status, address }) => {
     return new Promise((resolve, reject) => {
         getOne(id)
@@ -41,6 +87,7 @@ const editOne = ({ id, status, address }) => {
     });
 };
 
+// Elimina una orden dado su ID - Sirve como el concepto de vaciar
 const deleteOne = (id) => {
     return new Promise((resolve, reject) => {
         getOne(id)
@@ -53,6 +100,7 @@ const deleteOne = (id) => {
     });
 };
 
+// Vacía una orden sin eliminarla
 const emptyOrder = (id) => {
     return new Promise((resolve, reject) => {
         getOne(id)

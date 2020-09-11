@@ -13,7 +13,10 @@ function InputField(props) {
   }
 
   return (
-    <div className={style.inputField}>
+    <div
+      className={[style.inputField, props.readOnly ? style.ro : ""].join(" ")}
+      style={props.style}
+    >
       <div className={style.prefix} style={props.prefixStyle}>
         {props.prefix}
       </div>
