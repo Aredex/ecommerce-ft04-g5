@@ -65,12 +65,14 @@ export function getProducts() {
 }
 export function getProductDetail(id) {
   return function (dispatch) {
+    if (!id) {
+      return dispatch({ type: "GET_PRODUCT_DETAIL", payload: null })
+    }
     return getById(id)
       .then((data) => {
         dispatch({ type: "GET_PRODUCT_DETAIL", payload: data });
       })
   };
-
 }
 
 export function searchProduct(name) {

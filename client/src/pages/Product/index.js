@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddToCart from "components/AddToCart";
 import noImage from "noImage.svg";
 import style from "./index.module.scss";
-import { useSelector } from "react-redux";
+import { getProductDetail } from "store/Actions/Products/ProductsActions"
+import { useSelector, useDispatch } from "react-redux";
 
 const Product = (props) => {
   const [count, setCount] = useState(1);
+  const dispatch = useDispatch()
+  useEffect(() => {
+    return () => {
+      dispatch(getProductDetail())
+    }
+  }, [])
+
+
 
   const product = useSelector((x) => x.ProductsReducer.productDetail);
   const handleOnAdd = () => {
@@ -57,6 +66,7 @@ const Product = (props) => {
           <div className={style.separator}>
             <span>Descripción</span>
           </div>
+          {product.description}
         </div>
       </div>
     );
