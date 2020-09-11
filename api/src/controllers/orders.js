@@ -10,7 +10,11 @@ const getAll = ({ status }) => {
     }
 
     return new Promise((resolve, reject) => {
-        Order.findAll({ where, include: [Product], order: [["id", "ASC"]] })
+        Order.findAll({
+            where,
+            include: [Product, User],
+            order: [["id", "ASC"]],
+        })
             .then((orders) => {
                 if (orders.length === 0) {
                     return reject({
