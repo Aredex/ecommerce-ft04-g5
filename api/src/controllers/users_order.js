@@ -8,7 +8,7 @@ const getOrderByUser = (userId) => {
             if (user) {
                 Order.findAll({
                     where: { userId },
-                    include: { all: true},
+                    include: [{ model: Product, include: Image }, User],
                 })
                     .then((user_order) => resolve(user_order))
                     .catch((err) => reject({ error: err }));
