@@ -15,7 +15,7 @@ function UserInit() {
             className={user.login ? style.imagen1 : style.imagen2}
           ></img>
         ) : (
-            <i class="fa fa-user"></i>
+            <i className="fa fa-user"></i>
           )}
         <span>
           {user ? "Hola! " + user.name : "Inicia sesion"}

@@ -77,13 +77,13 @@
   }
 
   @include respond-to("default") {
-    grid-template-columns: 4rem 4rem 1fr;
+    grid-template-columns: 4rem 4rem 1fr 4rem;
     .brand {
       visibility: collapse;
     }
   }
   @include respond-to("small") {
-    grid-template-columns: 4rem 1fr 20rem;
+    grid-template-columns: 4rem 1fr 20rem 4rem;
   }
 }
 .headerBrand {
