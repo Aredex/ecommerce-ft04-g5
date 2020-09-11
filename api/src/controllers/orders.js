@@ -1,4 +1,4 @@
-const { Order, Product } = require("../db");
+const { Order, Product, User } = require("../db");
 
 // Obtiene todas las ordenes hechas
 const getAll = ({ status }) => {
@@ -38,7 +38,7 @@ const getAll = ({ status }) => {
 // Busca una orden por su ID
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
-        Order.findOne({ where: { id }, include: [Product] })
+        Order.findOne({ where: { id }, include: [Product, User] })
             .then((order) => {
                 if (!order) {
                     return reject({
