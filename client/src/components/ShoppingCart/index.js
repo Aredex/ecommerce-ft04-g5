@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import style from "./index.module.scss";
 import { useRouteMatch } from "react-router";
 import useOrders from "hooks/useOrders";
+
 function ShoppingCart() {
   const [showCart, setShowCart] = useState(false);
 
