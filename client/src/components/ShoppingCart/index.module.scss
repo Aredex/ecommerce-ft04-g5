@@ -5,9 +5,10 @@
   position: relative;
 
   aside {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    position: fixed;
     right: 0;
     top: 0;
     z-index: 100;
@@ -21,19 +22,25 @@
     backdrop-filter: blur(2px);
     justify-content: space-between;
 
-    section {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      width: stretch;
-    }
-
     header {
       width: stretch;
       background: #fff;
       display: flex;
       justify-content: flex-end;
     }
+
+    section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: stretch;
+      overflow: hidden;
+      overflow-y: auto;
+    }
+  }
+
+  .inHome {
+    background: #ffffffcc;
   }
 
   .showCart {
@@ -79,11 +86,13 @@
   width: stretch;
   margin: 0.25rem 1rem;
   background: #fff;
-  transition: box-shadow 0.5s;
-  box-shadow: 0 0 4px transparent;
+  transition: 0.25s;
+  box-shadow: 0 0 8px transparent;
+  transform: scale(1);
 
   &:hover {
-    box-shadow: 0 0 4px #d3d3d3;
+    box-shadow: 0 0 8px #d3d3d3;
+    transform: scale(1.005);
   }
 
   .productName {
@@ -99,6 +108,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-transform: capitalize;
 
     i {
       cursor: pointer;
@@ -166,6 +176,21 @@
   }
 }
 
+.totalOrder {
+  display: flex;
+  margin: 0.5rem 1rem;
+  width: stretch;
+
+  span {
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+  .money {
+    text-align: right;
+    width: stretch;
+  }
+}
+
 .checkOut {
   width: stretch;
   background: #00cc76;
@@ -177,4 +202,11 @@
   padding: 0.5rem;
   font-weight: 100;
   border-radius: 0.5rem;
+}
+
+.money {
+  &::before {
+    margin-right: 0.25rem;
+    content: "$";
+  }
 }

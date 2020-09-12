@@ -1,7 +1,7 @@
 import { useLocalStorage } from "react-use";
 import { useDispatch, useSelector } from "react-redux";
 import { setShoppingCart } from "store/Actions/Orders";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import Axios from "axios";
 
 const user = null;
@@ -16,16 +16,33 @@ export default function useOrders() {
   const dispatch = useDispatch();
   const shoppingCart = useSelector((state) => state.orders.shoppingCart);
 
-  // A futuro debe verificar si existe usuario
-  if (false) {
-  } else {
-    dispatch(setShoppingCart(localShoppingCart));
-  }
+  useEffect(() => {
+    console.log("reload", shoppingCart, localShoppingCart);
+    // A futuro debe verificar si existe usuario
+    if (false) {
+    } else {
+      let total = 0;
+      total =
+        localShoppingCart &&
+        localShoppingCart.products &&
+        Array.isArray(localShoppingCart.products) &&
+        localShoppingCart.products.reduce((result, product) => {
+          result += product.price * product.amount;
+          return result;
+        }, 0);
+      localShoppingCart &&
+      localShoppingCart.products &&
+      Array.isArray(localShoppingCart.products) &&
+      localShoppingCart.products.length > 0
+        ? dispatch(setShoppingCart({ ...localShoppingCart, total }))
+        : dispatch(setShoppingCart(undefined));
+    }
+  }, [localShoppingCart]);
 
   const addProduct = useCallback((id, name, price, amount) => {
     if (user && shoppingCart) {
       const productSearchResult = shoppingCart.products.find(
-        (x) => (x.id = id)
+        (x) => x.id === id
       );
       if (productSearchResult) {
         amount += productSearchResult.amount;
@@ -72,9 +89,9 @@ export default function useOrders() {
         );
       }
     } else if (localShoppingCart) {
-      const newShoppingCart = { ...shoppingCart };
+      const newShoppingCart = { ...localShoppingCart };
       const productSearchResult = newShoppingCart.products.find(
-        (x) => (x.id = id)
+        (x) => x.id === id
       );
       if (productSearchResult) {
         productSearchResult.amount += amount;
@@ -85,12 +102,48 @@ export default function useOrders() {
       setLocalShoppingCart(newShoppingCart);
     } else {
       setLocalShoppingCart({ products: [{ id, name, price, amount }] });
-      dispatch(setShoppingCart(localShoppingCart));
     }
   }, []);
 
+  const increseAmount = useCallback((id) => {
+    const newShoppingCart = { ...localShoppingCart };
+    const productSearchResult = newShoppingCart.products.find(
+      (x) => x.id === id
+    );
+    console.log(newShoppingCart, productSearchResult);
+    if (productSearchResult) {
+      productSearchResult.amount++;
+      setLocalShoppingCart(newShoppingCart);
+    }
+  });
+  const decreaseAmount = useCallback((id) => {
+    const newShoppingCart = { ...localShoppingCart };
+    const productSearchResult = newShoppingCart.products.find(
+      (x) => x.id === id
+    );
+    if (productSearchResult) {
+      productSearchResult.amount--;
+      setLocalShoppingCart(newShoppingCart);
+    }
+  });
+  const removeProduct = useCallback((id) => {
+    const newShoppingCart = { ...localShoppingCart };
+    newShoppingCart.products = newShoppingCart.products.reduce(
+      (result, product) => {
+        result = [...result];
+        if (product.id !== id) result.push(product);
+        return result;
+      },
+      []
+    );
+    setLocalShoppingCart(newShoppingCart);
+  });
+
   return {
     shoppingCart,
+    increseAmount,
+    decreaseAmount,
+    removeProduct,
     addProduct,
   };
 }
