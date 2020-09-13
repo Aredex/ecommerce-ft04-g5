@@ -1,4 +1,6 @@
-.inputNumber {
+@import "bp.scss";
+
+.searchBar {
   display: flex;
   height: 2rem;
   width: stretch;
@@ -9,9 +11,6 @@
   transition-property: background, box-shadow;
   transition-duration: 0.25s;
   margin: 0 0.5rem;
-  // :hover {
-  //   box-shadow: 0 1px 8px #c5c5c5;
-  // }
 
   input {
     margin: 0;
@@ -19,6 +18,9 @@
     width: stretch;
     border: none;
     text-align: center;
+    @include respond-to("default") {
+      width: calc(100vw - 16.6rem);
+    }
   }
   input:focus,
   input.form-control:focus {

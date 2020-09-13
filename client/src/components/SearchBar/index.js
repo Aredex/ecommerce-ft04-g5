@@ -15,7 +15,7 @@ const SearchBar = () => {
   });
 
   return (
-    <form className={style.inputNumber} onSubmit={formik.handleSubmit}>
+    <form className={style.searchBar} onSubmit={formik.handleSubmit}>
       <input
         className="Inp"
         type="text"
@@ -30,5 +30,4 @@ const SearchBar = () => {
   );
 };
 
-
-export default SearchBar
+export default SearchBar;
