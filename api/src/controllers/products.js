@@ -4,6 +4,7 @@ const {
     setProductAsociation,
     setMultipleProductAsociations,
     getByUrl,
+    deleteMultiple: deleteMultipleImages,
 } = require("../controllers/images");
 
 // ==============================================
@@ -184,15 +185,23 @@ const editOne = (id, name, description, price, stock, imageUrl) => {
 
 const deleteOne = (id) => {
     return new Promise((resolve, reject) => {
+        let theProduct = null;
+
         getOne(id)
             .then((product) => {
-                product.destroy();
-                return resolve({
+                theProduct = product;
+                const images = product.images.map((image) => image.id);
+
+                return deleteMultipleImages(images);
+            })
+            .then(() => theProduct.destroy())
+            .then(() =>
+                resolve({
                     succes: {
                         message: "Successfully removed",
                     },
-                });
-            })
+                })
+            )
             .catch((err) => reject({ error: err }));
     });
 };

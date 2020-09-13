@@ -1,16 +1,46 @@
-const { Order, Product } = require("../db");
+const { getOne: getProduct } = require("./products");
+const { Order, Product, User, Op } = require("../db");
 
-// Obtiene todas las ordenes hechas
-const getAll = ({ status }) => {
+// Obtiene todas las ordenes hechas y puede filtrar según su status
+
+const getAllFiler = ({ search }) => {
+    return new Promise((resolve, reject) => {
+        if (!isNaN(search)) {
+            search = Number(search);
+            console.log(search);
+
+            getOne(search)
+                .then((order) => resolve(order))
+                .catch((err) => reject(err));
+        } else {
+            getAll({ search })
+                .then((order) => resolve(order))
+                .catch((err) => reject(err));
+        }
+    });
+};
+
+const getAll = ({ status, search }) => {
     let where = {};
+    let obj = {};
+    let include = [Product, User];
 
     if (status) {
         status = status.toUpperCase();
         where.status = status;
     }
 
+    if (search) {
+        obj = { model: User, where: { name: { [Op.substring]: search } } };
+        include[1] = obj;
+    }
+
     return new Promise((resolve, reject) => {
-        Order.findAll({ where, include: [Product], order: [["id", "ASC"]] })
+        Order.findAll({
+            where,
+            include,
+            order: [["id", "ASC"]],
+        })
             .then((orders) => {
                 if (orders.length === 0) {
                     return reject({
@@ -35,10 +65,58 @@ const getAll = ({ status }) => {
     });
 };
 
+const confirmedOrder = async ({ id, address }) => {
+    if (!address) {
+        return new Promise((resolve, reject) => {
+            reject({
+                error: { message: "Es necesario tener la dirección de envío" },
+            });
+        });
+    }
+
+    const Order = await getOne(id);
+    let poderComprar = true;
+
+    Order.products.map((product) => {
+        if (product.order_product.amount >= product.stock) {
+            poderComprar = false;
+        }
+    });
+
+    return new Promise((resolve, reject) => {
+        if (!poderComprar) {
+            return reject({
+                error: {
+                    message:
+                        "No se puede hacer la compra, uno de los productos no tiene el stock suficiente",
+                },
+            });
+        }
+
+        const products = Order.products.map((product) => {
+            return getProduct(product.id)
+                .then((p) => {
+                    p.stock = p.stock - product.order_product.amount;
+                    return p.save();
+                })
+                .catch((err) => err);
+        });
+
+        Promise.all(products)
+            .then(() => {
+                Order.status = "CONFIRMED";
+                Order.address = address;
+                return Order.save();
+            })
+            .then((order) => resolve(order))
+            .catch((err) => reject({ error: err }));
+    });
+};
+
 // Busca una orden por su ID
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
-        Order.findOne({ where: { id }, include: [Product] })
+        Order.findOne({ where: { id }, include: [Product, User] })
             .then((order) => {
                 if (!order) {
                     return reject({
@@ -117,4 +195,6 @@ module.exports = {
     editOne,
     deleteOne,
     emptyOrder,
+    confirmedOrder,
+    getAllFiler,
 };

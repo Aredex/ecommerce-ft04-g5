@@ -2,6 +2,7 @@ const { getOne: getProduct } = require("./products");
 const { getOne: getOrder, createOne: createOrder } = require("./orders");
 const { Order_product } = require("../db");
 const { setUsertoOrder } = require("./users_order");
+const { getOne: getUser } = require("./users");
 
 const findByProduct = (productId) => {
     return new Promise((resolve, reject) => {
@@ -37,6 +38,26 @@ const addMultipleProductsToOrder = async ({
     address,
     idUser,
 }) => {
+    const User = await getUser(idUser);
+
+    if (!User) {
+        return new Promise((resolve, reject) => {
+            reject({
+                error: {
+                    name: "ApiFindError",
+                    type: "Users Error",
+                    errors: [
+                        {
+                            message: "user does not exist in the database",
+                            type: "not found",
+                            value: null,
+                        },
+                    ],
+                },
+            });
+        });
+    }
+
     if (!idOrder) {
         const Order = await createOrder("IN CREATION", address);
         idOrder = Order.id;
@@ -72,6 +93,26 @@ const addProductToOrder = async ({
 }) => {
     if (!amount) amount = 1;
 
+    const User = await getUser(idUser);
+
+    if (!User) {
+        return new Promise((resolve, reject) => {
+            reject({
+                error: {
+                    name: "ApiFindError",
+                    type: "Users Error",
+                    errors: [
+                        {
+                            message: "user does not exist in the database",
+                            type: "not found",
+                            value: null,
+                        },
+                    ],
+                },
+            });
+        });
+    }
+
     const Product = await getProduct(idProduct);
     let Order = null;
 
@@ -94,8 +135,9 @@ const addProductToOrder = async ({
                     });
                 }
 
-                return findOne(Product.id, Order.id)
-                    .then((product_order) => product_order)
+                return findOne(Product.id, Order.id).then(
+                    (product_order) => product_order
+                );
             })
             .then((product_order) => {
                 if (Array.isArray(product_order)) return product_order[0];
@@ -107,14 +149,13 @@ const addProductToOrder = async ({
                 return product_order.save();
             })
             .then((product_order) => {
-                return getOrder(product_order.orderId)
+                return getOrder(product_order.orderId);
             })
             .then((order) => {
                 resolve(order);
             })
             .catch((err) => {
-
-                reject({ error: err })
+                reject(err);
             });
     });
 };

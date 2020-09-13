@@ -3,9 +3,11 @@ const {
     getAll,
     createOne,
     deleteOne,
-    getOne,
+    // getOne,
     editOne,
     emptyOrder,
+    confirmedOrder,
+    getAllFiler,
 } = require("../controllers/orders");
 const {
     removeProductToOrder,
@@ -14,13 +16,24 @@ const {
 } = require("../controllers/order_products");
 const { setUsertoOrder } = require("../controllers/users_order");
 
+//-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\\
+const { ordersDevolution } = require("../controllers/order_id_string");
+//-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\\
+
 // Rutas para obtener todas las ordenes y crear una orden
 router
     .route("/")
     .get((req, res) => {
         const { status } = req.body;
+        const { search } = req.query;
 
-        getAll({ status })
+        if (!search) {
+            return getAll({ status })
+                .then((orders) => res.json(orders))
+                .catch((err) => res.status(404).json(err));
+        }
+
+        getAllFiler({ search })
             .then((orders) => res.json(orders))
             .catch((err) => res.status(404).json(err));
     })
@@ -37,13 +50,17 @@ router
 //      Solo edita el status y address
 //      Eliminar una orden sirve como método para vaciar
 router
-    .route("/:id")
+    .route(
+        "/id"
+    ) /*
     .get((req, res) => {
         const { id } = req.params;
         getOne(id)
             .then((order) => res.json(order).status(201))
             .catch((err) => res.status(404).json(err));
     })
+            .catch((err) => res.status(400).json(err));
+    })*/
 
     .delete((req, res) => {
         const { id } = req.params;
@@ -140,7 +157,7 @@ router.route("/:id/confirmed").put((req, res) => {
     const { id } = req.params;
     const { address } = req.body;
 
-    editOne({ id, status: "CONFIRMED", address })
+    confirmedOrder({ id, address })
         .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
@@ -237,4 +254,10 @@ router.route("/finalized").get((req, res) => {
         .catch((err) => res.status(404).json(err));
 });
 
+router.route("/:variable").get((req, res) => {
+    const { variable } = req.params;
+    ordersDevolution(variable)
+        .then((orders) => res.json(orders))
+        .catch((err) => res.status(400).json(err));
+});
 module.exports = router;
