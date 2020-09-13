@@ -39,7 +39,7 @@ export default function useOrders() {
     }
   }, [localShoppingCart]);
 
-  const addProduct = useCallback((id, name, price, amount) => {
+  const addProduct = (id, name, price, amount) => {
     if (user && shoppingCart) {
       const productSearchResult = shoppingCart.products.find(
         (x) => x.id === id
@@ -88,8 +88,8 @@ export default function useOrders() {
           )
         );
       }
-    } else if (localShoppingCart) {
-      const newShoppingCart = { ...localShoppingCart };
+    } else if (shoppingCart) {
+      const newShoppingCart = { ...shoppingCart };
       const productSearchResult = newShoppingCart.products.find(
         (x) => x.id === id
       );
@@ -103,21 +103,20 @@ export default function useOrders() {
     } else {
       setLocalShoppingCart({ products: [{ id, name, price, amount }] });
     }
-  }, []);
+  };
 
-  const increseAmount = useCallback((id) => {
-    const newShoppingCart = { ...localShoppingCart };
+  const increseAmount = (id) => {
+    const newShoppingCart = { ...shoppingCart };
     const productSearchResult = newShoppingCart.products.find(
       (x) => x.id === id
     );
-    console.log(newShoppingCart, productSearchResult);
     if (productSearchResult) {
       productSearchResult.amount++;
       setLocalShoppingCart(newShoppingCart);
     }
-  });
-  const decreaseAmount = useCallback((id) => {
-    const newShoppingCart = { ...localShoppingCart };
+  };
+  const decreaseAmount = (id) => {
+    const newShoppingCart = { ...shoppingCart };
     const productSearchResult = newShoppingCart.products.find(
       (x) => x.id === id
     );
@@ -125,9 +124,9 @@ export default function useOrders() {
       productSearchResult.amount--;
       setLocalShoppingCart(newShoppingCart);
     }
-  });
-  const removeProduct = useCallback((id) => {
-    const newShoppingCart = { ...localShoppingCart };
+  };
+  const removeProduct = (id) => {
+    const newShoppingCart = { ...shoppingCart };
     newShoppingCart.products = newShoppingCart.products.reduce(
       (result, product) => {
         result = [...result];
@@ -137,7 +136,7 @@ export default function useOrders() {
       []
     );
     setLocalShoppingCart(newShoppingCart);
-  });
+  };
 
   return {
     shoppingCart,
