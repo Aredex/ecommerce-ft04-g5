@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import style from "./index.module.scss";
-import { useRouteMatch } from "react-router";
+import { useRouteMatch, useHistory } from "react-router";
 import useOrders from "hooks/useOrders";
 
 function ShoppingCart() {
   const [showCart, setShowCart] = useState(false);
 
   const { isExact: isHome } = useRouteMatch("/");
+  const history = useHistory();
 
   useEffect(() => {
     setShowCart(false);
@@ -39,6 +40,11 @@ function ShoppingCart() {
         ].join(" ")}
       >
         <header>
+          {shoppingCart &&
+            shoppingCart.products &&
+            Array.isArray(shoppingCart.products) && (
+              <span>Artículos ({shoppingCart.products.length})</span>
+            )}
           <button
             className={style.buttonMenu}
             onClick={() => setShowCart(!showCart)}
@@ -81,13 +87,13 @@ function ShoppingCart() {
                         <section>
                           <button
                             onClick={() => increseAmount(product.id)}
-                            disabled={false}
+                            disabled={product.amount === product.stock}
                           >
                             <i className={["fas", "fa-angle-up"].join(" ")}></i>
                           </button>
                           <button
                             onClick={() => decreaseAmount(product.id)}
-                            disabled={false}
+                            disabled={product.amount === 1}
                           >
                             <i
                               className={["fas", "fa-angle-down"].join(" ")}
@@ -113,7 +119,15 @@ function ShoppingCart() {
                   })}
                 </span>
               </div>
-              <button className={style.checkOut}>Finalizar orden</button>
+              <button
+                className={style.checkOut}
+                onClick={() => {
+                  setShowCart(false);
+                  history.push("/checkout");
+                }}
+              >
+                Finalizar orden
+              </button>
             </>
           )}
         </section>

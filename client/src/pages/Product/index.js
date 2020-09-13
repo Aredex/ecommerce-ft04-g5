@@ -68,7 +68,13 @@ const Product = (props) => {
               disableAdd={count === product.stock}
               disableSubstract={count === 1}
               onSubmit={() =>
-                addProduct(product.id, product.name, product.price, count)
+                addProduct(
+                  product.id,
+                  product.name,
+                  product.price,
+                  count,
+                  product.stock
+                )
               }
             />
           ) : (

@@ -39,7 +39,7 @@ export default function useOrders() {
     }
   }, [localShoppingCart]);
 
-  const addProduct = (id, name, price, amount) => {
+  const addProduct = (id, name, price, amount, stock) => {
     if (user && shoppingCart) {
       const productSearchResult = shoppingCart.products.find(
         (x) => x.id === id
@@ -63,6 +63,7 @@ export default function useOrders() {
                 name: product.name,
                 price: product.order_product.price,
                 amount: product.order_product.amount,
+                stock: product.stock,
               })),
             })
           )
@@ -83,6 +84,7 @@ export default function useOrders() {
                 name: product.name,
                 price: product.order_product.price,
                 amount: product.order_product.amount,
+                stock: product.stock,
               })),
             })
           )
@@ -97,11 +99,11 @@ export default function useOrders() {
         productSearchResult.amount += amount;
         productSearchResult.price = price;
       } else {
-        newShoppingCart.products.push({ id, name, price, amount });
+        newShoppingCart.products.push({ id, name, price, amount, stock });
       }
       setLocalShoppingCart(newShoppingCart);
     } else {
-      setLocalShoppingCart({ products: [{ id, name, price, amount }] });
+      setLocalShoppingCart({ products: [{ id, name, price, amount, stock }] });
     }
   };
 
