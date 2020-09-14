@@ -1,0 +1,46 @@
+@import "var.scss";
+
+.divPrincipal {
+  margin: 5px;
+  width: stretch;
+  text-align: end;
+  flex-direction: column;
+}
+
+.link1 {
+  padding-top: 5px;
+  text-decoration: none;
+  color: #298100;
+}
+
+.parrafo1 {
+  margin: 0 1.5em 0 0;
+  display: flex;
+  align-items: center;
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: stretch;
+  }
+  img {
+    margin-right: 0.5rem;
+  }
+  a {
+    margin-left: 0.5rem;
+  }
+  i {
+    color: $--primary-color;
+    font-size: 1.3em;
+    margin-right: 0.5rem;
+  }
+}
+
+.imagen1 {
+  width: 2em;
+  display: inline-block;
+}
+
+.imagen2 {
+  width: 2em;
+}

@@ -1,0 +1,24 @@
+@import "var.scss";
+
+.page {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 10rem 1fr;
+  min-height: 100%;
+
+  aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .navLink {
+      text-decoration: none;
+      color: #111;
+      padding: 0.5rem 1.25rem;
+      border-left: solid 0.25rem transparent;
+    }
+    .activeNav {
+      border-color: $--primary-color;
+    }
+  }
+}

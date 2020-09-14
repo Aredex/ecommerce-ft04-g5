@@ -1,0 +1,71 @@
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500&display=swap");
+@import url("https://use.fontawesome.com/releases/v5.14.0/css/all.css");
+
+.autocomplete {
+  width: stretch;
+  display: flex;
+  flex-wrap: wrap;
+  font-family: "Ubuntu", sans-serif;
+}
+
+.result {
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem;
+  span {
+    border-radius: 1.5rem;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: solid 2px transparent;
+    border-bottom-color: beige;
+    height: fit-content;
+    margin: 0 0.25rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  margin: 0.5rem;
+  box-shadow: 0 0 4px #3e3e3e;
+
+  input {
+    font-family: "Ubuntu", sans-serif;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: solid 2px transparent;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  ul {
+    margin-top: 0;
+    padding: 0 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    gap: 0.25rem;
+  }
+
+  li {
+    list-style-type: none;
+    cursor: pointer;
+    text-transform: capitalize;
+    &:hover {
+      font-weight: 600;
+    }
+  }
+}
+
+.removeButton {
+  color: #333;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}

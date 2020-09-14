@@ -1,0 +1,35 @@
+@import "var.scss";
+
+.reviewButton {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  cursor: pointer;
+  background: #e3e3e300;
+  padding: 0.5rem;
+  border-radius: 9999px;
+  &:hover {
+    background: #e3e3e3ff;
+  }
+
+  span {
+    margin: 0.5rem;
+  }
+  svg {
+    margin: 0.25rem;
+  }
+}
+
+.review {
+  border-radius: 0.25rem;
+  border: solid 1px #e3e3e3;
+  text-align: left;
+
+  .rating {
+    padding: 0.5rem;
+    border-bottom: solid 1px #e3e3e3;
+  }
+  .message {
+    padding: 0.5rem;
+  }
+}
