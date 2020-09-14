@@ -10,11 +10,12 @@ function OrderDetail() {
   const [order, setOrder] = useState(undefined);
   const { id } = useParams();
   useEffect(() => {
-    getOrderById(id).then((data) => setOrder(data));
+    getOrderById(id).then((data) => setOrder(data[0]));
   }, [id]);
 
   const total = useMemo(() => {
-    return order
+    console.log("orders", order);
+    return order && order.products && Array.isArray(order.products)
       ? order.products.reduce((result, { order_product }) => {
           return result + order_product.price * order_product.amount;
         }, 0)
