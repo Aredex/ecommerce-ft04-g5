@@ -1,19 +1,22 @@
 import React from "react";
 import SearchBar from "components/SearchBar";
+import ShoppingCart from "components/ShoppingCart";
 import style from "./index.module.scss";
 import logo from "logo.svg";
+import Nav from "./Nav";
+import { useHistory } from "react-router";
 
 const Header = () => {
+  const history = useHistory();
   return (
     <header className={style.header}>
-      <button className={style.buttonMenu}>
-        <i className="fas fa-bars"></i>
-      </button>
-      <div className={style.headerBrand}>
+      <Nav />
+      <div className={style.headerBrand} onClick={() => history.push("/")}>
         <img className={style.logo} src={logo} alt="Logo" />
         <span className={style.brand}>GardenRy</span>
       </div>
       <SearchBar />
+      <ShoppingCart />
     </header>
   );
 };

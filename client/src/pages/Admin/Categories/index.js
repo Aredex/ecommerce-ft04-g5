@@ -1,71 +1,69 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import style from "./index.module.scss";
-import { getAll, getById, update, create, remove } from "services/categories";
 import CRUD from "./CRUD";
+import * as actionsCategories from "store/Actions/Categories/CategoriesActions"
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux'
 
-const Categories = () => {
-  const [categories, setCategories] = useState([]);
-  const [formik, setFormik] = useState();
+
+const Categories = ({ state, disabledCRUD, createCategory, updateCategory,
+  removeCategory, getAllCategories, handleViewCategory, handleUpdateCategory,
+  handleCreateCategory }) => {
 
   useEffect(() => {
-    (async () => {
-      const result = await getAll();
-      setCategories(result);
-    })();
+    getAllCategories()
   }, []);
+  useEffect(() => {
+    getAllCategories()
+  }, [state.categoryRemove,
+  state.categoryCreate,
+  state.categoryReadOnly,
+  state.categoryUpdate]);
 
-  const getValues = async (id) => {
-    const result = await getById(id);
-    return {
-      id: result.id,
-      name: result.name,
-      description: result.description,
-    };
-  };
+  const categories = state.categories;
+  const bandera = {
+    readOnly: state.categoryReadOnly,
+    create: state.categoryCreate,
+    update: state.categoryUpdate,
+  }
 
   const handleView = async (id) => {
-    setFormik({
-      initialValues: await getValues(id),
-      readOnly: true,
-    });
+    await handleViewCategory(id)
   };
   const handleUpdate = async (id) => {
-    setFormik({
-      initialValues: await getValues(id),
-      onSubmit: async (values) => {
-        const { name, description } = values;
-        await update(id, name, description);
-        const result = await getAll();
-        setCategories(result);
-        setFormik(undefined);
-      },
-      update: true,
-    });
+    await handleUpdateCategory(id)
   };
   const handleCreate = async () => {
-    setFormik({
-      initialValues: {
-        name: "",
-        description: "",
-      },
-      onSubmit: async (values) => {
-        const { name, description } = values;
-        await create(name, description);
-        const result = await getAll();
-        setCategories(result);
-        setFormik(undefined);
-      },
-      create: true,
-    });
+    await handleCreateCategory()
   };
   const handleDelete = async (id, name) => {
     var r = window.confirm(`Desea eliminar ${name}`);
-    if (r == true) {
-      await remove(id);
-      const result = await getAll();
-      setCategories(result);
+    if (r === true) {
+      await removeCategory(id);
+      disabledCRUD()
     }
-  };
+  }
+
+  var onSubmit
+  if (bandera) {
+    if (bandera.update) {
+      onSubmit = async (values) => {
+        await updateCategory(values.id, values.name, values.description)
+        disabledCRUD()
+      }
+    }
+    if (bandera.readOnly) {
+      onSubmit = async () => {
+        await disabledCRUD()
+      }
+    }
+    if (bandera.create) {
+      onSubmit = async (values) => {
+        await createCategory(values.name, values.description)
+        disabledCRUD()
+      }
+    }
+  }
 
   return (
     <section>
@@ -82,7 +80,7 @@ const Categories = () => {
           </tr>
         </thead>
         <tbody>
-          {categories.map((category, key) => (
+          {categories !== undefined && categories.map((category, key) => (
             <tr key={key}>
               <td>{category.name}</td>
               <td>{category.description}</td>
@@ -103,13 +101,29 @@ const Categories = () => {
           ))}
         </tbody>
       </table>
-      {formik && (
-        <div className={style.modal}>
-          <CRUD formikData={formik} onClose={() => setFormik(undefined)} />
-        </div>
+      {(bandera.readOnly || bandera.update || bandera.create) && (
+        //condicional para visualizacion del CRUD
+        <CRUD
+          onClose={() => disabledCRUD()}
+          onSubmit={onSubmit}
+          category={state.categoryId}
+          estado={bandera}
+        />
       )}
     </section>
   );
 };
 
-export default Categories;
+function mapStateToProps(state) {
+  return {
+    state: state.CategoriesReducer
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(actionsCategories, dispatch)
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Categories);

@@ -2,12 +2,16 @@ module.exports = (sequelize, DataTypes) => {
     // defino el modelo
     return sequelize.define("image", {
         url: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false,
             validate: {
                 isUrl: true,
+                notEmpty: false,
             },
-            // unique: true
+            set(value) {
+                this.setDataValue("url", value.trim());
+            },
+            unique: true
         },
     });
 };

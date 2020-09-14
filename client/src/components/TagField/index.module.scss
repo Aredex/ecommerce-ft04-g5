@@ -1,0 +1,98 @@
+$border: solid 1px #a3a3a3;
+
+.inputField {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: solid 1px #a3a3a3;
+  background: #fff;
+  position: relative;
+  border-radius: 0.25rem;
+  font-size: 0.85rem;
+  margin: 0.5rem;
+}
+.prefix {
+  width: stretch;
+  text-align: left;
+  padding: 0.25rem 0.5rem;
+  background: #e3e3e3;
+  color: #3e3e3e;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  border-bottom: $border;
+}
+.input {
+  width: stretch;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0.125rem;
+
+  p,
+  span {
+    margin: 0.125rem;
+    border: $border;
+    padding: 0.25rem;
+    cursor: default;
+  }
+  p {
+    text-align: center;
+    width: stretch;
+    border-color: transparent;
+  }
+  span {
+    border-radius: 0.25rem;
+
+    i {
+      padding-left: 0.25rem;
+      cursor: pointer;
+    }
+  }
+}
+.sufix {
+  width: stretch;
+  text-align: left;
+  background: #e3e3e3;
+  color: #3e3e3e;
+  position: relative;
+  border-top: $border;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+
+  input {
+    margin: 0.25rem;
+    border: $border;
+    padding: 0.25rem;
+    width: stretch;
+    border-radius: 0.25rem;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  ul {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    gap: 0.5rem;
+    position: absolute;
+    border: $border;
+    width: stretch;
+    z-index: 110;
+    color: #3e3e3e;
+    background: #e3e3e3;
+    border-radius: 0.25rem;
+    box-shadow: 0 0 4px #3e3e3e;
+  }
+
+  li {
+    list-style-type: none;
+    cursor: pointer;
+    text-transform: capitalize;
+    &:hover {
+      font-weight: 600;
+    }
+  }
+}
