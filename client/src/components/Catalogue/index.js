@@ -4,9 +4,7 @@ import ProductCard from "components/ProductCard";
 import style from "./index.module.scss";
 
 const Catalogue = ({ products }) => {
-  //Modificar to de NavLink por {`/product/${props.id}`}
   const history = useHistory();
-  //eliminar el Style una vez definido los estilos en css externo
   return (
     <div className={style.catalogue}>
       {products &&
@@ -19,7 +17,9 @@ const Catalogue = ({ products }) => {
               img={imageURL}
               title={e.name}
               price={e.price}
-              onClick={() => history.push(`/products/${e.id}`)}
+              onClick={() => {
+                history.push(`/products/${e.id}`);
+              }}
             />
           );
         })}

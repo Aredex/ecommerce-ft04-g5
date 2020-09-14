@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from "react";
-import getById from "services/products/getById";
-import { useParams, useHistory } from "react-router";
 import AddToCart from "components/AddToCart";
 import noImage from "noImage.svg";
 import style from "./index.module.scss";
 import { getProductDetail } from "store/Actions/Products/ProductsActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ReviewButton from "components/ReviewButton";
+import useOrders from "hooks/useOrders";
+import { useHistory, useParams } from "react-router";
 
 const Product = (props) => {
   const [count, setCount] = useState(1);
-
-  let { id } = useParams();
-
   const dispatch = useDispatch();
-
-  const product = useSelector((x) => x.ProductsReducer.productDetail);
-
+  const { id } = useParams();
   useEffect(() => {
-    (async () => {
-      dispatch(await getProductDetail(id));
-    })();
-  }, [id]);
+    dispatch(getProductDetail(id));
+    return () => {
+      dispatch(getProductDetail());
+    };
+  }, []);
 
+  const history = useHistory();
+  const product = useSelector((x) => x.ProductsReducer.productDetail);
   const handleOnAdd = () => {
     setCount(count + 1);
   };
@@ -34,6 +32,8 @@ const Product = (props) => {
 
     setCount(count - 1);
   };
+
+  const { addProduct } = useOrders();
 
   if (product) {
     const imageURL = product.images[0]?.url || noImage;
@@ -56,7 +56,7 @@ const Product = (props) => {
               {
                 id: 1,
                 rating: 2,
-                message: "Porque tenemos que pelear con redux?🤬",
+                message: "Mensaje de la review!",
               },
             ]}
           />
@@ -67,6 +67,15 @@ const Product = (props) => {
               value={count}
               disableAdd={count === product.stock}
               disableSubstract={count === 1}
+              onSubmit={() =>
+                addProduct(
+                  product.id,
+                  product.name,
+                  product.price,
+                  count,
+                  product.stock
+                )
+              }
             />
           ) : (
             <h1>No contamos con stock</h1>
@@ -75,7 +84,14 @@ const Product = (props) => {
             <div className={style.separator}>Categorias</div>
             <section>
               {product.categories.map((category, key) => (
-                <span key={key}>{category.name}</span>
+                <span
+                  key={key}
+                  onClick={() =>
+                    history.push(`/products?category=${category.id}`)
+                  }
+                >
+                  {category.name}
+                </span>
               ))}
             </section>
           </div>
@@ -83,6 +99,7 @@ const Product = (props) => {
             <div className={style.separator}>
               <span>Descripción</span>
             </div>
+            {product.description}
           </div>
         </div>
       </div>

@@ -3,18 +3,26 @@ import { useFormik } from "formik";
 import { Link, useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 import style from "./Sign.module.scss";
+import { useSelector, useDispatch } from "react-redux";
+import { getUser } from "store/Actions/Users/UsersActions"
 
 import logo from "logo.svg";
 
 export default function SignIn() {
   const history = useHistory();
+  const dispatch = useDispatch();
+
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      dispatch(getUser(values.email, values.password))
+        .then(() => {
+          history.push(`/`)
+        })
     },
   });
 

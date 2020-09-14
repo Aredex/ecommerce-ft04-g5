@@ -3,11 +3,17 @@ import { useFormik } from "formik";
 import { Link, useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 import style from "./Sign.module.scss";
+import { createUser } from "store/Actions/Users/UsersActions"
+
+import { useSelector, useDispatch } from "react-redux";
+
 
 import logo from "logo.svg";
 
-export default function SignIn() {
+export default function SignUp() {
+
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -18,7 +24,10 @@ export default function SignIn() {
       passwordConfirm: "",
     },
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      dispatch(createUser(values.name, values.email, values.passwordConfirm, "ADMIN"))
+        .then(() => {
+          history.push("/sign-in")
+        })
     },
   });
 
