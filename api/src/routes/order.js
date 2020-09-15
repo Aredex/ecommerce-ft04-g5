@@ -14,31 +14,53 @@ const {
     addProductToOrder,
     addMultipleProductsToOrder,
 } = require("../controllers/order_products");
-const { setUsertoOrder } = require("../controllers/users_order");
+const {
+    setUsertoOrder
+} = require("../controllers/users_order");
 
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\\
-const { ordersDevolution } = require("../controllers/order_id_string");
+const {
+    ordersDevolution
+} = require("../controllers/order_id_string");
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\\
+
+const {
+    sendEmail
+} = require("../mailmodel/sendEmail")
+
+
+//-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\\
+
 
 // Rutas para obtener todas las ordenes y crear una orden
 router
     .route("/")
     .get((req, res) => {
-        const { status } = req.body;
-        const { search } = req.query;
+        const {
+            status
+        } = req.body;
+        const {
+            search
+        } = req.query;
 
         if (!search) {
-            return getAll({ status })
+            return getAll({
+                    status
+                })
                 .then((orders) => res.json(orders))
                 .catch((err) => res.status(404).json(err));
         }
 
-        getAllFiler({ search })
+        getAllFiler({
+                search
+            })
             .then((orders) => res.json(orders))
             .catch((err) => res.status(404).json(err));
     })
     .post((req, res) => {
-        const { address } = req.body;
+        const {
+            address
+        } = req.body;
 
         // Crea una orden sin vinculos con productos y usuarios
         createOne("IN CREATION", address)
@@ -52,26 +74,38 @@ router
 router
     .route(
         "/id"
-    ) /*
-    .get((req, res) => {
-        const { id } = req.params;
-        getOne(id)
-            .then((order) => res.json(order).status(201))
-            .catch((err) => res.status(404).json(err));
-    })
-            .catch((err) => res.status(400).json(err));
-    })*/
+    )
+    /*
+       .get((req, res) => {
+           const { id } = req.params;
+           getOne(id)
+               .then((order) => res.json(order).status(201))
+               .catch((err) => res.status(404).json(err));
+       })
+               .catch((err) => res.status(400).json(err));
+       })*/
 
     .delete((req, res) => {
-        const { id } = req.params;
+        const {
+            id
+        } = req.params;
         deleteOne(id)
             .then((order) => res.json(order).status(201))
             .catch((err) => res.status(400).json(err));
     })
     .put((req, res) => {
-        const { id } = req.params;
-        const { status, address } = req.body;
-        editOne({ id, status, address })
+        const {
+            id
+        } = req.params;
+        const {
+            status,
+            address
+        } = req.body;
+        editOne({
+                id,
+                status,
+                address
+            })
             .then((order_product) => res.json(order_product))
             .catch((err) => res.status(400).json(err));
     });
@@ -79,29 +113,55 @@ router
 // Ruta para agregar un producto a una orden
 // Si la orden aún no está creada, la crea y le agrrega el producto
 router.route("/product/:idProduct").post((req, res) => {
-    const { idProduct } = req.params;
-    const { amount, address, idUser } = req.body;
+    const {
+        idProduct
+    } = req.params;
+    const {
+        amount,
+        address,
+        idUser
+    } = req.body;
 
-    addProductToOrder({ idProduct, amount, address, idUser })
+    addProductToOrder({
+            idProduct,
+            amount,
+            address,
+            idUser
+        })
         .then((order_product) => res.json(order_product).status(201))
         .catch((err) => res.status(400).json(err));
 });
 
 // Agrega muchos productos a una orden ya definida
 router.route("/:idOrder/products").post((req, res) => {
-    const { idOrder } = req.params;
-    const { products, idUser } = req.body;
+    const {
+        idOrder
+    } = req.params;
+    const {
+        products,
+        idUser
+    } = req.body;
 
-    addMultipleProductsToOrder({ idOrder, arrayProducts: products, idUser })
+    addMultipleProductsToOrder({
+            idOrder,
+            arrayProducts: products,
+            idUser
+        })
         .then((order_product) => res.json(order_product).status(201))
         .catch((err) => res.status(400).json(err));
 });
 
 // Agrega muchos productos a una orden aunque esta no esté definida. La crea
 router.route("/products").post((req, res) => {
-    const { products, idUser } = req.body;
+    const {
+        products,
+        idUser
+    } = req.body;
 
-    addMultipleProductsToOrder({ arrayProducts: products, idUser })
+    addMultipleProductsToOrder({
+            arrayProducts: products,
+            idUser
+        })
         .then((order_product) => res.json(order_product).status(201))
         .catch((err) => res.status(400).json(err));
 });
@@ -112,31 +172,57 @@ router.route("/products").post((req, res) => {
 router
     .route("/:idOrder/product/:idProduct")
     .post((req, res) => {
-        const { idOrder, idProduct } = req.params;
-        const { amount, idUser } = req.body;
+        const {
+            idOrder,
+            idProduct
+        } = req.params;
+        const {
+            amount,
+            idUser
+        } = req.body;
 
-        addProductToOrder({ idProduct, idOrder, amount, idUser })
+        addProductToOrder({
+                idProduct,
+                idOrder,
+                amount,
+                idUser
+            })
             .then((order_product) => res.json(order_product))
             .catch((err) => res.status(400).json(err));
     })
     .delete((req, res) => {
-        const { idOrder, idProduct } = req.params;
+        const {
+            idOrder,
+            idProduct
+        } = req.params;
 
         removeProductToOrder(idProduct, idOrder)
             .then((order_product) => res.json(order_product).status(204))
             .catch((err) => res.status(400).json(err));
     })
     .put((req, res) => {
-        const { idOrder, idProduct } = req.params;
-        const { amount } = req.body;
+        const {
+            idOrder,
+            idProduct
+        } = req.params;
+        const {
+            amount
+        } = req.body;
 
-        addProductToOrder({ idOrder, idProduct, amount })
+        addProductToOrder({
+                idOrder,
+                idProduct,
+                amount
+            })
             .then((order) => res.json(order).res.status(204))
             .catch((err) => res.status(400).json(err));
     });
 
 router.route("/:idOrder/user/:idUser").post((req, res) => {
-    const { idOrder, idUser } = req.params;
+    const {
+        idOrder,
+        idUser
+    } = req.params;
 
     setUsertoOrder(idUser, idOrder)
         .then((order_product) => res.json(order_product))
@@ -145,7 +231,9 @@ router.route("/:idOrder/user/:idUser").post((req, res) => {
 
 // Ruta alternativa para vaciar una orden
 router.route("/:id/empty").delete((req, res) => {
-    const { id } = req.params;
+    const {
+        id
+    } = req.params;
 
     emptyOrder(id)
         .then((order_product) => res.json(order_product).status(204))
@@ -154,20 +242,38 @@ router.route("/:id/empty").delete((req, res) => {
 
 // Ruta para especificar que una orden ya ha sido comprada
 router.route("/:id/confirmed").put((req, res) => {
-    const { id } = req.params;
-    const { address } = req.body;
+    const {
+        id
+    } = req.params;
+    const {
+        address
+    } = req.body;
 
-    confirmedOrder({ id, address })
-        .then((order_product) => res.json(order_product).status(204))
+    confirmedOrder({
+            id,
+            address
+        })
+        .then((order_product) => {
+            sendEmail(order_product)
+            res.json(order_product).status(204)
+        })
         .catch((err) => res.status(400).json(err));
 });
 
 // Ruta para especificar que una orden ha sido rechazada
 router.route("/:id/rejected").put((req, res) => {
-    const { id } = req.params;
-    const { address } = req.body;
+    const {
+        id
+    } = req.params;
+    const {
+        address
+    } = req.body;
 
-    editOne({ id, status: "REJECTED", address })
+    editOne({
+            id,
+            status: "REJECTED",
+            address
+        })
         .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
@@ -175,10 +281,18 @@ router.route("/:id/rejected").put((req, res) => {
 // Ruta para especificar que una orden ya ha sido comprada
 //  Y se está preparando su envío
 router.route("/:id/preparing").put((req, res) => {
-    const { id } = req.params;
-    const { address } = req.body;
+    const {
+        id
+    } = req.params;
+    const {
+        address
+    } = req.body;
 
-    editOne({ id, status: "PREPARING", address })
+    editOne({
+            id,
+            status: "PREPARING",
+            address
+        })
         .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
@@ -186,18 +300,28 @@ router.route("/:id/preparing").put((req, res) => {
 // Ruta para especificar que una orden ya ha sido comprada
 //  Y ya se ha enviado al cliente
 router.route("/:id/sent").put((req, res) => {
-    const { id } = req.params;
+    const {
+        id
+    } = req.params;
 
-    editOne({ id, status: "SENT" })
+    editOne({
+            id,
+            status: "SENT"
+        })
         .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
 
 // Ruta para especificar que una orden ya ha sido entregada
 router.route("/:id/delivered").put((req, res) => {
-    const { id } = req.params;
+    const {
+        id
+    } = req.params;
 
-    editOne({ id, status: "DELIVERED" })
+    editOne({
+            id,
+            status: "DELIVERED"
+        })
         .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
@@ -205,57 +329,78 @@ router.route("/:id/delivered").put((req, res) => {
 // Ruta para especificar que una orden ya ha sido entregada
 //  Recibida con éxito y sin problemas, se pone en estado finalizado
 router.route("/:id/finalized").put((req, res) => {
-    const { id } = req.params;
+    const {
+        id
+    } = req.params;
 
-    editOne({ id, status: "FINALIZED" })
+    editOne({
+            id,
+            status: "FINALIZED"
+        })
         .then((order_product) => res.json(order_product).status(204))
         .catch((err) => res.status(400).json(err));
 });
 
 router.route("/increation").get((req, res) => {
-    getAll({ status: "IN CREATION" })
+    getAll({
+            status: "IN CREATION"
+        })
         .then((orders) => res.json(orders))
         .catch((err) => res.status(404).json(err));
 });
 
 router.route("/sent").get((req, res) => {
-    getAll({ status: "sent" })
+    getAll({
+            status: "sent"
+        })
         .then((orders) => res.json(orders))
         .catch((err) => res.status(404).json(err));
 });
 
 router.route("/confirmed").get((req, res) => {
-    getAll({ status: "confirmed" })
+    getAll({
+            status: "confirmed"
+        })
         .then((orders) => res.json(orders))
         .catch((err) => res.status(404).json(err));
 });
 
 router.route("/rejected").get((req, res) => {
-    getAll({ status: "rejected" })
+    getAll({
+            status: "rejected"
+        })
         .then((orders) => res.json(orders))
         .catch((err) => res.status(404).json(err));
 });
 
 router.route("/preparing").get((req, res) => {
-    getAll({ status: "preparing" })
+    getAll({
+            status: "preparing"
+        })
         .then((orders) => res.json(orders))
         .catch((err) => res.status(404).json(err));
 });
 
 router.route("/delivered").get((req, res) => {
-    getAll({ status: "delivered" })
+    getAll({
+            status: "delivered"
+        })
         .then((orders) => res.json(orders))
         .catch((err) => res.status(404).json(err));
 });
 
 router.route("/finalized").get((req, res) => {
-    getAll({ status: "finalized" })
+    getAll({
+            status: "finalized"
+        })
         .then((orders) => res.json(orders))
         .catch((err) => res.status(404).json(err));
 });
 
 router.route("/:variable").get((req, res) => {
-    const { variable } = req.params;
+    const {
+        variable
+    } = req.params;
     ordersDevolution(variable)
         .then((orders) => res.json(orders))
         .catch((err) => res.status(400).json(err));
