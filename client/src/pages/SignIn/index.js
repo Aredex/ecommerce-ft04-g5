@@ -4,7 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 import style from "./Sign.module.scss";
 import { useSelector, useDispatch } from "react-redux";
-import { getUser } from "store/Actions/Users/UsersActions"
+import { getUser } from "store/Actions/Users/UsersActions";
 
 import logo from "logo.svg";
 
@@ -12,17 +12,15 @@ export default function SignIn() {
   const history = useHistory();
   const dispatch = useDispatch();
 
-
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     onSubmit: (values) => {
-      dispatch(getUser(values.email, values.password))
-        .then(() => {
-          history.push(`/`)
-        })
+      dispatch(getUser(values.email, values.password)).then(() => {
+        history.push(`/`);
+      });
     },
   });
 
@@ -57,7 +55,11 @@ export default function SignIn() {
               También puedes iniciar sesión con
             </div>
             <div className={style.buttonGroup}>
-              <button>
+              <button
+                onClick={() =>
+                  (window.location = "http://localhost:3001/auth/login/google")
+                }
+              >
                 <i className="fab fa-google"></i>
               </button>
               <button>
