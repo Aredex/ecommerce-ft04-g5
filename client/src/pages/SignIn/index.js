@@ -1,19 +1,16 @@
 import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-// import { useLocalStorage } from "react-use";
-import { getUser } from "store/Actions/Users/UsersActions";
+// import { useSelector, useDispatch } from "react-redux";
 
 import logo from "logo.svg";
 import style from "./Sign.module.scss";
+import useUser from "hooks/useUser";
 
 export default function SignIn() {
-    const dataSignin = useSelector((x) => x.UsersReducer.userLogin);
-    // const [user, setUser, removeUser] = useLocalStorage("user");
+    const { loginWithEmail } = useUser();
 
     const history = useHistory();
-    const dispatch = useDispatch();
 
     const formik = useFormik({
         initialValues: {
@@ -21,17 +18,10 @@ export default function SignIn() {
             password: "",
         },
         onSubmit: (values) => {
-            dispatch(getUser(values.email, values.password)).then(() => {
-                history.push(`/`);
-            });
+            loginWithEmail(values.email, values.password);
+            history.push("/products");
         },
     });
-
-    useEffect(() => {
-        return () => {
-            console.log(dataSignin);
-        };
-    }, [dataSignin]);
 
     return (
         <>
@@ -59,6 +49,7 @@ export default function SignIn() {
                             value="Iniciar"
                         />
                     </form>
+
                     <div className={style.otherMethods}>
                         <div className={style.separator}>
                             También puedes iniciar sesión con
