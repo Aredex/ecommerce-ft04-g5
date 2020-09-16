@@ -1,18 +1,20 @@
-const router = require("express").Router();
+const router = require("express").Router(),
+  isAdmin = require("../lib/isAdmin");
 const {
-    getAll,
-    createOne,
-    deleteOne,
-    //   getOne,
-    editOne,
-    emptyOrder,
-    confirmedOrder,
-    getAllFiler,
+
+  getAll,
+  createOne,
+  deleteOne,
+  // getOne,
+  editOne,
+  emptyOrder,
+  confirmedOrder,
+  getAllFiler,
 } = require("../controllers/orders");
 const {
-    removeProductToOrder,
-    addProductToOrder,
-    addMultipleProductsToOrder,
+  removeProductToOrder,
+  addProductToOrder,
+  addMultipleProductsToOrder,
 } = require("../controllers/order_products");
 const {
     setUsertoOrder
@@ -34,45 +36,36 @@ const {
 
 // Rutas para obtener todas las ordenes y crear una orden
 router
-    .route("/")
-    .get((req, res) => {
-        const {
-            status
-        } = req.body;
-        const {
-            search
-        } = req.query;
+  .route("/")
+  .get((req, res) => {
+    const { status } = req.body;
+    const { search } = req.query;
+    if (isAdmin(req)) {
+      if (!search) {
+        return getAll({ status })
+          .then((orders) => res.json(orders))
+          .catch((err) => res.status(404).json(err));
+      }
 
-        if (!search) {
-            return getAll({
-                    status
-                })
-                .then((orders) => res.json(orders))
-                .catch((err) => res.status(404).json(err));
-        }
-
-        getAllFiler({
-                search
-            })
-            .then((orders) => res.json(orders))
-            .catch((err) => res.status(404).json(err));
-    })
-    .post((req, res) => {
-        const {
-            address
-        } = req.body;
-
-        // Crea una orden sin vinculos con productos y usuarios
-        createOne("IN CREATION", address)
-            .then((order) => res.json(order).status(201))
-            .catch((err) => res.status(400).json(err));
-    });
+      getAllFiler({ search })
+        .then((orders) => res.json(orders))
+        .catch((err) => res.status(404).json(err));
+    } else {
+      res.sendStatus(401);
+    }
+  })
+  .post((req, res) => {
+    const { address } = req.body;
+    // Crea una orden sin vinculos con productos y usuarios
+    createOne("IN CREATION", address)
+      .then((order) => res.json(order).status(201))
+      .catch((err) => res.status(400).json(err));
+  });
 
 //  Rutas para obtener una orden en particular, eliminarla y editarla
 //      Solo edita el status y address
 //      Eliminar una orden sirve como método para vaciar
-router
-    .route(
+router.route(
         "/id"
     )
     /*
@@ -130,11 +123,12 @@ router.route("/product/:idProduct").post((req, res) => {
         })
         .then((order_product) => res.json(order_product).status(201))
         .catch((err) => res.status(400).json(err));
+
 });
 
 // Agrega muchos productos a una orden ya definida
 router.route("/:idOrder/products").post((req, res) => {
-    const {
+const {
         idOrder
     } = req.params;
     const {
@@ -224,9 +218,9 @@ router.route("/:idOrder/user/:idUser").post((req, res) => {
         idUser
     } = req.params;
 
-    setUsertoOrder(idUser, idOrder)
-        .then((order_product) => res.json(order_product))
-        .catch((err) => res.status(400).json(err));
+  setUsertoOrder(idUser, idOrder)
+    .then((order_product) => res.json(order_product))
+    .catch((err) => res.status(400).json(err));
 });
 
 // Ruta alternativa para vaciar una orden
@@ -235,9 +229,9 @@ router.route("/:id/empty").delete((req, res) => {
         id
     } = req.params;
 
-    emptyOrder(id)
-        .then((order_product) => res.json(order_product).status(204))
-        .catch((err) => res.status(400).json(err));
+  emptyOrder(id)
+    .then((order_product) => res.json(order_product).status(204))
+    .catch((err) => res.status(400).json(err));
 });
 
 // Ruta para especificar que una orden ya ha sido comprada
