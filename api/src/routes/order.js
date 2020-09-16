@@ -3,7 +3,7 @@ const {
     getAll,
     createOne,
     deleteOne,
-    // getOne,
+    //   getOne,
     editOne,
     emptyOrder,
     confirmedOrder,
@@ -259,7 +259,6 @@ router.route("/:id/confirmed").put((req, res) => {
         })
         .catch((err) => res.status(400).json(err));
 });
-
 // Ruta para especificar que una orden ha sido rechazada
 router.route("/:id/rejected").put((req, res) => {
     const {
