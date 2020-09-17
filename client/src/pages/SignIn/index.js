@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { Link, useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 import style from "./Sign.module.scss";
 import { useSelector, useDispatch } from "react-redux";
-import { getUser } from "store/Actions/Users/UsersActions"
+import { getUser } from "store/Actions/Users/UsersActions";
 
 import logo from "logo.svg";
+import useQuery from "hooks/useQuery";
+import Axios from "axios";
 
 export default function SignIn() {
   const history = useHistory();
   const dispatch = useDispatch();
-
+  const query = useQuery();
 
   const formik = useFormik({
     initialValues: {
@@ -19,12 +21,24 @@ export default function SignIn() {
       password: "",
     },
     onSubmit: (values) => {
-      dispatch(getUser(values.email, values.password))
-        .then(() => {
-          history.push(`/`)
-        })
+      dispatch(getUser(values.email, values.password)).then(() => {
+        history.push(`/`);
+      });
     },
   });
+
+  useEffect(() => {
+    (async () => {
+      console.log("query");
+      if (query.token) {
+        query.token = query.token.split("#")[0];
+        const { data } = await Axios.get("http://localhost:3001/auth/me", {
+          headers: { Authorization: `Bearer ${query.token}` },
+        });
+        console.log(data);
+      }
+    })();
+  }, [query.token]);
 
   return (
     <>
@@ -57,10 +71,19 @@ export default function SignIn() {
               También puedes iniciar sesión con
             </div>
             <div className={style.buttonGroup}>
-              <button>
+              <button
+                onClick={() =>
+                  (window.location = "http://localhost:3001/auth/login/google")
+                }
+              >
                 <i className="fab fa-google"></i>
               </button>
-              <button>
+              <button
+                onClick={() =>
+                  (window.location =
+                    "http://localhost:3001/auth/login/facebook")
+                }
+              >
                 <i className="fab fa-facebook"></i>
               </button>
             </div>

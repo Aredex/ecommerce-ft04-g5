@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <style>
+    .imagen {
+      transition: all .9s ease;
+      ;
+
+    }
+
+    .imagen:hover {
+      transform: matrix3d(1.25);
+
+    }
+  </style>
+</head>
+
+<body style=" font-family: 'Open Sans', 'Arial Narrow', Arial, sans-serif; ">
+  <div onmouseover="bigImg(this)"
+    style="height: 100%; padding: 2em; background-image: url('https://images.unsplash.com/photo-1491147334573-44cbb4602074?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80'); background-size: 100%;">
+    <div style="border-radius: 2em;text-align: -webkit-center;background-color: #ffffff;z-index: 1;position: relative;">
+      <img src="https://image.flaticon.com/icons/png/512/3438/3438467.png" width="50px" height="50px"
+        style="position: relative; margin-top: 1em;">
+      <h1 style="color: #000000;margin: .2em; font-size: 2em; font-weight: 100;">GardenRy</h1>
+      <p
+        style="color: #ffffff;font-weight: 800;background-color: #00cc76;margin-bottom: 0;padding-top: 1em;padding-left: -1em;">
+        %username% ! Muchas gracias por tu compra!</p>
+      <p
+        style="color: #ffffff;font-weight: 800;background-color: #00cc76;margin-top: 0;padding-top: 1em;padding-bottom: 1em;">
+        Pronto la enviaremos a %address%</p>
+      %listProducts%
+      <p style="text-align-last: right;margin-right: 2em;font-size: .7em;color: #9e9e9ed4;font-weight: 800;">N° orden :
+        %orderid%</p>
+    </div>
+  </div>
+
+</body>
+
+</html>
