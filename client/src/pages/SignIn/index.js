@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { Link, useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -7,10 +7,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { getUser } from "store/Actions/Users/UsersActions";
 
 import logo from "logo.svg";
+import useQuery from "hooks/useQuery";
+import Axios from "axios";
 
 export default function SignIn() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const query = useQuery();
 
   const formik = useFormik({
     initialValues: {
@@ -23,6 +26,19 @@ export default function SignIn() {
       });
     },
   });
+
+  useEffect(() => {
+    (async () => {
+      console.log("query");
+      if (query.token) {
+        query.token = query.token.split("#")[0];
+        const { data } = await Axios.get("http://localhost:3001/auth/me", {
+          headers: { Authorization: `Bearer ${query.token}` },
+        });
+        console.log(data);
+      }
+    })();
+  }, [query.token]);
 
   return (
     <>

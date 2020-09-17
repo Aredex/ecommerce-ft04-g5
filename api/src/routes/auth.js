@@ -1,6 +1,7 @@
 const router = require("express").Router(),
   jwt = require("jsonwebtoken"),
-  passport = require("passport");
+  passport = require("passport"),
+  { getOne } = require("../controllers/users");
 
 const secret = process.env.AUTH_SECRET || "secret";
 
@@ -46,6 +47,18 @@ router.route("/login/facebook/callback").get(function (req, res, next) {
       res.redirect(`http://localhost:3000/sign-in?token=${token}`);
     }
   })(req, res, next);
+});
+
+router.route("/me").get(async (req, res) => {
+  if (!req.user) {
+    res.sendStatus(401);
+  } else if (!req.user.uid) {
+    res.sendStatus(401);
+  } else {
+    const user = await getOne(req.user.uid);
+    const { id, name, email, role, status, createdAt, updatedAt } = user;
+    res.json({ id, name, email, role, status, createdAt, updatedAt });
+  }
 });
 
 module.exports = router;
