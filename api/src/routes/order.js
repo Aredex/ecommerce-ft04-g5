@@ -1,20 +1,22 @@
 const router = require("express").Router(),
-  isAdmin = require("../lib/isAdmin");
+    isAdmin = require("../lib/isAdmin");
+const isUser = require("../lib/isUser");
+
 const {
 
-  getAll,
-  createOne,
-  deleteOne,
-  // getOne,
-  editOne,
-  emptyOrder,
-  confirmedOrder,
-  getAllFiler,
+    getAll,
+    createOne,
+    deleteOne,
+    // getOne,
+    editOne,
+    emptyOrder,
+    confirmedOrder,
+    getAllFiler,
 } = require("../controllers/orders");
 const {
-  removeProductToOrder,
-  addProductToOrder,
-  addMultipleProductsToOrder,
+    removeProductToOrder,
+    addProductToOrder,
+    addMultipleProductsToOrder,
 } = require("../controllers/order_products");
 const {
     setUsertoOrder
@@ -36,31 +38,41 @@ const {
 
 // Rutas para obtener todas las ordenes y crear una orden
 router
-  .route("/")
-  .get((req, res) => {
-    const { status } = req.body;
-    const { search } = req.query;
-    if (isAdmin(req)) {
-      if (!search) {
-        return getAll({ status })
-          .then((orders) => res.json(orders))
-          .catch((err) => res.status(404).json(err));
-      }
+    .route("/")
+    .get((req, res) => {
+        const {
+            status
+        } = req.body;
+        const {
+            search
+        } = req.query;
+        if (isAdmin(req)) {
+            if (!search) {
+                return getAll({
+                        status
+                    })
+                    .then((orders) => res.json(orders))
+                    .catch((err) => res.status(404).json(err));
+            }
 
-      getAllFiler({ search })
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(404).json(err));
-    } else {
-      res.sendStatus(401);
-    }
-  })
-  .post((req, res) => {
-    const { address } = req.body;
-    // Crea una orden sin vinculos con productos y usuarios
-    createOne("IN CREATION", address)
-      .then((order) => res.json(order).status(201))
-      .catch((err) => res.status(400).json(err));
-  });
+            getAllFiler({
+                    search
+                })
+                .then((orders) => res.json(orders))
+                .catch((err) => res.status(404).json(err));
+        } else {
+            res.sendStatus(401);
+        }
+    })
+    .post((req, res) => {
+        const {
+            address
+        } = req.body;
+        // Crea una orden sin vinculos con productos y usuarios
+        createOne("IN CREATION", address)
+            .then((order) => res.json(order).status(201))
+            .catch((err) => res.status(400).json(err));
+    });
 
 //  Rutas para obtener una orden en particular, eliminarla y editarla
 //      Solo edita el status y address
@@ -115,20 +127,26 @@ router.route("/product/:idProduct").post((req, res) => {
         idUser
     } = req.body;
 
-    addProductToOrder({
-            idProduct,
-            amount,
-            address,
-            idUser
-        })
-        .then((order_product) => res.json(order_product).status(201))
-        .catch((err) => res.status(400).json(err));
+    if (isAdmin(req) || (isUser(req) && req.user.uid === idUser)) {
+        addProductToOrder({
+                idProduct,
+                amount,
+                address,
+                idUser
+            })
+            .then((order_product) => res.json(order_product).status(201))
+            .catch((err) => res.status(400).json(err));
+    } else {
+        res.sendStatus(401)
+    }
+
+
 
 });
 
 // Agrega muchos productos a una orden ya definida
 router.route("/:idOrder/products").post((req, res) => {
-const {
+    const {
         idOrder
     } = req.params;
     const {
@@ -136,13 +154,18 @@ const {
         idUser
     } = req.body;
 
-    addMultipleProductsToOrder({
-            idOrder,
-            arrayProducts: products,
-            idUser
-        })
-        .then((order_product) => res.json(order_product).status(201))
-        .catch((err) => res.status(400).json(err));
+    if (isAdmin(req) || (isUser(req) && req.user.uid === idUser)) {
+        addMultipleProductsToOrder({
+                idOrder,
+                arrayProducts: products,
+                idUser
+            })
+            .then((order_product) => res.json(order_product).status(201))
+            .catch((err) => res.status(400).json(err));
+    } else {
+        res.sendStatus(401)
+    }
+
 });
 
 // Agrega muchos productos a una orden aunque esta no esté definida. La crea
@@ -152,12 +175,18 @@ router.route("/products").post((req, res) => {
         idUser
     } = req.body;
 
-    addMultipleProductsToOrder({
-            arrayProducts: products,
-            idUser
-        })
-        .then((order_product) => res.json(order_product).status(201))
-        .catch((err) => res.status(400).json(err));
+    if (isAdmin(req) || (isUser(req) && req.user.uid === idUser)) {
+        addMultipleProductsToOrder({
+                arrayProducts: products,
+                idUser
+            })
+            .then((order_product) => res.json(order_product).status(201))
+            .catch((err) => res.status(400).json(err));
+    } else {
+        res.sendStatus(401)
+    }
+
+
 });
 
 // Rutas para
@@ -175,20 +204,27 @@ router
             idUser
         } = req.body;
 
-        addProductToOrder({
-                idProduct,
-                idOrder,
-                amount,
-                idUser
-            })
-            .then((order_product) => res.json(order_product))
-            .catch((err) => res.status(400).json(err));
+
+        if (isAdmin(req) || (isUser(req) && req.user.uid === idUser)) {
+            addProductToOrder({
+                    idProduct,
+                    idOrder,
+                    amount,
+                    idUser
+                })
+                .then((order_product) => res.json(order_product))
+                .catch((err) => res.status(400).json(err));
+
+        } else {
+            res.sendStatus(401)
+        }
     })
     .delete((req, res) => {
         const {
             idOrder,
             idProduct
         } = req.params;
+
 
         removeProductToOrder(idProduct, idOrder)
             .then((order_product) => res.json(order_product).status(204))
@@ -218,9 +254,15 @@ router.route("/:idOrder/user/:idUser").post((req, res) => {
         idUser
     } = req.params;
 
-  setUsertoOrder(idUser, idOrder)
-    .then((order_product) => res.json(order_product))
-    .catch((err) => res.status(400).json(err));
+    if (isAdmin(req) || (isUser(req) && req.user.uid === idUser)) {
+        setUsertoOrder(idUser, idOrder)
+            .then((order_product) => res.json(order_product))
+            .catch((err) => res.status(400).json(err));
+    } else {
+        res.sendStatus(401)
+    }
+
+
 });
 
 // Ruta alternativa para vaciar una orden
@@ -229,9 +271,9 @@ router.route("/:id/empty").delete((req, res) => {
         id
     } = req.params;
 
-  emptyOrder(id)
-    .then((order_product) => res.json(order_product).status(204))
-    .catch((err) => res.status(400).json(err));
+    emptyOrder(id)
+        .then((order_product) => res.json(order_product).status(204))
+        .catch((err) => res.status(400).json(err));
 });
 
 // Ruta para especificar que una orden ya ha sido comprada
@@ -281,13 +323,20 @@ router.route("/:id/preparing").put((req, res) => {
         address
     } = req.body;
 
-    editOne({
-            id,
-            status: "PREPARING",
-            address
-        })
-        .then((order_product) => res.json(order_product).status(204))
-        .catch((err) => res.status(400).json(err));
+    if (isAdmin(req)) {
+        editOne({
+                id,
+                status: "PREPARING",
+                address
+            })
+            .then((order_product) => res.json(order_product).status(204))
+            .catch((err) => res.status(400).json(err));
+
+    } else {
+        res.sendStatus(401)
+    }
+
+
 });
 
 // Ruta para especificar que una orden ya ha sido comprada
@@ -297,12 +346,19 @@ router.route("/:id/sent").put((req, res) => {
         id
     } = req.params;
 
-    editOne({
-            id,
-            status: "SENT"
-        })
-        .then((order_product) => res.json(order_product).status(204))
-        .catch((err) => res.status(400).json(err));
+    if (isAdmin(req)) {
+        editOne({
+                id,
+                status: "SENT"
+            })
+            .then((order_product) => res.json(order_product).status(204))
+            .catch((err) => res.status(400).json(err));
+
+    } else {
+        res.sendStatus(401)
+    }
+
+
 });
 
 // Ruta para especificar que una orden ya ha sido entregada
@@ -311,12 +367,17 @@ router.route("/:id/delivered").put((req, res) => {
         id
     } = req.params;
 
-    editOne({
-            id,
-            status: "DELIVERED"
-        })
-        .then((order_product) => res.json(order_product).status(204))
-        .catch((err) => res.status(400).json(err));
+    if (isAdmin(req)) {
+        editOne({
+                id,
+                status: "DELIVERED"
+            })
+            .then((order_product) => res.json(order_product).status(204))
+            .catch((err) => res.status(400).json(err));
+
+    } else {
+        res.sendStatus(401)
+    }
 });
 
 // Ruta para especificar que una orden ya ha sido entregada
@@ -326,76 +387,129 @@ router.route("/:id/finalized").put((req, res) => {
         id
     } = req.params;
 
-    editOne({
-            id,
-            status: "FINALIZED"
-        })
-        .then((order_product) => res.json(order_product).status(204))
-        .catch((err) => res.status(400).json(err));
+    if (isAdmin(req)) {
+        editOne({
+                id,
+                status: "FINALIZED"
+            })
+            .then((order_product) => res.json(order_product).status(204))
+            .catch((err) => res.status(400).json(err));
+    } else {
+        res.sendStatus(401)
+    }
+
+
 });
 
 router.route("/increation").get((req, res) => {
-    getAll({
-            status: "IN CREATION"
-        })
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(404).json(err));
+
+    if (isAdmin(req)) {
+        getAll({
+                status: "IN CREATION"
+            })
+            .then((orders) => res.json(orders))
+            .catch((err) => res.status(404).json(err));
+    } else {
+        res.sendStatus(401)
+    }
+
 });
 
 router.route("/sent").get((req, res) => {
-    getAll({
-            status: "sent"
-        })
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(404).json(err));
+
+    if (isAdmin(req)) {
+        getAll({
+                status: "sent"
+            })
+            .then((orders) => res.json(orders))
+            .catch((err) => res.status(404).json(err));
+    } else {
+        res.sendStatus(401)
+    }
+
 });
 
 router.route("/confirmed").get((req, res) => {
-    getAll({
-            status: "confirmed"
-        })
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(404).json(err));
+
+    if (isAdmin(req)) {
+        getAll({
+                status: "confirmed"
+            })
+            .then((orders) => res.json(orders))
+            .catch((err) => res.status(404).json(err));
+    } else {
+        res.sendStatus(401)
+    }
+
 });
 
 router.route("/rejected").get((req, res) => {
-    getAll({
-            status: "rejected"
-        })
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(404).json(err));
+
+    if (isAdmin(req)) {
+        getAll({
+                status: "rejected"
+            })
+            .then((orders) => res.json(orders))
+            .catch((err) => res.status(404).json(err));
+    } else {
+        res.sendStatus(401)
+    }
+
 });
 
 router.route("/preparing").get((req, res) => {
-    getAll({
-            status: "preparing"
-        })
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(404).json(err));
+
+    if (isAdmin(req)) {
+        getAll({
+                status: "preparing"
+            })
+            .then((orders) => res.json(orders))
+            .catch((err) => res.status(404).json(err));
+    } else {
+        res.sendStatus(401)
+    }
+
 });
 
 router.route("/delivered").get((req, res) => {
-    getAll({
-            status: "delivered"
-        })
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(404).json(err));
+
+    if (isAdmin(req)) {
+        getAll({
+                status: "delivered"
+            })
+            .then((orders) => res.json(orders))
+            .catch((err) => res.status(404).json(err));
+    } else {
+        res.sendStatus(401)
+    }
+
 });
 
 router.route("/finalized").get((req, res) => {
-    getAll({
-            status: "finalized"
-        })
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(404).json(err));
+
+    if (isAdmin(req)) {
+        getAll({
+                status: "finalized"
+            })
+            .then((orders) => res.json(orders))
+            .catch((err) => res.status(404).json(err));
+    } else {
+        res.sendStatus(401)
+    }
+
 });
 
 router.route("/:variable").get((req, res) => {
     const {
         variable
     } = req.params;
-    ordersDevolution(variable)
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(400).json(err));
+
+    if (isAdmin(req)) {
+        ordersDevolution(variable)
+            .then((orders) => res.json(orders))
+            .catch((err) => res.status(400).json(err));
+    } else {
+        res.sendStatus(401)
+    }
 });
 module.exports = router;

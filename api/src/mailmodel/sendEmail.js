@@ -1,10 +1,17 @@
 var fs = require("fs")
 var nodemailer = require('nodemailer');
 var mg = require('nodemailer-mailgun-transport');
+const {
+  MAILGUN_API_KEY,
+  MAILGUN_DOMAIN
+} = process.env;
+
+
+
 var auth = {
   auth: {
-    api_key: 'e6eb8d555aea984a6fd6862022d21273-d5e69b0b-88b0f856',
-    domain: 'sandbox693866aa224c4dc0ac01b02fb995b793.mailgun.org'
+    api_key: MAILGUN_API_KEY,
+    domain: MAILGUN_DOMAIN
   }
 }
 var nodemailerMailgun = nodemailer.createTransport(mg(auth));
