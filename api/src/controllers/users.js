@@ -26,9 +26,9 @@ const getAll = () => {
   });
 };
 
-const createOne = (name, email, password, role) => {
+const createOne = (name, email, password, role, googleId, facebookId) => {
   return new Promise((resolve, reject) => {
-    User.create({ name, email, password })
+    User.create({ name, email, password, googleId, facebookId })
       .then((user) => {
         if (role) {
           if (role !== "ADMIN" && role !== "GUEST") {
@@ -104,6 +104,28 @@ const getOneByEmail = async (email) => {
     return error;
   }
 };
+const getOneByGoogleId = async (googleId) => {
+  try {
+    const user = User.findOne({
+      where: { googleId },
+      include: [{ model: Review, include: Product }],
+    });
+    return user;
+  } catch (error) {
+    return error;
+  }
+};
+const getOneByFacebookId = async (facebookId) => {
+  try {
+    const user = User.findOne({
+      where: { facebookId },
+      include: [{ model: Review, include: Product }],
+    });
+    return user;
+  } catch (error) {
+    return error;
+  }
+};
 
 const deleteOne = (id) => {
   return new Promise((resolve, reject) => {
@@ -122,6 +144,8 @@ module.exports = {
   getAll,
   getOne,
   getOneByEmail,
+  getOneByGoogleId,
+  getOneByFacebookId,
   editOne,
   deleteOne,
 };

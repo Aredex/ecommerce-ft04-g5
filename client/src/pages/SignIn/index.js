@@ -6,11 +6,28 @@ import { useHistory } from "react-router-dom";
 import logo from "logo.svg";
 import style from "./Sign.module.scss";
 import useUser from "hooks/useUser";
+import useQuery from "hooks/useQuery";
+import Axios from "axios";
 
 export default function SignIn() {
     const { loginWithEmail } = useUser();
 
     const history = useHistory();
+    const dispatch = useDispatch();
+    const query = useQuery();
+  
+  useEffect(() => {
+    (async () => {
+      console.log("query");
+      if (query.token) {
+        query.token = query.token.split("#")[0];
+        const { data } = await Axios.get("http://localhost:3001/auth/me", {
+          headers: { Authorization: `Bearer ${query.token}` },
+        });
+        console.log(data);
+      }
+    })();
+  }, [query.token]);
 
     const formik = useFormik({
         initialValues: {
@@ -22,13 +39,11 @@ export default function SignIn() {
             history.push("/products");
         },
     });
-
     return (
         <>
             <main className={style.main}>
                 <section className={style.formSection}>
                     <img className={style.logo} src={logo} alt="" />
-
                     <form onSubmit={formik.handleSubmit}>
                         <span className={style.title}>Iniciar sesión</span>
                         <input
@@ -56,16 +71,18 @@ export default function SignIn() {
                         </div>
                         <div className={style.buttonGroup}>
                             <button
-                                onClick={() =>
-                                    (window.location =
-                                        "http://localhost:3001/auth/login/google")
-                                }
-                            >
-                                <i className="fab fa-google"></i>
-                            </button>
-                            <button>
-                                <i className="fab fa-facebook"></i>
-                            </button>
+                onClick={() =>
+                  (window.location = "http://localhost:3001/auth/login/google")
+                }
+              >
+                <i className="fab fa-google"></i>
+              </button>
+              <button
+                onClick={() =>
+                  (window.location =
+                    "http://localhost:3001/auth/login/facebook")
+                }
+              >
                         </div>
                         <div className={style.buttonGroup}>
                             <span
