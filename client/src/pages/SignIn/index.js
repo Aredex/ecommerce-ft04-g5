@@ -62,7 +62,12 @@ export default function SignIn() {
               >
                 <i className="fab fa-google"></i>
               </button>
-              <button>
+              <button
+                onClick={() =>
+                  (window.location =
+                    "http://localhost:3001/auth/login/facebook")
+                }
+              >
                 <i className="fab fa-facebook"></i>
               </button>
             </div>

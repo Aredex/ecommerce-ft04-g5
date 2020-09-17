@@ -15,26 +15,28 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       unique: true,
       validate: {
         isEmail: true,
         notEmpty: false,
       },
       set(value) {
-        this.setDataValue("email", value.trim().toLowerCase());
+        this.setDataValue("email", value ? value.trim().toLowerCase() : null);
       },
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         notEmpty: false,
       },
       set(value) {
-        const salt = bcrypt.genSaltSync(saltRounds);
-        const hash = bcrypt.hashSync(value, salt);
-        this.setDataValue("password", hash);
+        if (value) {
+          const salt = bcrypt.genSaltSync(saltRounds);
+          const hash = bcrypt.hashSync(value, salt);
+          this.setDataValue("password", hash);
+        }
       },
     },
     role: {
@@ -46,6 +48,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM,
       values: ["ACTIVE", "INACTIVE"],
       defaultValue: "ACTIVE",
+    },
+    googleId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
+    },
+    facebookId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
     },
   });
   User.prototype.compare = function (pass) {
