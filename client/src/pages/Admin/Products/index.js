@@ -105,7 +105,7 @@ const Products = ({ state, updateProduct, createProduct, addCategoryProduct,
           </tr>
         </thead>
         <tbody>
-          {products != undefined && products.map((product, key) => (
+          {products !== undefined && products.map((product, key) => (
             <tr key={key}>
               <td>{product.name}</td>
               <td>{product.description}</td>
