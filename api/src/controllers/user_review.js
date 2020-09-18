@@ -5,8 +5,6 @@ const addUserToReview = async (idUser, idReview) => {
     const User = await getUser(idUser);
     const Review = await getReview(idReview);
 
-    console.log('AMIGO DE MI ALMA');
-
     return new Promise((resolve, reject) => {
         Review.setUser(User)
             .then((user_review) => resolve(user_review))
@@ -24,6 +22,11 @@ const removeUserToReview = async (idUser, idReview) => {
             .catch((err) => reject({ error: err }));
     });
 };
+
+const verifyUserReview = async (idUser, idReview) => {
+    const User = await getUser(idUser);
+    const Review = await getReview(idReview);
+}
 
 module.exports = {
     addUserToReview,

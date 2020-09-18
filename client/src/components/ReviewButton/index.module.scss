@@ -24,6 +24,7 @@
   border-radius: 0.25rem;
   border: solid 1px #e3e3e3;
   text-align: left;
+  margin: 0.5rem 0;
 
   .rating {
     padding: 0.5rem;
@@ -31,6 +32,8 @@
   }
   .message {
     padding: 0.5rem;
+    overflow: hidden;
+    word-wrap: break-word;
   }
 }
 

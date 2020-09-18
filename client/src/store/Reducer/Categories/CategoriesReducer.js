@@ -33,7 +33,6 @@ export default function CategoriesReducer(state = initialState, action) {
         categoryRemove: action.payload,
       };
     case "HANDLE_VIEW_CATEGORY":
-      console.log("entra")
 
       return {
         ...state,

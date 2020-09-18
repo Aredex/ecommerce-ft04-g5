@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { Link, useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -6,11 +6,19 @@ import style from "./Sign.module.scss";
 import { createUser } from "store/Actions/Users/UsersActions";
 
 import { useSelector, useDispatch } from "react-redux";
+import useUser from "hooks/useUser";
 
 import logo from "logo.svg";
 
 export default function SignUp() {
-  const history = useHistory();
+
+  const { localUser } = useUser()
+  const history = useHistory()
+
+  useEffect(() => {
+    if (localUser) history.push('/')
+  }, [localUser])
+
   const dispatch = useDispatch();
 
   const formik = useFormik({

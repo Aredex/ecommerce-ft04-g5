@@ -3,6 +3,7 @@ import { Formik } from "formik";
 import style from "./CRUD.module.scss";
 import InputField from "components/InputField";
 import Modal from "components/Modal";
+import { toAdmin, toGuest } from "services/user";
 
 const CRUD = ({ formikData, onClose }) => {
   const prefixStyle = { width: "8rem" };
@@ -41,6 +42,20 @@ const CRUD = ({ formikData, onClose }) => {
                 name="role"
                 readOnly
               />
+              {formikData.update && values.role === 'GUEST' ? <button
+                type="button"
+                className={style.primary}
+                onClick={formikData.onPromote}
+              >
+                Promover a ADMIN
+                </button> :
+                <button
+                  type="button"
+                  className={style.primary}
+                  onClick={formikData.onDegrade}
+                >
+                  Degradar a GUEST
+                </button>}
               {!formikData.readOnly && !formikData.update && (
                 <>
                   <InputField

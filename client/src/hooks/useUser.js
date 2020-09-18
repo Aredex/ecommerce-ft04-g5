@@ -23,7 +23,6 @@ export default function useUser() {
         ] = `Bearer ${localUser.token}`;
       }
     }
-    console.log("localUser", localUser);
     dispatch(getUser(localUser));
   }, [localUser, dispatch]);
 

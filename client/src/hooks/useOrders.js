@@ -17,8 +17,6 @@ export default function useOrders() {
   const shoppingCart = useSelector((state) => state.orders.shoppingCart);
 
   useEffect(() => {
-    // console.log("reload", shoppingCart, localShoppingCart);
-    // A futuro debe verificar si existe usuario
     if (false) {
     } else {
       let total = 0;
@@ -31,9 +29,9 @@ export default function useOrders() {
           return result;
         }, 0);
       localShoppingCart &&
-      localShoppingCart.products &&
-      Array.isArray(localShoppingCart.products) &&
-      localShoppingCart.products.length > 0
+        localShoppingCart.products &&
+        Array.isArray(localShoppingCart.products) &&
+        localShoppingCart.products.length > 0
         ? dispatch(setShoppingCart({ ...localShoppingCart, total }))
         : dispatch(setShoppingCart(undefined));
     }

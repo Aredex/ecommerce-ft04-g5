@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import style from "./index.module.scss";
 import Axios from "axios";
 import CRUD from "./CRUD";
+import { toAdmin, toGuest } from "services/user";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -56,6 +57,8 @@ const Users = () => {
             });
             setFormikData(null);
           },
+          onPromote: async () => { await toAdmin(id); getAll(); setFormikData(null); },
+          onDegrade: async () => { await toGuest(id); getAll(); setFormikData(null); },
           update: true,
         });
       });

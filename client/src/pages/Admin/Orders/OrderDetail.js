@@ -14,7 +14,6 @@ function OrderDetail() {
   }, [id]);
 
   const total = useMemo(() => {
-    console.log("orders", order);
     return order && order.products && Array.isArray(order.products)
       ? order.products.reduce((result, { order_product }) => {
         return result + order_product.price * order_product.amount;

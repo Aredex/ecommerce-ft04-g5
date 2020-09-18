@@ -1,9 +1,0 @@
-{
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnPaste": true,
-    "editor.formatOnType": true,
-    "editor.tabSize": 2,
-    "files.eol": "\r\n",
-    "compile-hero.disable-compile-files-on-did-save-code": false
-}

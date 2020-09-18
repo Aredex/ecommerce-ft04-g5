@@ -1,5 +1,5 @@
-import React from "react";
-import { Route } from "react-router";
+import React, { useEffect } from "react";
+import { Route, useHistory } from "react-router";
 import style from "./index.module.scss";
 import Products from "./Products";
 import Categories from "./Categories";
@@ -7,8 +7,18 @@ import { NavLink } from "react-router-dom";
 import Users from "./Users";
 import Orders from "./Orders";
 import OrderDetail from "./Orders/OrderDetail";
+import useUser from "hooks/useUser";
 
 const Admin = () => {
+  const { localUser } = useUser()
+  const history = useHistory()
+  useEffect(() => {
+    if (!localUser) history.push('/')
+    else if (!localUser.user) history.push('/')
+    else if (localUser.user.role !== 'ADMIN') {
+      history.replace('/')
+    }
+  }, [localUser])
   return (
     <section className={style.page}>
       <aside>

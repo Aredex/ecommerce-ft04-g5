@@ -12,13 +12,13 @@ const Product = (props) => {
   const [count, setCount] = useState(1);
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [rating, setRating] = useState(0);
   useEffect(() => {
     dispatch(getProductDetail(id));
     return () => {
       dispatch(getProductDetail());
     };
   }, []);
-
   const history = useHistory();
   const product = useSelector((x) => x.ProductsReducer.productDetail);
   const handleOnAdd = () => {
@@ -51,26 +51,7 @@ const Product = (props) => {
             <p>{product.price}</p>
           </div>
 
-          <ReviewButton
-            rating={2.3}
-            reviews={[
-              {
-                id: 1,
-                rating: '',
-                message:
-                  <div className={style.input}>
-                    <textarea
-                      rows={5}
-                      name={props.name}
-                      // value={props.value ? props.value : formikContext.values[props.name]}
-                      type={props.type}
-                      // onChange={handleChange}
-                      readOnly={props.readOnly}
-                    />
-                  </div>
-              },
-            ]}
-          />
+          <ReviewButton rating={rating} reviews={product.reviews} idProduct={product.id} />
           {product.stock > 0 ? (
             <AddToCart
               onAdd={handleOnAdd}
@@ -116,7 +97,6 @@ const Product = (props) => {
             <div className={style.separator}>
               <span>Reviews</span>
             </div>
-
           </div>
         </div>
       </div>

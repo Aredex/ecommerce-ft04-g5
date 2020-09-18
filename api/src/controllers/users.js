@@ -2,7 +2,7 @@ const { User, Review, Product } = require("../db");
 
 const getAll = () => {
   return new Promise((resolve, reject) => {
-    User.findAll()
+    User.findAll({ order: [["id", "ASC"]] })
       .then((users) => {
         if (users.length === 0) {
           return reject({
@@ -68,7 +68,7 @@ const getOne = (id) => {
   return new Promise((resolve, reject) => {
     User.findOne({
       where: { id },
-      include: [{ model: Review, include: Product }],
+      include: [{ model: Review, include: Product }, Review],
     })
       .then((user) => {
         if (!user) {

@@ -9,9 +9,16 @@ import useQuery from "hooks/useQuery";
 import Axios from "axios";
 
 export default function SignIn() {
+
+  const { localUser } = useUser()
+  const history = useHistory()
+
+  useEffect(() => {
+    if (localUser) history.push('/')
+  }, [localUser])
+
   const { loginWithEmail, loginWithToken } = useUser();
 
-  const history = useHistory();
   const query = useQuery();
 
   useEffect(() => {
