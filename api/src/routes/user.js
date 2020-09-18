@@ -4,11 +4,11 @@ const isUser = require("../lib/isUser");
 
 
 const {
-    createOne,
-    getAll,
-    getOne,
-    editOne,
-    deleteOne,
+  createOne,
+  getAll,
+  getOne,
+  editOne,
+  deleteOne,
 } = require("../controllers/users");
 const {
     getOrderByUser
