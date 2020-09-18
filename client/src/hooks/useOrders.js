@@ -17,7 +17,7 @@ export default function useOrders() {
   const shoppingCart = useSelector((state) => state.orders.shoppingCart);
 
   useEffect(() => {
-    console.log("reload", shoppingCart, localShoppingCart);
+    // console.log("reload", shoppingCart, localShoppingCart);
     // A futuro debe verificar si existe usuario
     if (false) {
     } else {

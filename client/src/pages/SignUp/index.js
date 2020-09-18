@@ -3,15 +3,13 @@ import { useFormik } from "formik";
 import { Link, useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 import style from "./Sign.module.scss";
-import { createUser } from "store/Actions/Users/UsersActions"
+import { createUser } from "store/Actions/Users/UsersActions";
 
 import { useSelector, useDispatch } from "react-redux";
-
 
 import logo from "logo.svg";
 
 export default function SignUp() {
-
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -24,10 +22,11 @@ export default function SignUp() {
       passwordConfirm: "",
     },
     onSubmit: (values) => {
-      dispatch(createUser(values.name, values.email, values.passwordConfirm, "ADMIN"))
-        .then(() => {
-          history.push("/sign-in")
-        })
+      dispatch(
+        createUser(values.name, values.email, values.passwordConfirm, "ADMIN")
+      ).then(() => {
+        history.push("/sign-in");
+      });
     },
   });
 
@@ -80,10 +79,19 @@ export default function SignUp() {
               También puedes registrarte con
             </div>
             <div className={style.buttonGroup}>
-              <button>
+              <button
+                onClick={() =>
+                  (window.location = "http://localhost:3001/auth/login/google")
+                }
+              >
                 <i className="fab fa-google"></i>
               </button>
-              <button>
+              <button
+                onClick={() =>
+                  (window.location =
+                    "http://localhost:3001/auth/login/facebook")
+                }
+              >
                 <i className="fab fa-facebook"></i>
               </button>
             </div>
