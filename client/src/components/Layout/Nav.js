@@ -2,14 +2,17 @@ import React, { useState, useEffect } from "react";
 import style from "./Nav.module.scss";
 import { NavLink, useLocation } from "react-router-dom";
 import UserView from "components/UserView";
+import useUser from "hooks/useUser";
 
 function Nav() {
   const [showNav, setShowNav] = useState(false);
+  const { isAdmin } = useUser();
   const location = useLocation();
 
   useEffect(() => {
     setShowNav(false);
   }, [location]);
+
   return (
     <div className={style.nav}>
       <button className={style.buttonMenu} onClick={() => setShowNav(!showNav)}>
@@ -39,13 +42,15 @@ function Nav() {
           >
             Sobre nosotros
           </NavLink>
-          <NavLink
-            className={style.navLink}
-            activeClassName={style.activeNav}
-            to="/admin"
-          >
-            Administración
-          </NavLink>
+          {isAdmin && (
+            <NavLink
+              className={style.navLink}
+              activeClassName={style.activeNav}
+              to="/admin"
+            >
+              Administración
+            </NavLink>
+          )}
         </section>
         <section className={style.navLink}>
           <UserView />

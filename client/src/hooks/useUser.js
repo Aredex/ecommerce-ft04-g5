@@ -1,15 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocalStorage } from "react-use";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signin } from "services/auth";
 import { getUser } from "store/Actions/Users/UsersActions";
 import Axios from "axios";
 
 export default function useUser() {
+  const [isAdmin, setIsAdmin] = useState(false);
   const [localUser, setLocalUser, removeLocalUser] = useLocalStorage(
     "user",
     undefined
   );
+  const userLogin = useSelector((x) => x.UsersReducer.userLogin);
 
   const dispatch = useDispatch();
 
@@ -24,6 +26,13 @@ export default function useUser() {
     console.log("localUser", localUser);
     dispatch(getUser(localUser));
   }, [localUser, dispatch]);
+
+  useEffect(() => {
+    if (!userLogin) setIsAdmin(false);
+    else if (!userLogin.user) setIsAdmin(false);
+    else if (userLogin.user.role !== "ADMIN") setIsAdmin(false);
+    else setIsAdmin(true);
+  }, [userLogin]);
 
   async function loginWithEmail(username, password) {
     const user = await signin(username, password);
@@ -42,5 +51,5 @@ export default function useUser() {
     removeLocalUser();
   }
 
-  return { localUser, loginWithEmail, loginWithToken, logOut };
+  return { localUser, loginWithEmail, loginWithToken, logOut, isAdmin };
 }

@@ -15,10 +15,12 @@ export default function SignIn() {
   const query = useQuery();
 
   useEffect(() => {
-    if (query.token) {
-      loginWithToken(query.token);
-      history.push("/");
-    }
+    (async () => {
+      if (query.token) {
+        await loginWithToken(query.token);
+        history.push("/");
+      }
+    })();
   }, [query.token]);
 
   const formik = useFormik({
