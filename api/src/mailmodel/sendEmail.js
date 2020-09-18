@@ -19,8 +19,6 @@ var nodemailerMailgun = nodemailer.createTransport(mg(auth));
 
 
 function sendEmail(obj) {
-  console.log(obj.id)
-  console.log(obj.user.name)
 
   var modelEmail = fs.readFileSync("./src/mailmodel/index.html", 'utf8', function (err, data) {
     if (err) console.log(err);

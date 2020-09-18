@@ -1,4 +1,4 @@
-const { User, Review, Product } = require("../db");
+const { User, Review, Product, Order } = require("../db");
 
 const getAll = () => {
   return new Promise((resolve, reject) => {
@@ -68,7 +68,7 @@ const getOne = (id) => {
   return new Promise((resolve, reject) => {
     User.findOne({
       where: { id },
-      include: [{ model: Review, include: Product }, Review],
+      include: [{ model: Review, include: Product }, Review, { model: Order, include: Product }],
     })
       .then((user) => {
         if (!user) {

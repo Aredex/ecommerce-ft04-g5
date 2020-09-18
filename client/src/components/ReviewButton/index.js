@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import style from "./index.module.scss";
 import Modal from "components/Modal";
 import { FaStar } from "react-icons/fa";
@@ -115,7 +115,7 @@ const ModalReview = ({ reviews, onClose, idProduct }) => {
                 const ratingValue = i + 1;
 
                 return (
-                  <label>
+                  <label key={i}>
                     <input
                       type="radio"
                       name="estrellas"
@@ -158,9 +158,18 @@ const ModalReview = ({ reviews, onClose, idProduct }) => {
   );
 };
 
-const ReviewButton = ({ rating, reviews, idProduct }) => {
+const ReviewButton = ({ reviews, idProduct }) => {
   const [showModal, setShowModal] = useState(false);
-
+  const rating = useMemo(() => {
+    if (reviews.length > 0) {
+      let result = reviews.reduce((result, item) => {
+        result += Number(item.stars)
+        return result
+      }, 0)
+      return result / reviews.length
+    }
+    return 0
+  }, [reviews])
   return (
     <>
       <div className={style.reviewButton} onClick={() => setShowModal(true)}>

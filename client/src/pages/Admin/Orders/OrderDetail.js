@@ -12,7 +12,6 @@ function OrderDetail() {
   useEffect(() => {
     getOrderById(id).then((data) => setOrder(data[0]));
   }, [id]);
-
   const total = useMemo(() => {
     return order && order.products && Array.isArray(order.products)
       ? order.products.reduce((result, { order_product }) => {
@@ -36,7 +35,7 @@ function OrderDetail() {
           </div>
           <div className={style.row}>
             <InputField
-              value={order.userId}
+              value={order.user.name}
               prefix="Cliente"
               name="userId"
               prefixStyle={prefixStyle}
@@ -101,9 +100,9 @@ function OrderDetail() {
           </thead>
           <tbody>
             {order?.products !== undefined &&
-              order.products.map(({ order_product, name }) => (
+              order.products.map(({ order_product, name, id }) => (
                 <tr key={id}>
-                  <td>{order_product.id}</td>
+                  <td>{id}</td>
                   <td>{name}</td>
                   <td>{`$ ${parseFloat(order_product.price).toFixed(2)}`}</td>
                   <td>{order_product.amount}</td>

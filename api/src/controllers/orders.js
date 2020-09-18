@@ -17,15 +17,14 @@ const getAllFiler = ({
     return new Promise((resolve, reject) => {
         if (!isNaN(search)) {
             search = Number(search);
-            console.log(search);
 
             getOne(search)
                 .then((order) => resolve(order))
                 .catch((err) => reject(err));
         } else {
             getAll({
-                    search
-                })
+                search
+            })
                 .then((order) => resolve(order))
                 .catch((err) => reject(err));
         }
@@ -59,12 +58,12 @@ const getAll = ({
 
     return new Promise((resolve, reject) => {
         Order.findAll({
-                where,
-                include,
-                order: [
-                    ["id", "ASC"]
-                ],
-            })
+            where,
+            include,
+            order: [
+                ["id", "ASC"]
+            ],
+        })
             .then((orders) => {
                 if (orders.length === 0) {
                     return reject({
@@ -75,7 +74,7 @@ const getAll = ({
                                 message: "there are no orders in the database",
                                 type: "not found",
                                 value: null,
-                            }, ],
+                            },],
                         },
                     });
                 }
@@ -150,16 +149,16 @@ const confirmedOrder = async ({
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
         Order.findOne({
-                where: {
-                    id
-                },
-                include: [{
-                    model: Product,
-                    include: {
-                        model: Image
-                    }
-                }, User]
-            })
+            where: {
+                id
+            },
+            include: [{
+                model: Product,
+                include: {
+                    model: Image
+                }
+            }, User]
+        })
             .then((order) => {
                 if (!order) {
                     return reject({
@@ -170,7 +169,7 @@ const getOne = (id) => {
                                 message: "order does not exist in the database",
                                 type: "not found",
                                 value: null,
-                            }, ],
+                            },],
                         },
                     });
                 }
@@ -187,9 +186,9 @@ const getOne = (id) => {
 const createOne = (status, address) => {
     return new Promise((resolve, reject) => {
         Order.create({
-                status,
-                address
-            })
+            status,
+            address
+        })
             .then((order) => resolve(order))
             .catch((err) => reject({
                 error: err
@@ -210,6 +209,12 @@ const editOne = ({
                 if (address) order.address = address;
 
                 return order.save();
+            })
+            .then((order) => {
+                if (order.products.length === 0) {
+                    return order.destroy()
+                }
+                return order
             })
             .then((order) => resolve(order))
             .catch((err) => reject({

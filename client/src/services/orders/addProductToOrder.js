@@ -3,13 +3,12 @@ import axios from "axios";
 export default async function addProducToOrder(
   idProduct,
   amount,
-  address,
+  orderId,
   idUser
 ) {
   return axios
-    .post(`http://localhost:3001/orders/product/${idProduct}`, {
+    .post(`http://localhost:3001/orders/${orderId}/product/${idProduct}`, {
       amount,
-      address,
       idUser,
     })
     .then((respose) => {

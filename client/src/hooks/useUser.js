@@ -50,5 +50,5 @@ export default function useUser() {
     removeLocalUser();
   }
 
-  return { localUser, loginWithEmail, loginWithToken, logOut, isAdmin };
+  return { localUser, loginWithEmail, loginWithToken, logOut, isAdmin, userLogin };
 }
