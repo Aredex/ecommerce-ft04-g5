@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import style from "./index.module.scss";
 import Modal from "components/Modal";
+import { FaStar } from 'react-icons/fa';
 
 const Star = ({ size, fill, stroke }) => (
   <svg
@@ -19,48 +20,83 @@ const Star = ({ size, fill, stroke }) => (
 );
 
 const ModalReview = ({ reviews, onClose }) => {
+  const [rating, setRating] = useState(null);
+  const [hover, setHover] = useState(null);
+  const [review, setReview] = useState({
+    rating: '',
+    estrellas: ''
+  })
+
+
+  const onChange = (e) => {
+    setReview({
+      ...review,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  }
+
   return (
     <Modal>
       <Modal.Header>Calificaciones:</Modal.Header>
       <Modal.Body>
-        {reviews &&
+        <div>
+          {[...Array(5)].map((star, i) => {
+            const ratingValue = i + 1;
+
+            return (
+              <label>
+                <input
+                  type="radio"
+                  name="estrellas"
+                  value={ratingValue}
+                  onClick={() => setRating(ratingValue)}
+                  onChange={onChange}
+                />
+                <FaStar
+                  className="star"
+                  color={ratingValue <= (hover || rating) ? "#00cc76" : "grey"}
+                  size={25}
+                  onMouseEnter={() => setHover(ratingValue)}
+                  onMouseLeave={() => setHover(null)}
+                />
+              </label>
+            )
+          })}
+
+        </div>
+      </Modal.Body>
+      <Modal.Body>
+        {
+          reviews &&
           Array.isArray(reviews) &&
           reviews.map(({ id, rating, message }) => (
-            <article key={id} className={style.review}>
-              <div className={style.rating}>
-                <Star
-                  fill={rating >= 0.5 ? "#00cc76" : "transparent"}
-                  stroke={"#00cc76"}
-                  size={"1rem"}
-                />
-                <Star
-                  fill={rating >= 1.5 ? "#00cc76" : "transparent"}
-                  stroke={"#00cc76"}
-                  size={"1rem"}
-                />
-                <Star
-                  fill={rating >= 2.5 ? "#00cc76" : "transparent"}
-                  stroke={"#00cc76"}
-                  size={"1rem"}
-                />
-                <Star
-                  fill={rating >= 3.5 ? "#00cc76" : "transparent"}
-                  stroke={"#00cc76"}
-                  size={"1rem"}
-                />
-                <Star
-                  fill={rating >= 4.5 ? "#00cc76" : "transparent"}
-                  stroke={"#00cc76"}
-                  size={"1rem"}
-                />
-              </div>
-              <div className={style.message}>{message}</div>
+            <article key={id} className={style.input}>
+              <textarea
+                rows={5}
+                name="rating"
+                type="text"
+                placeholder="Ingresa tu reseña..."
+                onChange={onChange}
+              />
             </article>
-          ))}
+          ))
+        }
+
       </Modal.Body>
       <Modal.Footer>
         <button type="button" onClick={onClose}>
           Cerrar
+        </button>
+        <button
+          type="submit"
+          className={style.primary}
+          onClick={handleSubmit}
+        >
+          Enviar
         </button>
       </Modal.Footer>
     </Modal>

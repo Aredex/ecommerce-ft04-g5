@@ -12,7 +12,7 @@ function UserView() {
         {user ? (
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png"
-            className={user.login ? style.imagen1 : style.imagen2}
+            className={user.login ? style.imagen1 : style.imagen2} alt=""
           ></img>
         ) : (
             <i className="fa fa-user"></i>

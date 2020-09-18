@@ -17,8 +17,8 @@ function OrderDetail() {
     console.log("orders", order);
     return order && order.products && Array.isArray(order.products)
       ? order.products.reduce((result, { order_product }) => {
-          return result + order_product.price * order_product.amount;
-        }, 0)
+        return result + order_product.price * order_product.amount;
+      }, 0)
       : 0;
   }, [order]);
   return (
@@ -101,7 +101,7 @@ function OrderDetail() {
             </tr>
           </thead>
           <tbody>
-            {order?.products != undefined &&
+            {order?.products !== undefined &&
               order.products.map(({ order_product, name }) => (
                 <tr key={id}>
                   <td>{order_product.id}</td>

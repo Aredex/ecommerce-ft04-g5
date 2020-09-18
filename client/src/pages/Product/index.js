@@ -50,13 +50,24 @@ const Product = (props) => {
             <label>$</label>
             <p>{product.price}</p>
           </div>
+
           <ReviewButton
             rating={2.3}
             reviews={[
               {
                 id: 1,
-                rating: 2,
-                message: "Mensaje de la review!",
+                rating: '',
+                message:
+                  <div className={style.input}>
+                    <textarea
+                      rows={5}
+                      name={props.name}
+                      // value={props.value ? props.value : formikContext.values[props.name]}
+                      type={props.type}
+                      // onChange={handleChange}
+                      readOnly={props.readOnly}
+                    />
+                  </div>
               },
             ]}
           />
@@ -78,8 +89,8 @@ const Product = (props) => {
               }
             />
           ) : (
-            <h1>No contamos con stock</h1>
-          )}
+              <h1>No contamos con stock</h1>
+            )}
           <div className={style.category}>
             <div className={style.separator}>Categorias</div>
             <section>
@@ -100,6 +111,12 @@ const Product = (props) => {
               <span>Descripción</span>
             </div>
             {product.description}
+          </div>
+          <div className={style.description}>
+            <div className={style.separator}>
+              <span>Reviews</span>
+            </div>
+
           </div>
         </div>
       </div>
