@@ -49,19 +49,12 @@ router
 //  Rutas para obtener una orden en particular, eliminarla y editarla
 //      Solo edita el status y address
 //      Eliminar una orden sirve como método para vaciar
-router
-    .route(
-        "/id"
-    ) /*
-    .get((req, res) => {
-        const { id } = req.params;
-        getOne(id)
-            .then((order) => res.json(order).status(201))
-            .catch((err) => res.status(404).json(err));
-    })
-            .catch((err) => res.status(400).json(err));
-    })*/
-
+router.route("/:id").get((req, res) => {
+    const { id } = req.params;
+    ordersDevolution(id)
+        .then((orders) => res.json(orders))
+        .catch((err) => res.status(400).json(err));
+})
     .delete((req, res) => {
         const { id } = req.params;
         deleteOne(id)
@@ -254,10 +247,5 @@ router.route("/finalized").get((req, res) => {
         .catch((err) => res.status(404).json(err));
 });
 
-router.route("/:variable").get((req, res) => {
-    const { variable } = req.params;
-    ordersDevolution(variable)
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(400).json(err));
-});
+
 module.exports = router;

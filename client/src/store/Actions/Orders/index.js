@@ -1,3 +1,4 @@
+import { getAllOrders, removeOrder } from "services/orders"
 import { orders } from "store/ActionTypeNames";
 
 export function addProductToShoppingCart(id, name, price, amount) {
@@ -19,4 +20,28 @@ export function setShoppingCart(shoppingCart) {
     type: SET_SHOPPINGCART,
     payload: shoppingCart,
   };
+}
+
+
+export function getAllOrdersAction() {
+  return function (dispatch) {
+    return getAllOrders()
+      .then(function (data) {
+        dispatch({ type: "GET_ALL_ORDERS", payload: data });
+      });
+  }
+}
+
+export function removeOrderAction(id){
+  return function (dispatch) {
+    return removeOrder(id)
+    .then( function(data){
+      dispatch({ type: "REMOVE_ORDER", payload: data}) 
+    })
+  }
+}
+
+
+export function disabledCRUD() {
+  return { type: "DISABLED_CRUD" }
 }
