@@ -7,12 +7,12 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux'
 import { removeOrder } from "services/orders"
 
-const Orders = ({state, getAllOrdersAction, removeOrderAction, disabledCRUD}) => { 
+const Orders = ({state, getAllOrdersAction, removeOrderAction, disabledCRUD, updateOrder, confirmOrder, setDeliveredOrderAction}) => { 
 const history = useHistory();
 useEffect(() => {
     getAllOrdersAction();
   }, []);
-
+ 
   useEffect(() => {
     getAllOrdersAction();
   }, [state.orderReadOnly,
@@ -21,21 +21,24 @@ useEffect(() => {
   state.orderRemove]);
 
   const orders = state.allOrders
+  
   const bandera = {
     readOnly: state.orderReadOnly,
     update: state.orderUpdate,
-    detail: state.orderDetail,
-    remove: state.orderRemove
   }
 
   const handleRemove = async (id) => {
-    var r = window.confirm(`Desea eliminar ${id}`);
+    var r = window.confirm(`Desea eliminar la orden N°${id}`);
     if (r === true) {
       await removeOrderAction(id);
       disabledCRUD();
   
     }
   }
+  const handleUpdate = async (id) => {
+      await setDeliveredOrderAction(id)  
+    
+  };
 
 
 
@@ -54,7 +57,7 @@ useEffect(() => {
         </thead>
         <tbody>
           {orders != undefined &&
-            orders.map(({ id, userId, status, createdAt, updatedAt }) => (
+            orders.map(({ id, userId, status, createdAt, updatedAt,}) => (
               <tr key={id}>
                 <td>{id}</td>
                 <td>{userId}</td>
@@ -62,12 +65,11 @@ useEffect(() => {
                 <td>{new Date(createdAt).toLocaleString()}</td>
                 <td>{new Date(updatedAt).toLocaleString()}</td>
 
-
                 <td style={{ display: "flex" }}>
                 <button onClick={() => history.push(`/admin/orders/${id}`)}>
                   <i className="fas fa-search"></i>
                 </button>
-                <button >
+                <button onClick={() => handleUpdate(id)}>
                   <i className="fas fa-edit"></i>
                 </button>
                 <button
@@ -75,22 +77,11 @@ useEffect(() => {
                 >
                   <i className="fas fa-trash-alt"></i>
                 </button>{" "}
-              </td>              
-
-
-
-
-              </tr>
+              </td>            
+              </tr> 
             ))}
         </tbody>
       </table>
-      {(bandera.readOnly || bandera.update || bandera.create) && (
-        //condicional para visualizacion del CRUD
-        <CRUD
-          onClose={() => disabledCRUD()}          
-          orders={state.categoryId}          
-        />
-      )}
     </section>
   );
 };

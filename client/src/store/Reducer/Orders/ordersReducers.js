@@ -22,6 +22,12 @@ export default function orders_reducer(state = initialState, action){
 		    	orderRemove: action.payload
 		    }
 
+		case "DELIVERED_ORDER":
+		    return {
+		    	...state,
+		    	orderUpdate: true,
+		    }
+
 		case "DISABLED_CRUD":
              return {
         ...state,
@@ -30,6 +36,7 @@ export default function orders_reducer(state = initialState, action){
         orderReadOnly: null,
         orderUpdate: null
       };
+
 
 		default:
 		    return {...state}

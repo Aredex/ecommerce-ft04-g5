@@ -1,4 +1,4 @@
-import { getAllOrders, removeOrder } from "services/orders"
+import { getAllOrders, removeOrder, setConfirmOrder, setDeliveredOrder, setPrepareOrder, setRejectOrder, setSendOrder } from "services/orders"
 import { orders } from "store/ActionTypeNames";
 
 export function addProductToShoppingCart(id, name, price, amount) {
@@ -40,6 +40,40 @@ export function removeOrderAction(id){
     })
   }
 }
+
+//----------------------\\\\
+export function setConfirmOrderAction(id, address){
+  return function(dispatch){
+    return removeOrder(id)
+    .then( function(data){
+      dispatch({type: "CONFIRM_ORDER", payload: data})
+    })
+  }
+}
+
+export function setDeliveredOrderAction(id, address){
+  return function(dispatch){
+    return setDeliveredOrder(id)
+    .then( function(data){
+      dispatch({type: "DELIVERED_ORDER", payload: data})
+    })
+  }
+}
+
+export function setPrepareOrderAction(id, address){
+  return function(dispatch){
+    return setPrepareOrder(id)
+    .then( function(data){
+      dispatch({type: "CONFIRM_ORDER", payload: data})
+    })
+  }
+}
+
+
+
+
+
+//
 
 
 export function disabledCRUD() {
