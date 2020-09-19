@@ -5,6 +5,8 @@ const addUserToReview = async (idUser, idReview) => {
     const User = await getUser(idUser);
     const Review = await getReview(idReview);
 
+    verifyUserReview(User, Review)
+
     return new Promise((resolve, reject) => {
         Review.setUser(User)
             .then((user_review) => resolve(user_review))
@@ -23,9 +25,8 @@ const removeUserToReview = async (idUser, idReview) => {
     });
 };
 
-const verifyUserReview = async (idUser, idReview) => {
-    const User = await getUser(idUser);
-    const Review = await getReview(idReview);
+const verifyUserReview = async (User, Review) => {
+    console.log('JAJA, ACÁ ESTÁ', Review)
 }
 
 module.exports = {
