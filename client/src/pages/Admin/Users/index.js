@@ -63,7 +63,7 @@ const Users = () => {
         });
       });
     },
-    [setFormikData, getById]
+    [setFormikData, getById, getAll, update]
   );
   const handleCreate = useCallback(() => {
     setFormikData({
@@ -83,7 +83,7 @@ const Users = () => {
       },
       create: true,
     });
-  }, [setFormikData]);
+  }, [setFormikData, create, getAll]);
 
   const handleDelete = useCallback(
     (id, name) => {
@@ -94,12 +94,12 @@ const Users = () => {
           .then(() => setFormikData(null));
       }
     },
-    [setFormikData]
+    [setFormikData, getAll, remove]
   );
 
   useEffect(() => {
     getAll();
-  }, []);
+  }, [getAll]);
 
   return (
     <section>
@@ -119,7 +119,7 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {users != undefined &&
+          {users !== undefined &&
             users.map(({ id, name, email, role, status }) => (
               <tr key={id}>
                 <td>{id}</td>

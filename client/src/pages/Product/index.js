@@ -8,17 +8,16 @@ import ReviewButton from "components/ReviewButton";
 import useOrders from "hooks/useOrders";
 import { useHistory, useParams } from "react-router";
 
-const Product = (props) => {
+const Product = () => {
   const [count, setCount] = useState(1);
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [rating, setRating] = useState(0);
   useEffect(() => {
     dispatch(getProductDetail(id));
     return () => {
       dispatch(getProductDetail());
     };
-  }, []);
+  }, [dispatch, id]);
   const history = useHistory();
   const product = useSelector((x) => x.ProductsReducer.productDetail);
   const handleOnAdd = () => {
@@ -51,7 +50,7 @@ const Product = (props) => {
             <p>{product.price}</p>
           </div>
 
-          <ReviewButton rating={rating} reviews={product.reviews} idProduct={product.id} />
+          <ReviewButton reviews={product.reviews} idProduct={product.id} />
           {product.stock > 0 ? (
             <AddToCart
               onAdd={handleOnAdd}

@@ -6,7 +6,6 @@ import logo from "logo.svg";
 import style from "./Sign.module.scss";
 import useUser from "hooks/useUser";
 import useQuery from "hooks/useQuery";
-import Axios from "axios";
 
 export default function SignIn() {
 
@@ -15,7 +14,7 @@ export default function SignIn() {
 
   useEffect(() => {
     if (localUser) history.push('/')
-  }, [localUser])
+  }, [localUser, history])
 
   const { loginWithEmail, loginWithToken } = useUser();
 
@@ -28,7 +27,7 @@ export default function SignIn() {
         history.push("/");
       }
     })();
-  }, [query.token]);
+  }, [query.token, history, loginWithToken]);
 
   const formik = useFormik({
     initialValues: {
@@ -57,6 +56,7 @@ export default function SignIn() {
               name="password"
               type="password"
               placeholder="contraseña"
+              autoComplete="on"
               onChange={formik.handleChange}
             />
             <input

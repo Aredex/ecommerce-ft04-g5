@@ -18,7 +18,7 @@ const Admin = () => {
     else if (localUser.user.role !== 'ADMIN') {
       history.replace('/')
     }
-  }, [localUser])
+  }, [localUser, history])
   return (
     <section className={style.page}>
       <aside>

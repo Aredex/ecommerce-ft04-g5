@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import { useFormik } from "formik";
-import { Link, useHistory } from "react-router-dom";
-import { motion } from "framer-motion";
+import { useHistory } from "react-router-dom";
 import style from "./Sign.module.scss";
-import { createUser } from "store/Actions/Users/UsersActions";
-
-import { useSelector, useDispatch } from "react-redux";
 import useUser from "hooks/useUser";
 
 import logo from "logo.svg";
@@ -17,9 +13,7 @@ export default function SignUp() {
 
   useEffect(() => {
     if (localUser) history.push('/')
-  }, [localUser])
-
-  const dispatch = useDispatch();
+  }, [localUser, history])
 
   const formik = useFormik({
     initialValues: {
@@ -69,12 +63,14 @@ export default function SignUp() {
               name="password"
               type="password"
               placeholder="contraseña"
+              autoComplete="on"
               onChange={formik.handleChange}
             />
             <input
               name="passwordConfirm"
               type="password"
               placeholder="repetir contraseña"
+              autoComplete="off"
               onChange={formik.handleChange}
             />
             <input
