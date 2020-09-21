@@ -108,8 +108,8 @@ const ModalReview = ({ reviews, onClose, idProduct }) => {
           ))}
       </Modal.Body>
       <Modal.Footer>
-        <section>
-          {localUser && <section>
+        <section className={style.reviewForm}>
+          {localUser && <section className={style.Input}>
             <div>
               {[...Array(5)].map((star, i) => {
                 const ratingValue = i + 1;
@@ -143,7 +143,7 @@ const ModalReview = ({ reviews, onClose, idProduct }) => {
               onChange={onChange}
             />
           </section>}
-          <section>
+          <section className={style.buttonGroup}>
 
             <button type="button" onClick={onClose}>
               Cerrar
