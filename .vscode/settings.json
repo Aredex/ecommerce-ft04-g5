@@ -3,6 +3,5 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnPaste": true,
     "editor.formatOnType": true,
-    "editor.tabSize": 2,
     "files.eol": "\r\n"
 }
