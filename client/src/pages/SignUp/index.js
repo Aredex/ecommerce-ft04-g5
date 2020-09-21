@@ -12,7 +12,7 @@ import logo from "logo.svg";
 
 export default function SignUp() {
 
-  const { localUser } = useUser()
+  const { localUser, register } = useUser()
   const history = useHistory()
 
   useEffect(() => {
@@ -29,12 +29,13 @@ export default function SignUp() {
       password: "",
       passwordConfirm: "",
     },
-    onSubmit: (values) => {
-      dispatch(
-        createUser(values.name, values.email, values.passwordConfirm, "ADMIN")
-      ).then(() => {
-        history.push("/sign-in");
-      });
+    onSubmit: async (values) => {
+      if (values.password === values.passwordConfirm) {
+        await register(`${values.name} ${values.surname}`, values.email, values.password)
+        history.push("/");
+      } else {
+        alert('La contraseña no coincide.')
+      }
     },
   });
 

@@ -46,9 +46,18 @@ export default function useUser() {
     if (user) setLocalUser({ user, token });
   }
 
+  async function register(name, email, password) {
+    const { data: user } = await Axios.post("http://localhost:3001/auth/register", {
+      name,
+      email,
+      password,
+    });
+    if (user) setLocalUser(user);
+  }
+
   function logOut() {
     removeLocalUser();
   }
 
-  return { localUser, loginWithEmail, loginWithToken, logOut, isAdmin, userLogin };
+  return { localUser, register, loginWithEmail, loginWithToken, logOut, isAdmin, userLogin };
 }
