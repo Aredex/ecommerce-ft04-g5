@@ -27,6 +27,7 @@ export default function useOrders() {
         const { orders } = user
 
         let orderInCreation = orders.find((order) => order.status === "IN CREATION")
+        console.log(orderInCreation)
         if (orderInCreation) {
           let total = 0;
           const products = orderInCreation.products.reduce((result, item) => {
@@ -78,8 +79,48 @@ export default function useOrders() {
           } else {
             dispatch(setShoppingCart({ ...orderInCreation, total }))
           }
+        } else {
+          if (localShoppingCart) {
+            console.log('ESTO SI FUNCIONA?', localShoppingCart)
 
+            // orderInCreation = orderInCreation.products.concat(localShoppingCart.products)
+            // removeLocalShoppingCart()
 
+            Axios.post(`http://localhost:3001/orders/products`, {
+              idUser: userLogin.user.id,
+              products: localShoppingCart.products,
+            }).then(({ data }) => {
+              let total = 0;
+              total =
+                data &&
+                data.products &&
+                Array.isArray(data.products) &&
+                data.products.reduce((result, product) => {
+                  result += product.order_product.price * product.order_product.amount;
+                  return result;
+                }, 0);
+              setLocalShoppingCart(null)
+              dispatch(
+                setShoppingCart({
+                  id: data.id,
+                  status: data.status,
+                  address: data.adress,
+                  userId: data.userId,
+                  total,
+                  products: data.products.map((product) => ({
+                    id: product.id,
+                    name: product.name,
+                    price: product.order_product.price,
+                    amount: product.order_product.amount,
+                    stock: product.stock,
+                  })),
+                })
+              )
+            }
+            );
+          } else {
+            dispatch(setShoppingCart(null))
+          }
         }
       })()
 
