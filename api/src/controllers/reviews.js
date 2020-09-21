@@ -122,13 +122,17 @@ const createReviewComplete = async ({
   }
 
   if (user && product) {
-    const reviesofUser = await user.getReviews();
-    const review = reviesofUser.find(
+    const reviesOfUser = await user.getReviews();
+    const review = reviesOfUser.find(
       (review) => review.productId === product.id
     );
     if (review) {
       return new Promise((resolve, reject) => {
-        reject({ error: { message: "Error, no creada" } });
+        editOne({ id: review.id, stars, title, description })
+          .then((review) => resolve(review))
+          .catch((err) => reject(err));
+
+        // reject({ error: { message: "Error, no creada" } });
       });
     }
   }
