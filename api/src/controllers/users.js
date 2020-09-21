@@ -28,7 +28,8 @@ const getAll = () => {
 
 const createOne = (name, email, password, role, googleId, facebookId) => {
   return new Promise((resolve, reject) => {
-    if (password.includes(" ")) {
+    
+    if (password && password.includes(" ")) {
       return reject({
         error: {
           message: "La contraseña no puede tener espacios en blanco",
