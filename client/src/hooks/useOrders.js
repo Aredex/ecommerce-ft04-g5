@@ -119,7 +119,7 @@ export default function useOrders() {
             }
             );
           } else {
-            dispatch(setShoppingCart(null))
+            dispatch(setShoppingCart(undefined))
           }
         }
       })()
@@ -369,7 +369,10 @@ export default function useOrders() {
         },
         []
       );
-      if (newShoppingCart.products.length === 0) setLocalShoppingCart(null)
+      if (newShoppingCart.products.length === 0) {
+        setLocalShoppingCart(null)
+        dispatch(setShoppingCart(undefined))
+      }
       else setLocalShoppingCart(newShoppingCart);
     }
   };

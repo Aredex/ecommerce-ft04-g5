@@ -133,8 +133,8 @@ router.route("/:id/reviews").get((req, res) => {
     } = req.params;
 
     getReviews({
-            idProduct: id
-        })
+        idProduct: id
+    })
         .then((reviews) => res.json(reviews).status(200))
         .catch((err) => res.json(err));
 });
