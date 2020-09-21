@@ -1,18 +1,43 @@
-import React from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState } from "react";
 import { Formik } from "formik";
 import style from "./CRUD.module.scss";
 import InputField from "components/InputField";
 import TextareaField from "components/TextareaField";
 import Modal from "components/Modal";
 import TagField from "components/TagField";
+import { useForm } from "hooks/useForm";
 
 const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
+  const [images, setImages] = useState([]);
+  const [addingImage, setAddingImage] = useState(false);
+  const [{ imageUrl }, handleInputChange, resetImageUrl] = useForm({
+    imageUrl: "",
+  });
+
+  const isUrl = (url) => {
+    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+    return regexp.test(url);
+  };
+
+  const handleAddImg = () => {
+    if (!addingImage) {
+      setAddingImage(true);
+    }
+
+    if (addingImage && imageUrl.length > 0) {
+      if (isUrl(imageUrl)) {
+        setImages((img) => [...img, imageUrl]);
+      }
+
+      resetImageUrl();
+      setAddingImage(false);
+    }
+  };
+
   const prefixStyle = { width: "8rem" };
   return (
-    <Formik
-      initialValues={formikData}
-      onSubmit={onSubmit}
-    >
+    <Formik initialValues={formikData} onSubmit={onSubmit}>
       {({ values, handleSubmit }) => (
         <Modal>
           <Modal.Header>
