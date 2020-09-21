@@ -1,4 +1,4 @@
-import { getAllOrders, removeOrder, setConfirmOrder, setDeliveredOrder, setPrepareOrder, setRejectOrder, setSendOrder } from "services/orders"
+import { getAllOrders, removeOrder, setConfirmOrder, setDeliveredOrder, setPrepareOrder, setRejectOrder, setSendOrder, getOrderById } from "services/orders"
 import { orders } from "store/ActionTypeNames";
 
 export function addProductToShoppingCart(id, name, price, amount) {
@@ -41,6 +41,7 @@ export function removeOrderAction(id){
   }
 }
 
+
 //----------------------\\\\
 export function setConfirmOrderAction(id, address){
   return function(dispatch){
@@ -64,10 +65,51 @@ export function setPrepareOrderAction(id, address){
   return function(dispatch){
     return setPrepareOrder(id)
     .then( function(data){
-      dispatch({type: "CONFIRM_ORDER", payload: data})
+      dispatch({type: "PREPARE_ORDER", payload: data})
     })
   }
 }
+
+export function setRejectOrderAction(id){
+  return function (dispatch) {
+    return setRejectOrder(id)
+    .then( function(data){
+      dispatch({ type: "REJECT_ORDER", payload: data}) 
+    })
+  }
+}
+
+export function setSendOrderAction(id){
+  return function (dispatch) {
+    return setSendOrder(id)
+    .then( function(data){
+      dispatch({ type: "SEND_ORDER", payload: data}) 
+    })
+  }
+}
+////////////////////////////////////////////////////////////
+
+export function handleViewOrder(id) {
+  return function (dispatch) {
+    dispatch(getOrderDetail(id))
+      .then(()=>{
+        dispatch({ type: "HANDLE_VIEW_ORDER" })
+      })
+  }
+}
+
+export function getOrderDetail(id) {
+  return function (dispatch) {
+    if (!id) { 
+      return dispatch({ type: "GET_ORDER_DETAIL", payload: null })
+    }
+    return getOrderById(id)
+      .then((data) => {
+        dispatch({ type: "GET_ORDER_DETAIL", payload: data });
+      })
+  };
+}
+
 
 
 

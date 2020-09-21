@@ -35,7 +35,9 @@ useEffect(() => {
   
     }
   }
+
   const handleUpdate = async (id) => {
+    
       await setDeliveredOrderAction(id)  
     
   };

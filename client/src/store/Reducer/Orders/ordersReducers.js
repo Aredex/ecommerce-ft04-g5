@@ -21,12 +21,46 @@ export default function orders_reducer(state = initialState, action){
 		    	...state,
 		    	orderRemove: action.payload
 		    }
+		case "CONFIRM_ORDER":
+		    return {
+		    	...state,
+		    	orderUpdate: true,
+		    }
 
 		case "DELIVERED_ORDER":
 		    return {
 		    	...state,
 		    	orderUpdate: true,
 		    }
+
+		case "PREPARE_ORDER":
+		    return {
+		    	...state,
+		    	orderUpdate: true,
+		    }
+
+		case "REJECT_ORDER":
+		    return {
+		    	...state,
+		    	orderUpdate: true,
+		    }
+
+		 case "SEND_ORDER":
+		    return {
+		    	...state,
+		    	orderUpdate: true,
+		    }
+		 case "GET_ORDER_DETAIL":
+             return {
+                ...state,
+                orderDetail: action.payload,
+            }
+
+        case "HANDLE_VIEW_ORDER":
+              return {
+              ...state,
+               orderReadOnly: true,
+            }
 
 		case "DISABLED_CRUD":
              return {
