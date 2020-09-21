@@ -41,6 +41,7 @@ const Products = ({ state, updateProduct, createProduct, addCategoryProduct,
   const handleDelete = async (id, name) => {
     var r = window.confirm(`Desea eliminar ${name}`);
     if (r === true) {
+      console.log(id, 'test')
       await removeProduct(id)
       disabledProductCRUD()
 
