@@ -1,5 +1,5 @@
 import React from "react";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import style from "./index.module.scss";
 import { useHistory } from "react-router";
 import logo from "logo.svg";

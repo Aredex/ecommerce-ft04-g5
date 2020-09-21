@@ -12,14 +12,14 @@ const Products = ({ state, updateProduct, createProduct, addCategoryProduct,
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [getProducts]);
 
   useEffect(() => {
     getProducts();
-  }, [state.productReadOnly,
-  state.productUpdate,
-  state.productCreate,
-  state.productRemove]);
+  }, [getProducts, state.productReadOnly,
+    state.productUpdate,
+    state.productCreate,
+    state.productRemove]);
 
   const products = state.productCards
   const bandera = {

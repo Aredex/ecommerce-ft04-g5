@@ -12,13 +12,13 @@ const Categories = ({ state, disabledCRUD, createCategory, updateCategory,
 
   useEffect(() => {
     getAllCategories()
-  }, []);
+  }, [getAllCategories]);
   useEffect(() => {
     getAllCategories()
-  }, [state.categoryRemove,
-  state.categoryCreate,
-  state.categoryReadOnly,
-  state.categoryUpdate]);
+  }, [getAllCategories, state.categoryRemove,
+    state.categoryCreate,
+    state.categoryReadOnly,
+    state.categoryUpdate]);
 
   const categories = state.categories;
   const bandera = {

@@ -36,7 +36,32 @@
     word-wrap: break-word;
   }
 }
+.reviewForm {
+  width: stretch;
+  .Input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
 
+    textarea {
+      height: auto;
+      border: solid 1px #3e3e3e;
+      font-size: inherit;
+      font-family: inherit;
+      padding: 0.25rem;
+      resize: none;
+      margin-top: 0.5rem;
+  
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  .buttonGroup {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
 //////////////////////////////////////////////
 // #form {
 //   width: 250px;

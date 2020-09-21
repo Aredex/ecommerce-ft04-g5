@@ -5,7 +5,7 @@ import style from "./index.module.scss";
 import UserDetail from "./UserDetail";
 
 function UserView() {
-  const { logOut, localUser: data } = useUser();
+  const { logOut } = useUser();
   const userLogin = useSelector((x) => x.UsersReducer.userLogin);
 
   return (
@@ -16,8 +16,8 @@ function UserView() {
             <UserDetail name={userLogin.user.name} logOut={logOut} />
           </div>
         ) : (
-          <i className="fa fa-user"></i>
-        )}
+            <i className="fa fa-user"></i>
+          )}
 
         <span>
           {!userLogin && "Inicia sesion"}

@@ -3,7 +3,6 @@ import { Formik } from "formik";
 import style from "./CRUD.module.scss";
 import InputField from "components/InputField";
 import Modal from "components/Modal";
-import { toAdmin, toGuest } from "services/user";
 
 const CRUD = ({ formikData, onClose }) => {
   const prefixStyle = { width: "8rem" };
