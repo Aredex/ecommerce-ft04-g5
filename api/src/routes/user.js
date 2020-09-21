@@ -138,4 +138,15 @@ router.route("/:id/toguest").put((req, res) => {
   }
 });
 
+router.route("/:id/resetpassword").post((req, res) => {
+  const { id } = req.params;
+  const { newPassword } = req.body;
+
+  editOne({ id, password: newPassword })
+    .then((user) => res.json(user))
+    .catch((err) => res.status(400).json({ err }));
+});
+
+module.exports = router;
+
 module.exports = router;
