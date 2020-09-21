@@ -54,7 +54,17 @@ const editOne = ({ id, name, email, password, role }) => {
       .then((user) => {
         if (name) user.name = name;
         if (email) user.email = email;
-        if (password) user.password = password;
+        if (password) {
+          console.log("ANDO POR ACÁ");
+          if (password.includes(" ")) {
+            return reject({
+              error: {
+                message: "La contraseña no puede tener espacios en blanco",
+              },
+            });
+          }
+          user.password = password;
+        }
         if (role) user.role = role;
 
         return user.save();
@@ -68,7 +78,11 @@ const getOne = (id) => {
   return new Promise((resolve, reject) => {
     User.findOne({
       where: { id },
-      include: [{ model: Review, include: Product }, Review, { model: Order, include: Product }],
+      include: [
+        { model: Review, include: Product },
+        Review,
+        { model: Order, include: Product },
+      ],
     })
       .then((user) => {
         if (!user) {
@@ -104,6 +118,7 @@ const getOneByEmail = async (email) => {
     return error;
   }
 };
+
 const getOneByGoogleId = async (googleId) => {
   try {
     const user = User.findOne({
@@ -115,6 +130,7 @@ const getOneByGoogleId = async (googleId) => {
     return error;
   }
 };
+
 const getOneByFacebookId = async (facebookId) => {
   try {
     const user = User.findOne({
