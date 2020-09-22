@@ -32,9 +32,16 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
 
       resetImageUrl();
       setAddingImage(false);
-      setFieldValue("imageUrl", images);
+
+   setFieldValue("imageUrl", images);
+
+      
     }
   };
+
+  // useEffect(() => {
+  //   console.log(images)
+  // }, [images])
 
   const prefixStyle = { width: "8rem" };
   return (
@@ -75,6 +82,27 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                 name="stock"
                 readOnly={estado.readOnly}
               />
+               <>
+                  {addingImage && (
+                    <div>
+                      <InputField
+                        prefix="URL de imagen"
+                        name="imageUrl"
+                        prefixStyle={prefixStyle}
+                        readOnly={estado.readOnly}
+                        onChange={handleInputChange}
+                        value={imageUrl}
+                      />
+                    </div>
+                  )}
+
+                  <div
+                    className={style.primary}
+                    onClick={() => handleAddImg(setFieldValue)}
+                  >
+                    {addingImage ? "Aceptar" : "Añadir nueva imagen"}
+                  </div>
+                </>
               {estado.create && (
                 <>
                   {addingImage && (
