@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
 import style from "./CRUD.module.scss";
 import InputField from "components/InputField";
@@ -20,7 +20,7 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
     return regexp.test(url);
   };
 
-  const handleAddImg = () => {
+  const handleAddImg = (setFieldValue) => {
     if (!addingImage) {
       setAddingImage(true);
     }
@@ -32,13 +32,14 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
 
       resetImageUrl();
       setAddingImage(false);
+      setFieldValue("imageUrl", images);
     }
   };
 
   const prefixStyle = { width: "8rem" };
   return (
     <Formik initialValues={formikData} onSubmit={onSubmit}>
-      {({ values, handleSubmit }) => (
+      {({ values, handleSubmit, setFieldValue }) => (
         <Modal>
           <Modal.Header>
             <>
@@ -76,12 +77,25 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
               />
               {estado.create && (
                 <>
-                  <InputField
-                    prefix="URL de imagen"
-                    name="imageUrl"
-                    prefixStyle={prefixStyle}
-                    readOnly={estado.readOnly}
-                  />
+                  {addingImage && (
+                    <div>
+                      <InputField
+                        prefix="URL de imagen"
+                        name="imageUrl"
+                        prefixStyle={prefixStyle}
+                        readOnly={estado.readOnly}
+                        onChange={handleInputChange}
+                        value={imageUrl}
+                      />
+                    </div>
+                  )}
+
+                  <div
+                    className={style.primary}
+                    onClick={() => handleAddImg(setFieldValue)}
+                  >
+                    {addingImage ? "Aceptar" : "Añadir nueva imagen"}
+                  </div>
                 </>
               )}
               <TagField

@@ -87,9 +87,7 @@ const Products = ({
       };
     }
     if (bandera.create) {
-
       onSubmit = async (values) => {
-
         var { name, description, price, stock, imageUrl, categories } = values;
 
         imageUrl = imageUrl
@@ -111,7 +109,7 @@ const Products = ({
             await addCategoryProduct(creado.id, category.id);
           }
         }
-        
+
         disabledProductCRUD();
       };
     }
