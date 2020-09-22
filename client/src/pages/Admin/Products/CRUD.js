@@ -16,7 +16,7 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
   });
 
   const isUrl = (url) => {
-    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/;
     return regexp.test(url);
   };
 
