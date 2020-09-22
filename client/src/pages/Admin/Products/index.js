@@ -62,19 +62,22 @@ const Products = ({
   if (bandera) {
     if (bandera.update) {
       onSubmit = async (values) => {
-        const { name, description, price, stock, categories, imageUrl } = values;
-        // imageUrl = imageUrl
-        // ? imageUrl.length > 0
-        //   ? imageUrl
-        //   : undefined
-        // : undefined;
-        console.log(name)
+        const {
+          name,
+          description,
+          price,
+          stock,
+          categories,
+          imageUrl,
+        } = values;
+
+        console.log(price);
 
         await updateProduct(
           state.productDetail.id,
-          // name,
+          name,
           description,
-          price,
+          // price,
           stock,
           imageUrl
         );

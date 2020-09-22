@@ -33,9 +33,11 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
       resetImageUrl();
       setAddingImage(false);
 
-   setFieldValue("imageUrl", images);
-
-      
+      if (estado.create) {
+        setFieldValue("imageUrl", images);
+      } else {
+        setFieldValue("price", images);
+      }
     }
   };
 
@@ -82,50 +84,29 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                 name="stock"
                 readOnly={estado.readOnly}
               />
-               <>
-                  {addingImage && (
-                    <div>
-                      <InputField
-                        prefix="URL de imagen"
-                        name="imageUrl"
-                        prefixStyle={prefixStyle}
-                        readOnly={estado.readOnly}
-                        onChange={handleInputChange}
-                        value={imageUrl}
-                      />
-                    </div>
-                  )}
 
-                  <div
-                    className={style.primary}
-                    onClick={() => handleAddImg(setFieldValue)}
-                  >
-                    {addingImage ? "Aceptar" : "Añadir nueva imagen"}
+              <>
+                {addingImage && (
+                  <div>
+                    <InputField
+                      prefix="URL de imagen"
+                      name="imageUrl"
+                      prefixStyle={prefixStyle}
+                      readOnly={estado.readOnly}
+                      onChange={handleInputChange}
+                      value={imageUrl}
+                    />
                   </div>
-                </>
-              {estado.create && (
-                <>
-                  {addingImage && (
-                    <div>
-                      <InputField
-                        prefix="URL de imagen"
-                        name="imageUrl"
-                        prefixStyle={prefixStyle}
-                        readOnly={estado.readOnly}
-                        onChange={handleInputChange}
-                        value={imageUrl}
-                      />
-                    </div>
-                  )}
+                )}
 
-                  <div
-                    className={style.primary}
-                    onClick={() => handleAddImg(setFieldValue)}
-                  >
-                    {addingImage ? "Aceptar" : "Añadir nueva imagen"}
-                  </div>
-                </>
-              )}
+                <div
+                  className={style.primary}
+                  onClick={() => handleAddImg(setFieldValue)}
+                >
+                  {addingImage ? "Aceptar" : "Añadir nueva imagen"}
+                </div>
+              </>
+
               <TagField
                 prefix="Categorías"
                 name="categories"
