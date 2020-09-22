@@ -27,23 +27,21 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
 
     if (addingImage && imageUrl.length > 0) {
       if (isUrl(imageUrl)) {
-        setImages((img) => [...img, imageUrl]);
+        setImages((img) => {
+          return [...img, imageUrl];
+        });
       }
 
       resetImageUrl();
       setAddingImage(false);
 
-      if (estado.create) {
-        setFieldValue("imageUrl", images);
-      } else {
-        setFieldValue("price", images);
-      }
+      setFieldValue("imageUrl", images);
     }
   };
 
-  // useEffect(() => {
-  //   console.log(images)
-  // }, [images])
+  useEffect(() => {
+    console.log(images)
+  }, [images])
 
   const prefixStyle = { width: "8rem" };
   return (

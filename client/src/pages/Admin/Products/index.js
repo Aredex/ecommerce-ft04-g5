@@ -71,13 +71,13 @@ const Products = ({
           imageUrl,
         } = values;
 
-        console.log(price);
+        console.log(imageUrl);
 
         await updateProduct(
           state.productDetail.id,
           name,
           description,
-          // price,
+          price,
           stock,
           imageUrl
         );
