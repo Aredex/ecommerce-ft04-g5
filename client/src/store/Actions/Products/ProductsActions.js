@@ -102,9 +102,9 @@ export function removeProduct(id) {
   };
 }
 
-export function updateProduct(id, name, description, price, stock) {
+export function updateProduct(id, name, description, price, stock, imageUrl) {
   return function (dispatch) {
-    return update(id, name, description, price, stock).then(function (data) {
+    return update(id, name, description, price, stock,imageUrl).then(function (data) {
       dispatch({ type: "UPDATE_PRODUCT", payload: data });
     });
   };
