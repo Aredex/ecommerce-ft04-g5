@@ -9,7 +9,6 @@ import TagField from "components/TagField";
 import { useForm } from "hooks/useForm";
 
 const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
-  const [images, setImages] = useState([]);
   const [addingImage, setAddingImage] = useState(false);
   const [{ imageUrl }, handleInputChange, resetImageUrl] = useForm({
     imageUrl: "",
@@ -20,28 +19,23 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
     return regexp.test(url);
   };
 
-  const handleAddImg = (setFieldValue) => {
+  const handleAddImg = (setFieldValue, values) => {
     if (!addingImage) {
       setAddingImage(true);
     }
 
     if (addingImage && imageUrl.length > 0) {
       if (isUrl(imageUrl)) {
-        setImages((img) => {
-          return [...img, imageUrl];
-        });
+        setFieldValue(
+          "imageUrl",
+          values.imageUrl ? [...values.imageUrl, imageUrl] : [imageUrl]
+        );
       }
 
       resetImageUrl();
       setAddingImage(false);
-
-      setFieldValue("imageUrl", images);
     }
   };
-
-  useEffect(() => {
-    console.log(images)
-  }, [images])
 
   const prefixStyle = { width: "8rem" };
   return (
@@ -99,7 +93,7 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
 
                 <div
                   className={style.primary}
-                  onClick={() => handleAddImg(setFieldValue)}
+                  onClick={() => handleAddImg(setFieldValue, values)}
                 >
                   {addingImage ? "Aceptar" : "Añadir nueva imagen"}
                 </div>
