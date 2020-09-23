@@ -1,0 +1,39 @@
+@import "var.scss";
+
+.container  {
+    margin-top: 25px;
+    background-color: white;
+    // border: 5px solid grey;
+    box-shadow: 0 0 30px 0 $--primary-color;
+    margin: 50px;
+    border-radius: 25px;
+}
+
+.title {
+    color: black;
+    font-weight: 900;
+    font-size: x-large;
+    text-decoration:  underline solid $--primary-color;
+}
+
+.container:hover {
+    // border: 5px solid $--primary-color .2px;
+    animation: mymove 7s infinite;
+}
+
+@keyframes mymove {
+    50% {box-shadow: 0 0 50px 0 rgb(0, 255, 0);}
+}
+
+.frase {
+    font-style: italic;
+    font-weight: 500;
+    font-size: 15px;
+    text-align: right;
+}
+
+span {
+    font-weight: 900;
+    color: $--primary-color;
+    text-shadow: 1px 1px 1px black;
+}

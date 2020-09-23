@@ -7,6 +7,7 @@ import SignUp from "pages/SignUp";
 import Admin from "pages/Admin";
 import Home from "pages/Home";
 import Products from "pages/Products";
+import About from "pages/About";
 
 const Routes = () => {
   return (
@@ -18,6 +19,7 @@ const Routes = () => {
       <Route exact path="/sign-up" component={SignUp}></Route>
       <Route path="/admin" component={Admin}></Route>
       <Route exact path="/CRUD/" component={CrudComponent}></Route>
+      <Route exact path="/about" component = {About}></Route>
     </>
   );
 };
