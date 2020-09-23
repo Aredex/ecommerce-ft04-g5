@@ -27,10 +27,7 @@ useEffect(() => {
 
   const orders = state.allOrders
   
-  const bandera = {
-    readOnly: state.orderReadOnly,
-    update: state.orderUpdate,
-  }
+  
 
   const handleRemove = async (id) => {
     var r = window.confirm(`Desea eliminar la orden N°${id}`);
@@ -39,8 +36,7 @@ useEffect(() => {
       await removeOrderAction(id);
       disabledCRUD();
   
-    }
-  }
+    }  }
 
 
 
