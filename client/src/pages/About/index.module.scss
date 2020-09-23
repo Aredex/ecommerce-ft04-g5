@@ -17,7 +17,7 @@
 }
 
 .container:hover {
-    // border: 5px solid $--primary-color .2px;
+    border: 5px solid $--primary-color .2px;
     animation: mymove 7s infinite;
 }
 
@@ -32,8 +32,9 @@
     text-align: right;
 }
 
-span {
+.gardenry{
     font-weight: 900;
     color: $--primary-color;
     text-shadow: 1px 1px 1px black;
 }
+

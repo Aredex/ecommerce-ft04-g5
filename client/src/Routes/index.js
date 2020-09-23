@@ -8,6 +8,7 @@ import Admin from "pages/Admin";
 import Home from "pages/Home";
 import Products from "pages/Products";
 import About from "pages/About";
+import ContactUs from 'pages/ContactUs';
 
 const Routes = () => {
   return (
@@ -20,6 +21,7 @@ const Routes = () => {
       <Route path="/admin" component={Admin}></Route>
       <Route exact path="/CRUD/" component={CrudComponent}></Route>
       <Route exact path="/about" component = {About}></Route>
+      <Route extact path="/contactus" component = {ContactUs}></Route>
     </>
   );
 };
