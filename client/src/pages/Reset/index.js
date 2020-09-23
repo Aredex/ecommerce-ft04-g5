@@ -25,32 +25,14 @@ export default function Reset() {
 
   const query = useQuery();
 
-  useEffect(() => {
-    (async () => {
-      if (query.token) {
-        await loginWithToken(query.token);
-        history.push("/");
-      }
-    })();
-  }, [query.token, history, loginWithToken]);
-
-  useEffect(()=>{
-    if(formik.values.email == formik.values.password && formik.values.email.length != 0 ){
-      setVisible(true)
-    }else{
-      setVisible(false)
-    }
-  })
-
-
-
+ 
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     onSubmit: (values) => {
-      resetPassword(query.user,values.password);
+      resetPassword(query.token,values.password);
       history.push("/");
     }
   });

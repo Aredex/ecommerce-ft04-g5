@@ -19,7 +19,6 @@ var auth = {
 var nodemailerMailgun = nodemailer.createTransport(mg(auth));
 
 
-
 function passwordReset(obj) {
 
   const token = jwt.sign({uid:obj.id, action:'password_reset'},secret)
