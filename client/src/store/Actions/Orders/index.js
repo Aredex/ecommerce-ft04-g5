@@ -1,4 +1,4 @@
-import { getAllOrders, removeOrder, setConfirmOrder, setDeliveredOrder, setPrepareOrder, setRejectOrder, setSendOrder, getOrderById } from "services/orders"
+import { getAllOrders, removeOrder, setConfirmOrder, setFinalizedOrder, setCompletedOrder, setDeliveredOrder, setPrepareOrder, setRejectOrder, setSendOrder, getOrderById } from "services/orders"
 import { orders } from "store/ActionTypeNames";
 
 export function addProductToShoppingCart(id, name, price, amount) {
@@ -41,16 +41,27 @@ export function removeOrderAction(id){
   }
 }
 
+export function setCompletedOrdeAction(id){
+  return function (dispatch) {
+    return setCompletedOrder(id)
+    .then( function(data){
+      dispatch({ type: "REMOVE_ORDER", payload: data}) 
+    })
+  }
+
+}
+
 
 //----------------------\\\\
 export function setConfirmOrderAction(id, address){
   return function(dispatch){
-    return removeOrder(id)
+    return setConfirmOrder(id, address)
     .then( function(data){
       dispatch({type: "CONFIRM_ORDER", payload: data})
     })
   }
 }
+
 
 export function setDeliveredOrderAction(id, address){
   return function(dispatch){
@@ -75,6 +86,15 @@ export function setRejectOrderAction(id){
     return setRejectOrder(id)
     .then( function(data){
       dispatch({ type: "REJECT_ORDER", payload: data}) 
+    })
+  }
+}
+
+export function setFinalizedOrderAction(id){
+  return function (dispatch) {
+    return setFinalizedOrder(id)
+    .then( function(data){
+      dispatch({ type: "FINALIZED_ORDER", payload: data}) 
     })
   }
 }

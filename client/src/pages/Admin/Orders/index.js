@@ -4,15 +4,20 @@ import CRUD from "./CRUD"
 import * as actionsOrders from "store/Actions/Orders";
 import { useHistory } from "react-router";
 import { connect } from "react-redux";
-import { bindActionCreators } from 'redux'
-import { removeOrder } from "services/orders"
+import { bindActionCreators } from 'redux';
+import { removeOrder } from "services/orders";
+import Select from './Select';
 
-const Orders = ({state, getAllOrdersAction, removeOrderAction, disabledCRUD, updateOrder, confirmOrder, setDeliveredOrderAction}) => { 
+
+const Orders = ({state, getAllOrdersAction, removeOrderAction, setFinalizedOrderAction
+  , disabledCRUD, setConfirmOrderAction, setDeliveredOrderAction, 
+  setPrepareOrderAction, setRejectOrderAction, setSendOrderAction}) => { 
 const history = useHistory();
 useEffect(() => {
     getAllOrdersAction();
   }, []);
  
+  
   useEffect(() => {
     getAllOrdersAction();
   }, [state.orderReadOnly,
@@ -30,19 +35,44 @@ useEffect(() => {
   const handleRemove = async (id) => {
     var r = window.confirm(`Desea eliminar la orden N°${id}`);
     if (r === true) {
+      console.log(state)
       await removeOrderAction(id);
       disabledCRUD();
   
     }
   }
 
-  const handleUpdate = async (id) => {
-    
-      await setDeliveredOrderAction(id)  
-    
-  };
 
 
+  const handleChange = async (e, id, address)=>{
+    console.log(id, e.target.value)
+      switch(e.target.value){
+
+        case "DELIVERED":
+              await setDeliveredOrderAction(id) 
+              break;  
+        case "CONFIRMED":
+              await setConfirmOrderAction(id, address)
+              break;  
+        case "SENT":
+              await setSendOrderAction(id)
+              break; 
+        case "REJECTED":
+              await setRejectOrderAction(id)
+              break;
+        case "PREPARING":
+              await setPrepareOrderAction(id)
+              break; 
+        case "FINALIZED":
+              await setFinalizedOrderAction(id)
+              break;
+        default:
+              break;
+
+      }
+
+      
+   }
 
   return (
     <section>
@@ -59,7 +89,7 @@ useEffect(() => {
         </thead>
         <tbody>
           {orders != undefined &&
-            orders.map(({ id, userId, status, createdAt, updatedAt,}) => (
+            orders.map(({ id, userId, status, createdAt, updatedAt, address}) => (
               <tr key={id}>
                 <td>{id}</td>
                 <td>{userId}</td>
@@ -71,19 +101,16 @@ useEffect(() => {
                 <button onClick={() => history.push(`/admin/orders/${id}`)}>
                   <i className="fas fa-search"></i>
                 </button>
-                <button onClick={() => handleUpdate(id)}>
-                  <i className="fas fa-edit"></i>
-                </button>
-                <button
-                  onClick={() => handleRemove(id)}
-                >
+                <Select status={status} id={id} handleChange={handleChange} address={address}/>
+                <button onClick={() => handleRemove(id)}>
                   <i className="fas fa-trash-alt"></i>
-                </button>{" "}
+                </button>
               </td>            
               </tr> 
             ))}
         </tbody>
       </table>
+
     </section>
   );
 };

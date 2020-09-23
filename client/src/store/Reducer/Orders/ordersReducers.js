@@ -61,6 +61,11 @@ export default function orders_reducer(state = initialState, action){
               ...state,
                orderReadOnly: true,
             }
+        case "FINALIZED_ORDER":
+             return  {
+              ...state,
+              orderUpdate: true,
+            }
 
 		case "DISABLED_CRUD":
              return {

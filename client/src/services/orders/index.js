@@ -16,3 +16,4 @@ export { default as setRejectOrder } from "./setRejectOrder";
 export { default as setSendOrder } from "./setSendOrder";
 export { default as setUpdateOrder } from "./setUpdateOrder";
 export { default as getOrderByUserId } from "./getOrderByUserId";
+export { default as setFinalizedOrder } from "./setFinalizedOrder";
