@@ -48,7 +48,7 @@ const ContactUs = () => {
                             <button 
                                 type = "submit"
                             >
-                                Enviar
+                                <span>Enviar</span>
                             </button>
                         </p>
                     </form>

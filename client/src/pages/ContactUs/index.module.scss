@@ -17,7 +17,7 @@
 }
 
 @keyframes mymove {
-    50% {box-shadow: 0 0 50px 0 rgb(0, 255, 0);}
+    50% {box-shadow: 0 0 30px 0 rgb(0, 255, 0);}
 }
 
 .wrapper > * {
@@ -63,6 +63,10 @@
     text-transform: uppercase;
     padding: 1em;
     cursor: pointer;
+    border-radius: 4px;
+    width: 300px;
+    transition: all 0.5s;
+    font-size: 20px;
 }
 
 .form form button:hover,
@@ -71,6 +75,30 @@
     color: black;
     transition: background-color 1s ease-out;
     outline: 0;
+}
+
+button span{
+    display: inline-block;
+    position: relative;
+    transition: .5s;
+}
+
+button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: .5s;
+}
+
+button:hover span {
+    padding-right: 35px;
+}
+
+button:hover span:after {
+    opacity: 1;
+    right: 0;
 }
 
 .contact {
