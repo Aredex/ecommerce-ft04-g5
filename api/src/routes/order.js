@@ -31,6 +31,9 @@ const {
 const {
     sendEmail
 } = require("../mailmodel/sendEmail")
+const {
+    dispatch
+} = require("../mailmodel/dispatch")
 
 
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\\
@@ -293,7 +296,9 @@ router.route("/:id/confirmed").put((req, res) => {
             sendEmail(order_product)
             res.json(order_product).status(204)
         })
-        .catch((err) => res.status(400).json(err));
+        .catch((err) => {
+            console.log(err)
+            res.status(400).json(err)});
 });
 // Ruta para especificar que una orden ha sido rechazada
 router.route("/:id/rejected").put((req, res) => {
@@ -362,22 +367,26 @@ router.route("/:id/sent").put((req, res) => {
 });
 
 // Ruta para especificar que una orden ya ha sido entregada
-router.route("/:id/delivered").put((req, res) => {
+router.route("/:id/delivered").get((req, res) => {
     const {
         id
     } = req.params;
 
-    if (isAdmin(req)) {
+    // if (isAdmin(req)) {
         editOne({
             id,
             status: "DELIVERED"
         })
-            .then((order_product) => res.json(order_product).status(204))
+            .then((order_product) =>{ 
+                var aux = dispatch(order_product)
+                res.send(aux)              
+                // res.json(order_product).status(204)})
+            })
             .catch((err) => res.status(400).json(err));
 
-    } else {
-        res.sendStatus(401)
-    }
+    // } else {
+    //     res.sendStatus(401)
+    // }
 });
 
 // Ruta para especificar que una orden ya ha sido entregada

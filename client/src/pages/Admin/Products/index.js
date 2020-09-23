@@ -72,6 +72,7 @@ const Products = ({ state, updateProduct, createProduct, addCategoryProduct,
     }
     if (bandera.create) {
       onSubmit = async (values) => {
+        console.log(values.categories)
         var { name, description, price, stock, imageUrl, categories } = values;
         imageUrl = imageUrl
           ? imageUrl.length > 0
