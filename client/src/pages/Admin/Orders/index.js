@@ -49,7 +49,7 @@ useEffect(() => {
       switch(e.target.value){
 
         case "DELIVERED":
-              await setDeliveredOrderAction(id) 
+              await setDeliveredOrderAction(id, address) 
               break;  
         case "CONFIRMED":
               await setConfirmOrderAction(id, address)
@@ -61,7 +61,7 @@ useEffect(() => {
               await setRejectOrderAction(id)
               break;
         case "PREPARING":
-              await setPrepareOrderAction(id)
+              await setPrepareOrderAction(id, address)
               break; 
         case "FINALIZED":
               await setFinalizedOrderAction(id)

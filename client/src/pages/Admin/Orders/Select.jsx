@@ -14,21 +14,15 @@ const valores = [
 export default function Select(props) {
    const [ state, setState ] = useState({ status: props.status})
 
-   const handlerSelect = (e) => {
-    setState({
-      ...state,
-      status: e.target.value
-    })
-
-   }
+   
 
    
   return (
     <div>
-      <select onChange={(e)=>{props.handleChange(e, props.id);  handlerSelect(e)}}>
+      <select onChange={(e)=>{props.handleChange(e, props.id, props.address)}}>
       {valores.map((val, index)=>{
         if(state.status === val){
-            return <option value={`${val}`} key={index} defaultValue>{val}</option>
+            return <option value={`${val}`} key={index} selected>{val}</option>
         }else{
           return <option value={`${val}`} key={index}>{val}</option>      }            
       })}
