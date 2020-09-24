@@ -106,7 +106,7 @@ function Checkout() {
         </section>
         <section className={style.orderData}>
           <h2>Datos de la orden</h2>
-          <Formik initialValues={userLogin.user} onSubmit={({ name }) => updateUserData({ id: userLogin.user.id, name })}>
+          <Formik initialValues={userLogin.user} onSubmit={({ name }) => { stateDispatch({ type: 'TOGGLE_NAME' }); updateUserData({ id: userLogin.user.id, name }) }}>
             {({ errors, handleSubmit }) => (
               <Card className={errors.name ? style.error : ''}>
                 <Card.Header>
@@ -131,7 +131,7 @@ function Checkout() {
                       : <button
                         type="submit"
                         className={style.primary}
-                        onClick={() => { stateDispatch({ type: 'TOGGLE_NAME' }); handleSubmit() }}
+                        onClick={handleSubmit}
                       >
                         Actualizar
                   </button>
@@ -140,7 +140,7 @@ function Checkout() {
               </Card>
             )}
           </Formik>
-          <Formik initialValues={userLogin.user} onSubmit={({ email }) => updateUserData({ id: userLogin.user.id, email })}>
+          <Formik initialValues={userLogin.user} onSubmit={({ email }) => { stateDispatch({ type: 'TOGGLE_EMAIL' }); updateUserData({ id: userLogin.user.id, email }) }}>
             {({ errors, handleSubmit }) => (
               <Card className={errors.email ? style.error : ''}>
                 <Card.Header>
@@ -165,7 +165,7 @@ function Checkout() {
                       : <button
                         type="submit"
                         className={style.primary}
-                        onClick={() => { stateDispatch({ type: 'TOGGLE_EMAIL' }); handleSubmit() }}
+                        onClick={handleSubmit}
                       >
                         Actualizar
                   </button>
@@ -174,7 +174,7 @@ function Checkout() {
               </Card>
             )}
           </Formik>
-          <Formik initialValues={userLogin.user} onSubmit={({ address }) => updateUserData({ id: userLogin.user.id, address })}>
+          <Formik initialValues={userLogin.user} onSubmit={({ address }) => { stateDispatch({ type: 'TOGGLE_ADDRESS' }); updateUserData({ id: userLogin.user.id, address }) }}>
             {({ errors, handleSubmit }) => (
               <Card className={errors.address ? style.error : ''}>
                 <Card.Header>
@@ -199,7 +199,7 @@ function Checkout() {
                       : <button
                         type="submit"
                         className={style.primary}
-                        onClick={() => { stateDispatch({ type: 'TOGGLE_ADDRESS' }); handleSubmit() }}
+                        onClick={handleSubmit}
                       >
                         Actualizar
                   </button>
