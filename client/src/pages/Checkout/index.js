@@ -112,7 +112,7 @@ function Checkout() {
                 </Card.Body>
                 <Card.Footer>
                   {
-                    state.emailReadOnly
+                    state.nameReadOnly
                       ? <button
                         type="button"
                         onClick={() => stateDispatch({ type: 'TOGGLE_NAME' })}
@@ -141,12 +141,12 @@ function Checkout() {
                   <span>
                     Es imprescindible contar con un email válido para ponernos en contacto con usetd.
                   </span>
-                  <InputField prefix="Email" prefixStyle={{ background: '#f3f3f3', width: '10rem' }} name="email" style={{ margin: '0.5rem 0rem', maxWidth: '20rem' }} validate={validateEmail} />
+                  <InputField readOnly={state.emailReadOnly} prefix="Email" prefixStyle={{ background: '#f3f3f3', width: '10rem' }} name="email" style={{ margin: '0.5rem 0rem', maxWidth: '20rem' }} validate={validateEmail} />
                   {errors.email && <div className={style.error}>{errors.email}</div>}
                 </Card.Body>
                 <Card.Footer>
                   {
-                    state.nameReadOnly
+                    state.emailReadOnly
                       ? <button
                         type="button"
                         onClick={() => stateDispatch({ type: 'TOGGLE_EMAIL' })}
@@ -175,7 +175,7 @@ function Checkout() {
                   <span>
                     Debe especificarse una dirección lo más completa posible, para realizar la entrega correctamente.
                   </span>
-                  <TextareaField prefix="Dirección" name="address" style={{ margin: '0.5rem 0rem' }} validate={validateAddress} />
+                  <TextareaField readOnly={state.addressReadOnly} prefix="Dirección" name="address" style={{ margin: '0.5rem 0rem' }} validate={validateAddress} />
                   {errors.address && <div className={style.error}>{errors.address}</div>}
                 </Card.Body>
                 <Card.Footer>
