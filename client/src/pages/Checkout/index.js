@@ -1,22 +1,174 @@
 import Axios from 'axios'
-import React, { useCallback } from 'react'
-import { useSelector } from 'react-redux'
+import Card from 'components/Card'
+import InputField from 'components/InputField'
+import ItemCard from 'components/ItemCard'
+import TextareaField from 'components/TextareaField'
+import { Formik } from 'formik'
+import useOrders from 'hooks/useOrders'
+import useUser from 'hooks/useUser'
+import React, { useState } from 'react'
+// import { useHistory } from 'react-router'
+import style from './index.module.scss'
+import checkoutDraw from 'assets/checkout.svg'
 
 function Checkout() {
-  const shoppingCart = useSelector(state => state.orders.shoppingCart)
+  const { shoppingCart, removeProduct, increseAmount, decreaseAmount } = useOrders()
+  const { userLogin, updateUserData } = useUser()
+  // const [errors, setErrors] = useState({})
+  // const { replace } = useHistory()
+
+  // // Si no hay nada en el carrito envía al clienta a Home
+  // useEffect(() => {
+  //   if (!shoppingCart) replace('/')
+  // }, [shoppingCart])
+
+  /**
+   * Procesa la orden y redirecciona a mercadopago para realizar el pago de la misma
+   * @param id Id de la orden a procesar
+   */
   const toPayment = async (id) => {
     const { data } = await Axios.post(`http://localhost:3001/orders/${id}/toPayment`, {
-      "address": "mirasoles sn"
+      address: userLogin.user.address
     })
-    console.log(data)
+    alert(data.redirect)
     window.location = data.redirect
   }
 
-  return (
-    <div>
-      <button onClick={() => toPayment(shoppingCart.id)}>Proceder al pago</button>
-    </div>
-  )
+  function validateName(value) {
+    let error;
+    if (!value) {
+      error = 'Necesitamos su nombre y apellido para poder continuar.';
+    }
+    return error;
+  }
+  function validateEmail(value) {
+    let error;
+    if (!value) {
+      error = 'Es imprescindible contar con un email válido.';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+      error = 'El email ingresado no es válido';
+    }
+    return error;
+  }
+  function validateAddress(value) {
+    let error;
+    if (!value) {
+      error = 'Debe especificar una dirección válida.';
+    }
+    return error;
+  }
+  function validateAllData() {
+    let errors;
+    const nameError = validateName(userLogin.user.name)
+    const emailError = validateName(userLogin.user.email)
+    const addressError = validateName(userLogin.user.address)
+    nameError && (errors ? errors.name = nameError : errors = { name: nameError })
+    emailError && (errors ? errors.email = emailError : errors = { email: emailError })
+    addressError && (errors ? errors.address = addressError : errors = { address: addressError })
+    return errors
+  }
+
+  if (shoppingCart)
+    return (
+      <div className={style.page}>
+        <img src={checkoutDraw} alt="" className={style.checkoutDraw} />
+        <section className={style.products}>
+          <h2>Productos</h2>
+          {shoppingCart.products.map(product =>
+            <ItemCard
+              key={product.id}
+              product={product}
+              removeProduct={removeProduct}
+              increseAmount={increseAmount}
+              decreaseAmount={decreaseAmount}
+              showPrice
+              showQuantity
+              showAmount
+            />
+          )}
+        </section>
+        <section className={style.orderData}>
+          <h2>Datos de la orden</h2>
+          <Formik initialValues={userLogin.user} onSubmit={({ name }) => updateUserData({ id: userLogin.user.id, name })}>
+            {({ errors, handleSubmit }) => (
+              <Card className={errors.name ? style.error : ''}>
+                <Card.Header>
+                  Nombre y apellido
+                </Card.Header>
+                <Card.Body>
+                  <span>
+                    Debe confirmar que tanto su nombre como apellidos están correctos antes de proceder al pago de la orden.
+                  </span>
+                  <InputField prefix="Nombre y apellido" prefixStyle={{ background: '#f3f3f3', width: '10rem' }} inputStyle={{ textTransform: 'capitalize' }} name="name" style={{ margin: '0.5rem 0rem', maxWidth: '20rem' }} validate={validateName} />
+                  {errors.name && <div className={style.error}>{errors.name}</div>}
+                </Card.Body>
+                <Card.Footer>
+                  <button
+                    type="submit"
+                    className={style.primary}
+                    onClick={handleSubmit}
+                  >
+                    Actualizar
+                  </button>
+                </Card.Footer>
+              </Card>
+            )}
+          </Formik>
+          <Formik initialValues={userLogin.user} onSubmit={({ email }) => updateUserData({ id: userLogin.user.id, email })}>
+            {({ errors, handleSubmit }) => (
+              <Card className={errors.email ? style.error : ''}>
+                <Card.Header>
+                  Email
+                </Card.Header>
+                <Card.Body>
+                  <span>
+                    Es imprescindible contar con un email válido para ponernos en contacto con usetd.
+                  </span>
+                  <InputField prefix="Email" prefixStyle={{ background: '#f3f3f3', width: '10rem' }} name="email" style={{ margin: '0.5rem 0rem', maxWidth: '20rem' }} validate={validateEmail} />
+                  {errors.email && <div className={style.error}>{errors.email}</div>}
+                </Card.Body>
+                <Card.Footer>
+                  <button
+                    type="submit"
+                    className={style.primary}
+                    onClick={handleSubmit}
+                  >
+                    Actualizar
+                  </button>
+                </Card.Footer>
+              </Card>
+            )}
+          </Formik>
+          <Formik initialValues={userLogin.user} onSubmit={({ address }) => updateUserData({ id: userLogin.user.id, address })}>
+            {({ errors, handleSubmit }) => (
+              <Card className={errors.address ? style.error : ''}>
+                <Card.Header>
+                  Dirección de envío
+               </Card.Header>
+                <Card.Body>
+                  <span>
+                    Debe especificarse una dirección lo más completa posible, para realizar la entrega correctamente.
+                  </span>
+                  <TextareaField prefix="Dirección" name="address" style={{ margin: '0.5rem 0rem' }} validate={validateAddress} />
+                  {errors.address && <div className={style.error}>{errors.address}</div>}
+                </Card.Body>
+                <Card.Footer>
+                  <button
+                    type="submit"
+                    className={style.primary}
+                    onClick={handleSubmit}
+                  >
+                    Actualizar
+                  </button>
+                </Card.Footer>
+              </Card>
+            )}
+          </Formik>
+          <button className={style.toPayment} onClick={() => validateAllData() ? alert('Debe completar todos los campos correctamente.') : toPayment(shoppingCart.id)}>Proceder al pago</button>
+        </section>
+      </div >
+    )
+  return null
 }
 
 export default Checkout
