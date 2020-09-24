@@ -94,6 +94,15 @@ function Checkout() {
               showAmount
             />
           )}
+          <div className={style.totalOrder}>
+            <span>Total:</span>
+            <span className={style.money}>
+              $ {Number(shoppingCart.total).toLocaleString("es", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+            </span>
+          </div>
         </section>
         <section className={style.orderData}>
           <h2>Datos de la orden</h2>
