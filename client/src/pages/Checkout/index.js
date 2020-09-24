@@ -6,7 +6,7 @@ import TextareaField from 'components/TextareaField'
 import { Formik } from 'formik'
 import useOrders from 'hooks/useOrders'
 import useUser from 'hooks/useUser'
-import React, { useState } from 'react'
+import React, { useReducer, useState } from 'react'
 // import { useHistory } from 'react-router'
 import style from './index.module.scss'
 import checkoutDraw from 'assets/checkout.svg'
@@ -14,6 +14,14 @@ import checkoutDraw from 'assets/checkout.svg'
 function Checkout() {
   const { shoppingCart, removeProduct, increseAmount, decreaseAmount } = useOrders()
   const { userLogin, updateUserData } = useUser()
+  const [state, stateDispatch] = useReducer((state, action) => {
+    switch (action.type) {
+      case 'TOGGLE_NAME': return { ...state, nameReadOnly: !state.nameReadOnly }
+      case 'TOGGLE_EMAIL': return { ...state, emailReadOnly: !state.emailReadOnly }
+      case 'TOGGLE_ADDRESS': return { ...state, addressReadOnly: !state.addressReadOnly }
+      default: return state
+    }
+  }, { nameReadOnly: true, emailReadOnly: true, addressReadOnly: true })
   // const [errors, setErrors] = useState({})
   // const { replace } = useHistory()
 
@@ -99,17 +107,26 @@ function Checkout() {
                   <span>
                     Debe confirmar que tanto su nombre como apellidos están correctos antes de proceder al pago de la orden.
                   </span>
-                  <InputField prefix="Nombre y apellido" prefixStyle={{ background: '#f3f3f3', width: '10rem' }} inputStyle={{ textTransform: 'capitalize' }} name="name" style={{ margin: '0.5rem 0rem', maxWidth: '20rem' }} validate={validateName} />
+                  <InputField readOnly={state.nameReadOnly} prefix="Nombre y apellido" prefixStyle={{ background: '#f3f3f3', width: '10rem' }} inputStyle={{ textTransform: 'capitalize' }} name="name" style={{ margin: '0.5rem 0rem', maxWidth: '20rem' }} validate={validateName} />
                   {errors.name && <div className={style.error}>{errors.name}</div>}
                 </Card.Body>
                 <Card.Footer>
-                  <button
-                    type="submit"
-                    className={style.primary}
-                    onClick={handleSubmit}
-                  >
-                    Actualizar
+                  {
+                    state.emailReadOnly
+                      ? <button
+                        type="button"
+                        onClick={() => stateDispatch({ type: 'TOGGLE_NAME' })}
+                      >
+                        Editar
+                    </button>
+                      : <button
+                        type="submit"
+                        className={style.primary}
+                        onClick={() => { stateDispatch({ type: 'TOGGLE_NAME' }); handleSubmit() }}
+                      >
+                        Actualizar
                   </button>
+                  }
                 </Card.Footer>
               </Card>
             )}
@@ -128,13 +145,22 @@ function Checkout() {
                   {errors.email && <div className={style.error}>{errors.email}</div>}
                 </Card.Body>
                 <Card.Footer>
-                  <button
-                    type="submit"
-                    className={style.primary}
-                    onClick={handleSubmit}
-                  >
-                    Actualizar
+                  {
+                    state.nameReadOnly
+                      ? <button
+                        type="button"
+                        onClick={() => stateDispatch({ type: 'TOGGLE_EMAIL' })}
+                      >
+                        Editar
+                    </button>
+                      : <button
+                        type="submit"
+                        className={style.primary}
+                        onClick={() => { stateDispatch({ type: 'TOGGLE_EMAIL' }); handleSubmit() }}
+                      >
+                        Actualizar
                   </button>
+                  }
                 </Card.Footer>
               </Card>
             )}
@@ -153,13 +179,22 @@ function Checkout() {
                   {errors.address && <div className={style.error}>{errors.address}</div>}
                 </Card.Body>
                 <Card.Footer>
-                  <button
-                    type="submit"
-                    className={style.primary}
-                    onClick={handleSubmit}
-                  >
-                    Actualizar
+                  {
+                    state.addressReadOnly
+                      ? <button
+                        type="button"
+                        onClick={() => stateDispatch({ type: 'TOGGLE_ADDRESS' })}
+                      >
+                        Editar
+                    </button>
+                      : <button
+                        type="submit"
+                        className={style.primary}
+                        onClick={() => { stateDispatch({ type: 'TOGGLE_ADDRESS' }); handleSubmit() }}
+                      >
+                        Actualizar
                   </button>
+                  }
                 </Card.Footer>
               </Card>
             )}
