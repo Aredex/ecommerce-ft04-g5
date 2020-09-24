@@ -26,10 +26,10 @@ function ItemCard({ product,
         {showPrice && <div className={style.dataItem}>
           <label>Precio:</label>
           <span className={style.money}>
-            {Number(product.price).toLocaleString("es", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+            $ {Number(product.price).toLocaleString("es", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
           </span>
         </div>}
         {showQuantity && <div className={style.dataItem}>
@@ -59,10 +59,10 @@ function ItemCard({ product,
         {showAmount && <div className={style.dataItem}>
           <label>Importe:</label>
           <span className={style.money}>
-            {Number(product.price * product.amount).toLocaleString("es", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+            $ {Number(product.price * product.amount).toLocaleString("es", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
           </span>
         </div>}
       </div>
