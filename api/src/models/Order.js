@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.ENUM,
             values: [
                 "IN CREATION",
+                "PENDING_PAYMENT",
                 "CONFIRMED",
                 "REJECTED",
                 "PREPARING",
@@ -24,5 +25,37 @@ module.exports = (sequelize, DataTypes) => {
                 this.setDataValue("address", value.trim().toLowerCase());
             },
         },
+        payment_method_id: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        payment_type_id: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        payment_status: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        payment_status_detail: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        card_expiration_month: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        card_expiration_year: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        card_first_six_digits: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        card_last_four_digits: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        }
     });
 };

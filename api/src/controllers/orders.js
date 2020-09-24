@@ -89,6 +89,30 @@ const getAll = ({
 
 const confirmedOrder = async ({
     id,
+    payment_method_id,
+    payment_type_id,
+    payment_status,
+    payment_status_detail,
+    card_expiration_month,
+    card_expiration_year,
+    card_first_six_digits,
+    card_last_four_digits
+}) => {
+    const Order = await getOne(id);
+    Order.status = "CONFIRMED";
+    Order.payment_method_id = payment_method_id
+    Order.payment_type_id = payment_type_id
+    Order.payment_status = payment_status
+    Order.payment_status_detail = payment_status_detail
+    Order.card_expiration_month = card_expiration_month
+    Order.card_expiration_year = card_expiration_year
+    Order.card_first_six_digits = card_first_six_digits
+    Order.card_last_four_digits = card_last_four_digits
+    await Order.save()
+};
+
+const toPaymentOrder = async ({
+    id,
     address
 }) => {
     if (!address) {
@@ -130,7 +154,7 @@ const confirmedOrder = async ({
 
         Promise.all(products)
             .then(() => {
-                Order.status = "CONFIRMED";
+                Order.status = "PENDING_PAYMENT";
                 Order.address = address;
                 Order.save();
             })
@@ -259,6 +283,7 @@ module.exports = {
     editOne,
     deleteOne,
     emptyOrder,
+    toPaymentOrder,
     confirmedOrder,
     getAllFiler,
 };
