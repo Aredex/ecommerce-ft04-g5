@@ -41,6 +41,21 @@
       color: #fff;
     }
 }
+.totalOrder {
+  display: flex;
+  margin: 0 1rem;
+  margin-top: 1.5rem;
+  width: stretch;
+  border-top: solid 1px #a3a3a3;
+  span {
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+  .money {
+    text-align: right;
+    width: stretch;
+  }
+}
 
 .error {
   color: $--danger-color;
