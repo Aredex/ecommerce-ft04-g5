@@ -1,0 +1,85 @@
+@import "var.scss";
+
+.itemCard {
+  width: stretch;
+
+  .productName {
+    font-weight: 600;
+    text-align: left;
+    width: stretch;
+    margin: 0;
+    padding: 0.25rem 0.5rem;
+    border-bottom: solid 1px #e3e3e3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: capitalize;
+
+    i {
+      cursor: pointer;
+      transition: color 0.25s;
+
+      &:hover {
+        color: $--danger-color;
+      }
+    }
+  }
+
+  .data {
+    display: flex;
+    position: relative;
+  }
+
+  .dataItem {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    padding: 0.25rem;
+
+    label {
+      padding: 0.25rem;
+      font-size: 0.75rem;
+    }
+
+    span {
+      border: solid 1px #e3e3e3;
+      border-radius: 0.25rem;
+      display: flex;
+      justify-content: center;
+      overflow: hidden;
+      align-items: center;
+      height: 2rem;
+      div {
+        width: stretch;
+      }
+      section {
+        width: fit-content;
+
+        button {
+          width: 2rem;
+          height: 1rem;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: #fff;
+          border: none;
+          cursor: pointer;
+          transition: color 0.25s;
+
+          &:focus {
+            outline: none;
+          }
+
+          &:hover {
+            color: $--primary-color;
+          }
+        }
+      }
+    }
+  }
+}

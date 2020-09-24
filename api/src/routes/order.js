@@ -1,17 +1,25 @@
 const router = require("express").Router(),
     isAdmin = require("../lib/isAdmin");
 const isUser = require("../lib/isUser");
+const mercadopago = require('mercadopago');
+
+// Agrega credenciales
+mercadopago.configure({
+    sandbox: true,
+    access_token: process.env.MELI_ACCESS_TOKEN,
+});
 
 const {
 
     getAll,
     createOne,
     deleteOne,
-    // getOne,
+    getOne,
     editOne,
     emptyOrder,
     confirmedOrder,
     getAllFiler,
+    toPaymentOrder,
 } = require("../controllers/orders");
 const {
     removeProductToOrder,
@@ -294,6 +302,58 @@ router.route("/:id/confirmed").put((req, res) => {
             res.json(order_product).status(204)
         })
         .catch((err) => res.status(400).json(err));
+});
+// Ruta para especificar que una orden ya ha sido comprada
+router.route("/:id/toPayment").post(async (req, res) => {
+    const {
+        id
+    } = req.params;
+    const {
+        address
+    } = req.body;
+
+    try {
+        let Order = await getOne(id)
+        let preference = {
+            items: Order.products.map((product) => ({
+                title: product.name,
+                unit_price: product.order_product.price,
+                quantity: product.order_product.amount,
+            })),
+            payment_methods: {
+                excluded_payment_types: [
+                    {
+                        id: "ticket"
+                    },
+                    {
+                        id: "atm"
+                    }
+                ],
+                installments: 1
+            },
+            external_reference: Order.id.toString(),
+            back_urls: {
+                success: "http://localhost:3001/payment/meli/callback",
+                failure: "http://localhost:3001/payment/meli/callback",
+            },
+            auto_return: "approved",
+        };
+        const response = await mercadopago.preferences.create(preference)
+        Order = await toPaymentOrder({
+            id,
+            address,
+            init_point: response.body.init_point
+        })
+        res.json({ redirect: response.body.init_point, order: Order })
+    } catch (error) {
+        res.status(400).json(error)
+    }
+
+    // .then((order_product) => {
+    //     sendEmail(order_product)
+    //     res.redirect()
+    // })
+    // .catch((err) => res.status(400).json(err));
 });
 // Ruta para especificar que una orden ha sido rechazada
 router.route("/:id/rejected").put((req, res) => {

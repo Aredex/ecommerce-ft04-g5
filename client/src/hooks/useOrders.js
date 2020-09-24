@@ -1,7 +1,7 @@
 import { useLocalStorage } from "react-use";
 import { useDispatch, useSelector } from "react-redux";
 import { setShoppingCart } from "store/Actions/Orders";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import Axios from "axios";
 import useUser from 'hooks/useUser';
 import { getById } from "services/user";
@@ -17,8 +17,7 @@ export default function useOrders() {
   const shoppingCart = useSelector((state) => state.orders.shoppingCart);
   const { userLogin } = useUser()
 
-  useEffect(() => {
-
+  const reloadShoppingCart = useCallback(() => {
     if (userLogin) {
 
       (async () => {
@@ -141,7 +140,11 @@ export default function useOrders() {
         ? dispatch(setShoppingCart({ ...localShoppingCart, total }))
         : dispatch(setShoppingCart(undefined));
     }
-  }, [localShoppingCart, userLogin, dispatch, setLocalShoppingCart]);
+  }, [localShoppingCart, userLogin, dispatch, setLocalShoppingCart])
+
+  useEffect(() => {
+    reloadShoppingCart()
+  }, [reloadShoppingCart]);
 
   const addProduct = (id, name, price, amount, stock) => {
     if (userLogin) {
@@ -383,5 +386,6 @@ export default function useOrders() {
     decreaseAmount,
     removeProduct,
     addProduct,
+    reloadShoppingCart
   };
 }
