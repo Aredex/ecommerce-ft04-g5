@@ -1,0 +1,24 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  div {
+    display: inline;
+  }
+  .gallerie {
+    display: flex;
+    justify-content: space-between;
+    width: calc(100% - 2rem);
+    border-radius: 7px;
+    box-shadow: 0 2px 5px #ccc;
+    margin: 1rem;
+    padding: 1rem;
+  }
+  img {
+    flex-direction: row;
+    width: 6rem;
+    height: 6rem;
+    margin: 2rem 1rem;
+  }
+  
