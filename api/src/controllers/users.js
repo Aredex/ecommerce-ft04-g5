@@ -28,6 +28,15 @@ const getAll = () => {
 
 const createOne = (name, email, password, role, googleId, facebookId) => {
   return new Promise((resolve, reject) => {
+    
+    if (password && password.includes(" ")) {
+      return reject({
+        error: {
+          message: "La contraseña no puede tener espacios en blanco",
+        },
+      });
+    }
+
     User.create({ name, email, password, googleId, facebookId })
       .then((user) => {
         if (role) {
@@ -54,7 +63,17 @@ const editOne = ({ id, name, email, password, role, address }) => {
       .then((user) => {
         if (name) user.name = name;
         if (email) user.email = email;
-        if (password) user.password = password;
+        if (password) {
+          console.log("ANDO POR ACÁ");
+          if (password.includes(" ")) {
+            return reject({
+              error: {
+                message: "La contraseña no puede tener espacios en blanco",
+              },
+            });
+          }
+          user.password = password;
+        }
         if (role) user.role = role;
         if (address) user.address = address;
 
@@ -69,7 +88,11 @@ const getOne = (id) => {
   return new Promise((resolve, reject) => {
     User.findOne({
       where: { id },
-      include: [{ model: Review, include: Product }, Review, { model: Order, include: Product }],
+      include: [
+        { model: Review, include: Product },
+        Review,
+        { model: Order, include: Product },
+      ],
     })
       .then((user) => {
         if (!user) {
@@ -105,6 +128,7 @@ const getOneByEmail = async (email) => {
     return error;
   }
 };
+
 const getOneByGoogleId = async (googleId) => {
   try {
     const user = User.findOne({
@@ -116,6 +140,7 @@ const getOneByGoogleId = async (googleId) => {
     return error;
   }
 };
+
 const getOneByFacebookId = async (facebookId) => {
   try {
     const user = User.findOne({

@@ -2,7 +2,6 @@ const router = require("express").Router();
 const isAdmin = require("../lib/isAdmin");
 const isUser = require("../lib/isUser");
 
-
 const {
     createOne,
     getAll,
@@ -10,38 +9,30 @@ const {
     editOne,
     deleteOne,
 } = require("../controllers/users");
-const {
-    getOrderByUser
-} = require("../controllers/users_order");
-const {
-    getAll: getReviews
-} = require("../controllers/reviews");
+const { getOrderByUser } = require("../controllers/users_order");
+const { getAll: getReviews } = require("../controllers/reviews");
 
 router
-    .route("/")
-    .post((req, res) => {
-        const {
-            name,
-            email,
-            password,
-            role
-        } = req.body;
+  .route("/")
+  .post((req, res) => {
+    const { name, email, password, role } = req.body;
 
-        createOne(name, email, password, role)
-            .then((user) => res.json(user).status(201))
-            .catch((err) => res.status(400).json(err));
-    })
-    .get((req, res) => {
-        if (isAdmin(req)) {
-            getAll()
-                .then((users) => res.json(users).status(200))
-                .catch((err) => res.status(404).json(err));
-        } else {
-            res.sendStatus(401)
-        }
-    });
+    createOne(name, email, password, role)
+      .then((user) => res.json(user).status(201))
+      .catch((err) => res.status(400).json(err));
+  })
+  .get((req, res) => {
+    if (isAdmin(req)) {
+      getAll()
+        .then((users) => res.json(users).status(200))
+        .catch((err) => res.status(404).json(err));
+    } else {
+      res.sendStatus(401);
+    }
+  });
 
 router
+
     .route("/:id")
     .get((req, res) => {
         const {
@@ -101,70 +92,78 @@ router
 
     });
 
+
 router.route("/:id/orders").get((req, res) => {
-    const {
-        id
-    } = req.params;
-    if (isAdmin(req) || (isUser(req) && req.user.uid === id)) {
-        getOrderByUser(id)
-            .then((orders) => res.json(orders).status(200))
-            .catch((err) => res.json(err));
-    } else {
-        res.sendStatus(401)
-    }
+  const { id } = req.params;
+  if (isAdmin(req) || (isUser(req) && req.user.uid === id)) {
+    getOrderByUser(id)
+      .then((orders) => res.json(orders).status(200))
+      .catch((err) => res.json(err));
+  } else {
+    res.sendStatus(401);
+  }
 });
 
 // Retorna todas las reviews hechas por el usuario según su id
 router.route("/:id/reviews").get((req, res) => {
-    const {
-        id
-    } = req.params;
-
-    if (isAdmin(req) || (isUser(req) && req.user.uid === id)) {
-        getReviews({
-            idUser: id
-        })
-            .then((reviews) => res.json(reviews).status(200))
-            .catch((err) => res.json(err));
-    } else {
-        res.sendStatus(401)
-    }
+  const { id } = req.params;
+  if (isAdmin(req) || (isUser(req) && req.user.uid === id)) {
+    getReviews({
+      idUser: id,
+    })
+      .then((reviews) => res.json(reviews).status(200))
+      .catch((err) => res.json(err));
+  } else {
+    res.sendStatus(401);
+  }
 });
 
 router.route("/:id/toadmin").put((req, res) => {
-    const {
-        id
-    } = req.params;
-    if (isAdmin(req)) {
-        editOne({
-            id,
-            role: "ADMIN"
+  const { id } = req.params;
+  if (isAdmin(req)) {
+    editOne({
+      id,
+      role: "ADMIN",
+    })
+      .then((user) => res.json(user))
+      .catch((err) =>
+        res.status(400).json({
+          err,
         })
-            .then((user) => res.json(user))
-            .catch((err) => res.status(400).json({
-                err
-            }));
-    } else {
-        res.sendStatus(401)
-    }
+      );
+  } else {
+    res.sendStatus(401);
+  }
 });
 
 router.route("/:id/toguest").put((req, res) => {
-    const {
-        id
-    } = req.params;
-    if (isAdmin(req)) {
-        editOne({
-            id,
-            role: "GUEST"
+  const { id } = req.params;
+  if (isAdmin(req)) {
+    editOne({
+      id,
+      role: "GUEST",
+    })
+      .then((user) => res.json(user))
+      .catch((err) =>
+        res.status(400).json({
+          err,
         })
-            .then((user) => res.json(user))
-            .catch((err) => res.status(400).json({
-                err
-            }));
-    } else {
-        res.sendStatus(401)
-    }
+      );
+  } else {
+    res.sendStatus(401);
+  }
+
 });
+
+router.route("/:id/resetpassword").post((req, res) => {
+  const { id } = req.params;
+  const { newPassword } = req.body;
+
+  editOne({ id, password: newPassword })
+    .then((user) => res.json(user))
+    .catch((err) => res.status(400).json({ err }));
+});
+
+module.exports = router;
 
 module.exports = router;
