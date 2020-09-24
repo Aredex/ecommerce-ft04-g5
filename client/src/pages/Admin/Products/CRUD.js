@@ -5,18 +5,17 @@ import InputField from "components/InputField";
 import TextareaField from "components/TextareaField";
 import Modal from "components/Modal";
 import TagField from "components/TagField";
+import ImagesProduct from "./ImagesProduct";
 
 const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
   const prefixStyle = { width: "8rem" };
   return (
-    <Formik
-      initialValues={formikData}
-      onSubmit={onSubmit}
-    >
+    <Formik initialValues={formikData} onSubmit={onSubmit}>
       {({ values, handleSubmit }) => (
         <Modal>
           <Modal.Header>
             <>
+              {/* {console.log(values)} */}
               {estado.readOnly && `${values.name}`}
               {estado.update && `Modificar ${values.name}`}
               {estado.create && "Crear nuevo producto"}
@@ -30,6 +29,7 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                 name="name"
                 readOnly={estado.readOnly}
               />
+              <ImagesProduct id={values.id} />
               <TextareaField
                 prefix="Descripción"
                 name="description"

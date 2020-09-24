@@ -17,10 +17,9 @@ export const startAddingImage = (productId, imageUrl) => {
 
 export const startSelectingProduct = (id) => {
   return async (dispatch) => {
-    const product = await axios.get(`http://localhost:3001/products/${id}`);
-    const images = product.images;
-
-    dispatch(selectProduct(product, images));
+    const { data } = await axios.get(`http://localhost:3001/products/${id}`);
+    const { images } = data;
+    dispatch(selectProduct(data, images));
   };
 };
 
