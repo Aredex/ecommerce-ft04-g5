@@ -7,9 +7,10 @@ import { Formik } from 'formik'
 import useOrders from 'hooks/useOrders'
 import useUser from 'hooks/useUser'
 import React, { useReducer, useState } from 'react'
-// import { useHistory } from 'react-router'
+import { useHistory } from 'react-router'
 import style from './index.module.scss'
 import checkoutDraw from 'assets/checkout.svg'
+import emptyDraw from 'assets/shoppingCartEmpty.svg'
 
 function Checkout() {
   const { shoppingCart, removeProduct, increseAmount, decreaseAmount } = useOrders()
@@ -23,7 +24,7 @@ function Checkout() {
     }
   }, { nameReadOnly: true, emailReadOnly: true, addressReadOnly: true })
   // const [errors, setErrors] = useState({})
-  // const { replace } = useHistory()
+  const { push } = useHistory()
 
   // // Si no hay nada en el carrito envía al clienta a Home
   // useEffect(() => {
@@ -212,7 +213,17 @@ function Checkout() {
         </section>
       </div >
     )
-  return null
+  return (
+    <div className={style.page}>
+      <img src={emptyDraw} alt="" className={style.emptyDraw} />
+      <button
+        className={style.buttonToProducts}
+        onClick={() => push("/products")}
+      >
+        ver nuestro catalogo
+      </button>
+    </div>
+  )
 }
 
 export default Checkout
