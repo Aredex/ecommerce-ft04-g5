@@ -57,8 +57,8 @@ const ContactUs = () => {
                     <h4>Más Info</h4>
                     <ul>
                         <li></li>
-                        <li>15-0000-1111</li>
-                        <li>contact@gardenry.com</li>
+                        <li><i class="fas fa-phone"></i> 15-0000-1111</li>
+                        <li><i class="fas fa-envelope-open-text"></i> contact@gardenry.com</li>
                     </ul>
                 </div>
             </div>
