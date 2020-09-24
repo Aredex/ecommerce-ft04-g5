@@ -113,7 +113,8 @@ const confirmedOrder = async ({
 
 const toPaymentOrder = async ({
     id,
-    address
+    address,
+    init_point
 }) => {
     if (!address) {
         return new Promise((resolve, reject) => {
@@ -156,6 +157,7 @@ const toPaymentOrder = async ({
             .then(() => {
                 Order.status = "PENDING_PAYMENT";
                 Order.address = address;
+                Order.init_point = init_point;
                 Order.save();
             })
             .catch((err) => reject({

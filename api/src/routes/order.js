@@ -14,7 +14,7 @@ const {
     getAll,
     createOne,
     deleteOne,
-    // getOne,
+    getOne,
     editOne,
     emptyOrder,
     confirmedOrder,
@@ -313,10 +313,7 @@ router.route("/:id/toPayment").post(async (req, res) => {
     } = req.body;
 
     try {
-        const Order = await toPaymentOrder({
-            id,
-            address
-        })
+        let Order = await getOne(id)
         let preference = {
             items: Order.products.map((product) => ({
                 title: product.name,
@@ -342,6 +339,11 @@ router.route("/:id/toPayment").post(async (req, res) => {
             auto_return: "approved",
         };
         const response = await mercadopago.preferences.create(preference)
+        Order = await toPaymentOrder({
+            id,
+            address,
+            init_point: response.body.init_point
+        })
         res.json({ redirect: response.body.init_point, order: Order })
     } catch (error) {
         res.status(400).json(error)

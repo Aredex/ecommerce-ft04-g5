@@ -56,6 +56,10 @@ module.exports = (sequelize, DataTypes) => {
         card_last_four_digits: {
             type: DataTypes.STRING,
             allowNull: true,
+        },
+        init_point: {
+            type: DataTypes.STRING,
+            allowNull: true,
         }
     });
 };

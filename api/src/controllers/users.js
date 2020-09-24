@@ -48,7 +48,7 @@ const createOne = (name, email, password, role, googleId, facebookId) => {
   });
 };
 
-const editOne = ({ id, name, email, password, role }) => {
+const editOne = ({ id, name, email, password, role, address }) => {
   return new Promise((resolve, reject) => {
     getOne(id)
       .then((user) => {
@@ -56,6 +56,7 @@ const editOne = ({ id, name, email, password, role }) => {
         if (email) user.email = email;
         if (password) user.password = password;
         if (role) user.role = role;
+        if (address) user.address = address;
 
         return user.save();
       })

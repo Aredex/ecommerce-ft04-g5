@@ -59,6 +59,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       unique: true,
     },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: false,
+    },
   });
   User.prototype.compare = function (pass) {
     return bcrypt.compareSync(pass, this.password);

@@ -1,5 +1,5 @@
 const mercadopago = require('mercadopago');
-const { confirmedOrder } = require('../controllers/orders');
+const { confirmedOrder, getOne } = require('../controllers/orders');
 
 const router = require("express").Router();
 
@@ -37,23 +37,26 @@ let preference = {
 };
 
 router.route('/meli/callback').get(async (req, res) => {
-  req.query
-  const { body } = await mercadopago.payment.get(req.query.collection_id)
-  try {
-    await confirmedOrder({
-      id: req.query.external_reference,
-      payment_method_id: body.payment_method_id,
-      payment_type_id: body.payment_type_id,
-      payment_status: body.status,
-      payment_status_detail: body.status_detail,
-      card_expiration_month: body.card.expiration_month,
-      card_expiration_year: body.card.expiration_year,
-      card_first_six_digits: body.card.first_six_digits,
-      card_last_four_digits: body.card.last_four_digits
-    })
-    res.redirect('http://localhost:3000/checkout/success')
-  } catch (error) {
-    res.status(200).json(error)
+  if (req.query.collection_status !== 'null') {
+    try {
+      const { body } = await mercadopago.payment.get(req.query.collection_id)
+      await confirmedOrder({
+        id: req.query.external_reference,
+        payment_method_id: body.payment_method_id,
+        payment_type_id: body.payment_type_id,
+        payment_status: body.status,
+        payment_status_detail: body.status_detail,
+        card_expiration_month: body.card.expiration_month,
+        card_expiration_year: body.card.expiration_year,
+        card_first_six_digits: body.card.first_six_digits,
+        card_last_four_digits: body.card.last_four_digits
+      })
+      res.redirect('http://localhost:3000/checkout/success')
+    } catch (error) {
+      res.status(200).json(error)
+    }
+  } else {
+    res.redirect(`http://localhost:3000/checkout/cancel?order=${req.query.external_reference}`)
   }
 })
 module.exports = router;
