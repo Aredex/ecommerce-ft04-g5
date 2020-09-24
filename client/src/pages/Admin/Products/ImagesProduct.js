@@ -6,7 +6,7 @@ import {
 } from "Disparchers/productImages";
 import "./imageProduct.scss";
 
-const ImagesProduct = ({ id }) => {
+const ImagesProduct = ({ id, estado }) => {
   const dispatch = useDispatch();
   const { productActive, productImages } = useSelector(
     (state) => state.imageProduct
@@ -21,21 +21,25 @@ const ImagesProduct = ({ id }) => {
   }, [id, dispatch]);
 
   return (
-    <div className="ip__container">
-      {productImages &&
-        productImages.map(({ id, url }) => (
-          <div key={id} className="ip__image-container">
-            <button
-              onClick={() => {
-                handleDeleteImage(id);
-              }}
-              className="ip__delete"
-            >
-              x
-            </button>
-            <img className="ip__image" src={url} alt={id} />
-          </div>
-        ))}
+    <div>
+      <div className="ip__container">
+        {productImages &&
+          productImages.map(({ id, url }) => (
+            <div key={id} className="ip__image-container">
+              {estado.update && (
+                <button
+                  onClick={() => {
+                    handleDeleteImage(id);
+                  }}
+                  className="ip__delete"
+                >
+                  x
+                </button>
+              )}
+              <img className="ip__image" src={url} alt={id} />
+            </div>
+          ))}
+      </div>
     </div>
   );
 };

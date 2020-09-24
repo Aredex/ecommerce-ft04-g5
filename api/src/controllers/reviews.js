@@ -106,9 +106,8 @@ const createReviewComplete = async ({
   description,
   idReview,
 }) => {
-  let review = null;
-
-  let product,
+  let review = null,
+    product,
     user,
     promises = [];
 
@@ -122,14 +121,22 @@ const createReviewComplete = async ({
   }
 
   if (user && product) {
-    const reviesofUser = await user.getReviews();
-    const review = reviesofUser.find(
+    const reviesOfUser = await user.getReviews();
+    const review = reviesOfUser.find(
       (review) => review.productId === product.id
     );
     if (review) {
-      return new Promise((resolve, reject) => {
-        reject({ error: { message: "Error, no creada" } });
-      });
+      try {
+        const reviewEdited = await editOne({
+          id: review.id,
+          stars,
+          title,
+          description,
+        });
+        return reviewEdited;
+      } catch (err) {
+        throw new Error(err);
+      }
     }
   }
 
@@ -147,17 +154,16 @@ const createReviewComplete = async ({
   }
 
   if (idProduct || idUser) {
-    return new Promise((resolve, reject) => {
-      Promise.all(promises)
-        .then((res) => resolve(res[0]))
-        .catch((err) => reject({ error: err }));
-    });
+    try {
+      const reviewResolved = await Promise.all(promises);
+      return reviewResolved[0];
+    } catch (err) {
+      throw new Error({ error: err });
+    }
   }
 
-  return new Promise((resolve, reject) => {
-    if (review) resolve(review);
-    else reject({ error: { message: "Error, no creada" } });
-  });
+  if (review) return review;
+  else throw new Error({ error: { message: "Error, no creada" } });
 };
 
 module.exports = {

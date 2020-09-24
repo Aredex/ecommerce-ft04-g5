@@ -170,7 +170,7 @@ const removeProductToOrder = async (idProduct, idOrder) => {
             return await Order.destroy()
         }
         return product_order;
-    } catch (err) { return error }
+    } catch (err) { return err }
 };
 
 module.exports = {

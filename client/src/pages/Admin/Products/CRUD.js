@@ -1,17 +1,47 @@
-import React from "react";
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
 import style from "./CRUD.module.scss";
 import InputField from "components/InputField";
 import TextareaField from "components/TextareaField";
 import Modal from "components/Modal";
 import TagField from "components/TagField";
+import { useForm } from "hooks/useForm";
 import ImagesProduct from "./ImagesProduct";
 
 const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
+  const [addingImage, setAddingImage] = useState(false);
+  const [{ imageUrl }, handleInputChange, resetImageUrl] = useForm({
+    imageUrl: "",
+  });
+
+  const isUrl = (url) => {
+    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/;
+    return regexp.test(url);
+  };
+
+  const handleAddImg = (setFieldValue, values) => {
+    if (!addingImage) {
+      setAddingImage(true);
+    }
+
+    if (addingImage && imageUrl.length > 0) {
+      if (isUrl(imageUrl)) {
+        setFieldValue(
+          "imageUrl",
+          values.imageUrl ? [...values.imageUrl, imageUrl] : [imageUrl]
+        );
+      }
+
+      resetImageUrl();
+      setAddingImage(false);
+    }
+  };
+
   const prefixStyle = { width: "8rem" };
   return (
     <Formik initialValues={formikData} onSubmit={onSubmit}>
-      {({ values, handleSubmit }) => (
+      {({ values, handleSubmit, setFieldValue }) => (
         <Modal>
           <Modal.Header>
             <>
@@ -29,7 +59,10 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                 name="name"
                 readOnly={estado.readOnly}
               />
-              <ImagesProduct id={values.id} />
+              {!estado.create && (
+                <ImagesProduct estado={estado} id={values.id} />
+              )}
+
               <TextareaField
                 prefix="Descripción"
                 name="description"
@@ -49,16 +82,29 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                 name="stock"
                 readOnly={estado.readOnly}
               />
-              {estado.create && (
-                <>
-                  <InputField
-                    prefix="URL de imagen"
-                    name="imageUrl"
-                    prefixStyle={prefixStyle}
-                    readOnly={estado.readOnly}
-                  />
-                </>
-              )}
+
+              <>
+                {addingImage && (
+                  <div>
+                    <InputField
+                      prefix="URL de imagen"
+                      name="imageUrl"
+                      prefixStyle={prefixStyle}
+                      readOnly={estado.readOnly}
+                      onChange={handleInputChange}
+                      value={imageUrl}
+                    />
+                  </div>
+                )}
+
+                <div
+                  className={style.primary}
+                  onClick={() => handleAddImg(setFieldValue, values)}
+                >
+                  {addingImage ? "Aceptar" : "Añadir nueva imagen"}
+                </div>
+              </>
+
               <TagField
                 prefix="Categorías"
                 name="categories"
