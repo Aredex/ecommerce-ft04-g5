@@ -4,11 +4,11 @@ const isUser = require("../lib/isUser");
 
 
 const {
-  createOne,
-  getAll,
-  getOne,
-  editOne,
-  deleteOne,
+    createOne,
+    getAll,
+    getOne,
+    editOne,
+    deleteOne,
 } = require("../controllers/users");
 const {
     getOrderByUser
@@ -63,16 +63,18 @@ router
             name,
             email,
             password,
-            role
+            role,
+            address
         } = req.body;
         if (isAdmin(req) || (isUser(req) && req.user.uid === id)) {
             editOne({
-                    id,
-                    name,
-                    email,
-                    password,
-                    role
-                })
+                id,
+                name,
+                email,
+                password,
+                role,
+                address
+            })
                 .then((user) => res.json(user))
                 .catch((err) => res.status(400).json({
                     err
@@ -120,8 +122,8 @@ router.route("/:id/reviews").get((req, res) => {
 
     if (isAdmin(req) || (isUser(req) && req.user.uid === id)) {
         getReviews({
-                idUser: id
-            })
+            idUser: id
+        })
             .then((reviews) => res.json(reviews).status(200))
             .catch((err) => res.json(err));
     } else {
@@ -135,9 +137,9 @@ router.route("/:id/toadmin").put((req, res) => {
     } = req.params;
     if (isAdmin(req)) {
         editOne({
-                id,
-                role: "ADMIN"
-            })
+            id,
+            role: "ADMIN"
+        })
             .then((user) => res.json(user))
             .catch((err) => res.status(400).json({
                 err
@@ -153,9 +155,9 @@ router.route("/:id/toguest").put((req, res) => {
     } = req.params;
     if (isAdmin(req)) {
         editOne({
-                id,
-                role: "GUEST"
-            })
+            id,
+            role: "GUEST"
+        })
             .then((user) => res.json(user))
             .catch((err) => res.status(400).json({
                 err
