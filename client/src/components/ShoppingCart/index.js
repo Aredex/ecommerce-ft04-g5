@@ -3,12 +3,13 @@ import style from "./index.module.scss";
 import { useRouteMatch, useHistory } from "react-router";
 import useOrders from "hooks/useOrders";
 import ItemCard from "components/ItemCard";
+import emptyDraw from 'assets/shoppingCartEmpty.svg'
 
 function ShoppingCart() {
   const [showCart, setShowCart] = useState(false);
 
   const { isExact: isHome } = useRouteMatch("/");
-  const history = useHistory();
+  const { push } = useHistory();
 
   useEffect(() => {
     setShowCart(false);
@@ -54,20 +55,26 @@ function ShoppingCart() {
           </button>
         </header>
         <section>
-          {shoppingCart &&
-            shoppingCart.products &&
-            Array.isArray(shoppingCart.products)
-            ? shoppingCart.products.map((product) => <ItemCard
-              key={product.id}
-              product={product}
-              removeProduct={removeProduct}
-              increseAmount={increseAmount}
-              decreaseAmount={decreaseAmount}
-              showPrice
-              showQuantity
-            />
-            )
-            : null}
+          {shoppingCart ?
+            (shoppingCart.products &&
+              Array.isArray(shoppingCart.products)
+              ? shoppingCart.products.map((product) => <ItemCard
+                key={product.id}
+                product={product}
+                removeProduct={removeProduct}
+                increseAmount={increseAmount}
+                decreaseAmount={decreaseAmount}
+                showPrice
+                showQuantity
+              />
+              )
+              : null) : <><img src={emptyDraw} alt="" className={style.emptyDraw} />
+              <button
+                className={style.buttonToProducts}
+                onClick={() => push("/products")}
+              >
+                ver nuestro catalogo
+          </button></>}
         </section>
         <section>
           {shoppingCart && (
@@ -85,7 +92,7 @@ function ShoppingCart() {
                 className={style.checkOut}
                 onClick={() => {
                   setShowCart(false);
-                  history.push("/checkout");
+                  push("/checkout");
                 }}
               >
                 Finalizar orden
