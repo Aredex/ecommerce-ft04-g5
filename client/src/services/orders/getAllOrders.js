@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function getAllOrders() {
   return axios
-    .get(`http://localhost:3001/orders`)
+    .get(`${process.env.API}/orders`)
     .then((response) => {
       return response.data;
     })

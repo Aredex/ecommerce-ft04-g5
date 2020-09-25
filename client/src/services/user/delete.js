@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function remove(id) {
   return axios
-    .delete(`http://localhost:3001/users/${id}`)
+    .delete(`${process.env.API}/users/${id}`)
     .then((response) => {
       return response.data;
     })

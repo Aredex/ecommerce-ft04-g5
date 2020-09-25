@@ -8,7 +8,7 @@ export default async function create(
   imageUrl
 ) {
   return axios
-    .post(`http://localhost:3001/products`, {
+    .post(`${process.env.API}/products`, {
       name,
       description,
       price,

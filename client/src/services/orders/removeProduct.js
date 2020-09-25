@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function removeProduct(idOrder, idProduct) {
   return axios
-    .delete(`http://localhost:3001/orders/${idOrder}/product/${idProduct}`)
+    .delete(`${process.env.API}/orders/${idOrder}/product/${idProduct}`)
     .then((respose) => {
       return respose.data;
     })

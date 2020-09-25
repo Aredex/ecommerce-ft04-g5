@@ -79,7 +79,7 @@ export default function SignIn() {
             <div className={style.buttonGroup}>
               <button
                 onClick={() =>
-                  (window.location = "http://localhost:3001/auth/login/google")
+                  (window.location = `${process.env.API}/auth/login/google`)
                 }
               >
                 <i className="fab fa-google"></i>
@@ -87,7 +87,7 @@ export default function SignIn() {
               <button
                 onClick={() =>
                   (window.location =
-                    "http://localhost:3001/auth/login/facebook")
+                    `${process.env.API}/auth/login/facebook`)
                 }
               >
                 <i className="fab fa-facebook"></i>

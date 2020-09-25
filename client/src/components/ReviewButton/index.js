@@ -64,7 +64,7 @@ const ModalReview = ({ reviews, onClose, idProduct }) => {
       idUser: localUser.user.id,
       idProduct
     }
-    await Axios.post('http://localhost:3001/reviews', data)
+    await Axios.post(`${process.env.API}/reviews`, data)
     dispatch(getProductDetail(idProduct));
   };
 

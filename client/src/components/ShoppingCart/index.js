@@ -73,7 +73,7 @@ function ShoppingCart() {
                 className={style.buttonToProducts}
                 onClick={() => push("/products")}
               >
-                ver nuestro catalogo
+                nuestro catalogo
           </button></>}
         </section>
         <section>
