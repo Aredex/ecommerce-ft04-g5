@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import style from "./index.module.scss";
-import CRUD from "./CRUD"
 import * as actionsOrders from "store/Actions/Orders";
 import { useHistory } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
-import { removeOrder } from "services/orders";
 import Select from './Select';
 
 
@@ -84,7 +82,7 @@ useEffect(() => {
           </tr>
         </thead>
         <tbody>
-          {orders != undefined &&
+          {orders !== undefined &&
             orders.map(({ id, userId, status, createdAt, updatedAt, address}) => (
               <tr key={id}>
                 <td>{id}</td>
