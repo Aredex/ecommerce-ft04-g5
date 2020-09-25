@@ -13,7 +13,7 @@ const {
 const { getOrderByUser } = require("../controllers/users_order");
 const { getAll: getReviews } = require("../controllers/reviews");
 
-const {passwordReset} =require("../mailmodel/passwordReset")
+const { passwordReset } = require("../mailmodel/passwordReset")
 const jwt = require('jsonwebtoken');
 const secret = process.env.AUTH_SECRET || 'secret';
 
@@ -146,24 +146,24 @@ router.route("/:id/toguest").put((req, res) => {
 
 router.route("/reset/resetpassword")
   .put((req, res) => {
-  const { newPassword , token} = req.body;
-  jwt.verify(token,secret,(error,user)=>{
-    if(error) res.sendStatus(401)
-    else{
-      editOne({ id:user.uid, password: newPassword })
-      .then((user) => res.json(user))
-      .catch((err) => res.status(400).json({ err }));
-    }
-  })
-});
+    const { newPassword, token } = req.body;
+    jwt.verify(token, secret, (error, user) => {
+      if (error) res.sendStatus(401)
+      else {
+        editOne({ id: user.uid, password: newPassword })
+          .then((user) => res.json(user))
+          .catch((err) => res.status(400).json({ err }));
+      }
+    })
+  });
 
 router.route("/reset/password")
-.post((req,res)=>{
- getOneByEmail(req.body.email)
- .then((user)=>{
-   var html = passwordReset(user)
-   res.send(html)
- })
-})
+  .post((req, res) => {
+    getOneByEmail(req.body.email)
+      .then((user) => {
+        var html = passwordReset(user)
+        res.send(html)
+      })
+  })
 
 module.exports = router;

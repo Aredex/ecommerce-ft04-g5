@@ -1,4 +1,4 @@
-import React, { useEffect , useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
 import logo from "logo.svg";
@@ -14,8 +14,8 @@ export default function Reset() {
   const { localUser } = useUser()
   const history = useHistory()
 
-  const [visible ,setVisible] = useState(false)
-  const [error ,setError] = useState({})
+  const [visible, setVisible] = useState(false)
+  const [error, setError] = useState({})
 
   useEffect(() => {
     if (localUser) history.push('/')
@@ -25,31 +25,31 @@ export default function Reset() {
 
   const query = useQuery();
 
- 
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     onSubmit: (values) => {
-      resetPassword(query.token,values.password);
+      resetPassword(values.password, query.token);
       history.push("/");
     }
   });
-  
-  useEffect(()=>{
-    let error={}
+
+  useEffect(() => {
+    let error = {}
     if (!formik.values.password) {
       error.password = 'Escriba una contraseña';
     } else if (!/(?=.*[0-9])/.test(formik.values.password)) {
       error.password = 'La contraseña es invalida, debe tener al menos un numero';
     }
-    if(formik.values.password != formik.values.passwordC){
+    if (formik.values.password != formik.values.passwordC) {
       error.passwordC = 'Las contraseñas no coinciden'
     }
     setError(error)
     console.log(error)
-  },[formik.values])
+  }, [formik.values])
 
 
   return (
@@ -65,7 +65,7 @@ export default function Reset() {
               placeholder="Nueva contraseña"
               onChange={formik.handleChange}
             />
-            {error.password &&(<p>{error.password}</p>)}
+            {error.password && (<p>{error.password}</p>)}
             <input
               name="passwordC"
               type="password"
@@ -73,7 +73,7 @@ export default function Reset() {
               autoComplete="on"
               onChange={formik.handleChange}
             />
-            {error.passwordC &&(<p>{error.passwordC}</p>)}
+            {error.passwordC && (<p>{error.passwordC}</p>)}
             <input
               type="submit"
               className={!error.password && !error.passwordC ? style.buttonSubmit : style.buttonSubmitDisabled}
