@@ -34,8 +34,8 @@ export default function SignIn() {
       email: "",
       password: "",
     },
-    onSubmit: (values) => {
-      loginWithEmail(values.email, values.password);
+    onSubmit: async (values) => {
+      await loginWithEmail(values.email, values.password);
       history.push("/");
     },
   });
@@ -64,6 +64,12 @@ export default function SignIn() {
               className={style.buttonSubmit}
               value="Iniciar"
             />
+            <span
+              className={style.a}
+              onClick={() => history.push("/reset")}
+            >
+              Olvide la contraseña
+              </span>
           </form>
 
           <div className={style.otherMethods}>

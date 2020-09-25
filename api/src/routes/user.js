@@ -3,14 +3,20 @@ const isAdmin = require("../lib/isAdmin");
 const isUser = require("../lib/isUser");
 
 const {
-    createOne,
-    getAll,
-    getOne,
-    editOne,
-    deleteOne,
+  createOne,
+  getAll,
+  getOne,
+  editOne,
+  deleteOne,
+  getOneByEmail
 } = require("../controllers/users");
 const { getOrderByUser } = require("../controllers/users_order");
 const { getAll: getReviews } = require("../controllers/reviews");
+
+const { passwordReset } = require("../mailmodel/passwordReset")
+const jwt = require('jsonwebtoken');
+const secret = process.env.AUTH_SECRET || 'secret';
+
 
 router
   .route("/")
@@ -155,15 +161,26 @@ router.route("/:id/toguest").put((req, res) => {
 
 });
 
-router.route("/:id/resetpassword").post((req, res) => {
-  const { id } = req.params;
-  const { newPassword } = req.body;
+router.route("/reset/resetpassword")
+  .put((req, res) => {
+    const { newPassword, token } = req.body;
+    jwt.verify(token, secret, (error, user) => {
+      if (error) res.sendStatus(401)
+      else {
+        editOne({ id: user.uid, password: newPassword })
+          .then((user) => res.json(user))
+          .catch((err) => res.status(400).json({ err }));
+      }
+    })
+  });
 
-  editOne({ id, password: newPassword })
-    .then((user) => res.json(user))
-    .catch((err) => res.status(400).json({ err }));
-});
-
-module.exports = router;
+router.route("/reset/password")
+  .post((req, res) => {
+    getOneByEmail(req.body.email)
+      .then((user) => {
+        var html = passwordReset(user)
+        res.send(html)
+      })
+  })
 
 module.exports = router;

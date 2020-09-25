@@ -36,6 +36,7 @@ export default function useUser() {
   async function loginWithEmail(username, password) {
     const user = await signin(username, password);
     if (user) setLocalUser(user);
+    dispatch(getUser(user));
   }
 
   async function loginWithToken(token) {

@@ -100,6 +100,7 @@ const Products = ({
     }
     if (bandera.create) {
       onSubmit = async (values) => {
+        console.log(values.categories)
         var { name, description, price, stock, imageUrl, categories } = values;
 
         imageUrl = imageUrl
