@@ -2,6 +2,7 @@
 
 .page {
   width: stretch;
+width: -moz-available;
   max-width: 45rem;
   margin: 0 auto;
 }
@@ -16,6 +17,7 @@
 .emptyDraw {
   height: 50vh;
   width: stretch;
+width: -moz-available;
   max-width: 45rem;
   margin: 0 auto;
   object-fit: contain;
@@ -25,6 +27,7 @@
 .draw {
   height: 50vh;
   width: stretch;
+width: -moz-available;
   margin: 0 auto;
   object-fit: contain;
   padding: 2rem;
@@ -55,6 +58,7 @@
   margin: 0 1rem;
   margin-top: 1.5rem;
   width: stretch;
+width: -moz-available;
   border-top: solid 1px #a3a3a3;
   span {
     font-weight: 600;
@@ -63,6 +67,7 @@
   .money {
     text-align: right;
     width: stretch;
+width: -moz-available;
   }
 }
 

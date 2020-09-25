@@ -11,6 +11,7 @@ import Products from "pages/Products";
 import Checkout from "pages/Checkout";
 import Success from "pages/Checkout/Success";
 import Cancel from "pages/Checkout/Cancel";
+import Profile from "pages/Profile";
 
 const Routes = () => {
   return (
@@ -21,6 +22,7 @@ const Routes = () => {
       <Route exact path="/checkout/success" component={Success} />
       <Route exact path="/checkout/cancel" component={Cancel} />
       <Route exact path="/products/:id" component={Product}></Route>
+      <Route path="/profile" component={Profile}></Route>
       <Route exact path="/sign-in" component={SignIn}></Route>
       <Route exact path="/reset" component={Reset}></Route>
       <Route exact path="/sign-up" component={SignUp}></Route>
