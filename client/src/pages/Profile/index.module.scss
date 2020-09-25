@@ -1,0 +1,46 @@
+@import "bp.scss";
+@import "var.scss";
+
+.page {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 10rem 1fr;
+  min-height: 100%;
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+
+  aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .navLink {
+      text-decoration: none;
+      color: #111;
+      padding: 0.5rem 1.25rem;
+      font-weight: 400;
+    }
+    .activeNav {
+      font-weight: 600;
+    }
+  }
+}
+
+.error {
+  color: $--danger-color;
+  border-color: $--danger-color;
+
+  button[type="submit"] {
+    border-color: $--danger-color;
+    background: $--danger-color;
+    color: #fff;
+    user-select: none;
+    cursor: not-allowed;
+
+    &:hover {
+      border-color: $--danger-color;
+      background: $--danger-color;
+      }
+  }
+}

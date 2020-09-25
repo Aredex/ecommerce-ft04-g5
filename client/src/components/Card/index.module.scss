@@ -18,27 +18,29 @@
 
 .header {
   font-weight: 600;
-    text-align: left;
-    width: stretch;
-    margin: 0;
-    padding: 0.25rem 0.5rem;
-    border-bottom: solid 1px #e3e3e3;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  text-align: left;
+  width: stretch;
+  margin: 0;
+  padding: 0.25rem 0.5rem;
+  border-bottom: solid 1px #e3e3e3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &::first-letter {
     text-transform: capitalize;
+  }
 
-    i {
-      cursor: pointer;
-      transition: color 0.25s;
+  i {
+    cursor: pointer;
+    transition: color 0.25s;
 
-      &:hover {
-        color: $--danger-color;
-      }
+    &:hover {
+      color: $--danger-color;
     }
+  }
 }
 
 .body {
