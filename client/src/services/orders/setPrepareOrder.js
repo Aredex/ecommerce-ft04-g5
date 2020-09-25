@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function setPrepareOrder(idOrder, address) {
   return axios
-    .put(`http://localhost:3001/orders/${idOrder}/preparing`, { address })
+    .put(`${process.env.API}/orders/${idOrder}/preparing`, { address })
     .then((response) => {
       return response.data;
     })

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function removeEmptyOrder(id) {
   return axios
-    .delete(`http://localhost:3001/order/${id}/empty`)
+    .delete(`${process.env.API}/order/${id}/empty`)
     .then((response) => {
       return response.data;
     })
