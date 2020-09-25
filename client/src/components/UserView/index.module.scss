@@ -3,6 +3,7 @@
 .divPrincipal {
     margin: 5px;
     width: stretch;
+width: -moz-available;
     text-align: end;
     flex-direction: column;
 }
@@ -23,6 +24,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         width: stretch;
+width: -moz-available;
     }
     img {
         margin-right: 0.5rem;

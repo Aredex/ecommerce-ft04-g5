@@ -109,6 +109,7 @@ const confirmedOrder = async ({
     Order.card_first_six_digits = card_first_six_digits
     Order.card_last_four_digits = card_last_four_digits
     await Order.save()
+    return Order
 };
 
 const toPaymentOrder = async ({

@@ -17,22 +17,21 @@
 }
 
 .header {
-  font-weight: 600;
-  text-align: left;
-  width: stretch;
-  margin: 0;
-  padding: 0.25rem 0.5rem;
-  border-bottom: solid 1px #e3e3e3;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  &::first-letter {
+    font-weight: 600;
+    text-align: left;
+    width: stretch;
+    width: -moz-available;
+    margin: 0;
+    padding: 0.25rem 0.5rem;
+    border-bottom: solid 1px #e3e3e3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-transform: capitalize;
-  }
-
+    
   i {
     cursor: pointer;
     transition: color 0.25s;
@@ -46,6 +45,7 @@
 .body {
   text-align: left;
   width: stretch;
+  width: -moz-available;
   margin: 0;
   padding: 0.25rem 0.5rem;
   font-size: 0.75rem;

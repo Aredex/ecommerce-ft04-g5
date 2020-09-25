@@ -1,5 +1,6 @@
 const mercadopago = require('mercadopago');
 const { confirmedOrder, getOne } = require('../controllers/orders');
+const { sendEmail } = require('../mailmodel/sendEmail');
 
 const router = require("express").Router();
 
@@ -40,7 +41,7 @@ router.route('/meli/callback').get(async (req, res) => {
   if (req.query.collection_status !== 'null') {
     try {
       const { body } = await mercadopago.payment.get(req.query.collection_id)
-      await confirmedOrder({
+      const order_product = await confirmedOrder({
         id: req.query.external_reference,
         payment_method_id: body.payment_method_id,
         payment_type_id: body.payment_type_id,
@@ -51,6 +52,7 @@ router.route('/meli/callback').get(async (req, res) => {
         card_first_six_digits: body.card.first_six_digits,
         card_last_four_digits: body.card.last_four_digits
       })
+      sendEmail(order_product)
       res.redirect('http://localhost:3000/checkout/success')
     } catch (error) {
       res.status(200).json(error)
