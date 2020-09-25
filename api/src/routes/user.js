@@ -38,49 +38,66 @@ router
   });
 
 router
-  .route("/:id")
-  .get((req, res) => {
-    const { id } = req.params;
-    if (isAdmin(req) || (isUser(req) && req.user.uid == id)) {
-      getOne(id)
-        .then((user) => res.json(user))
-        .catch((err) => res.status(404).json(err));
-    } else {
-      res.sendStatus(401);
-    }
-  })
-  .put((req, res) => {
-    const { id } = req.params;
-    const { name, email, password, role } = req.body;
-    if (isAdmin(req) || (isUser(req) && req.user.uid === id)) {
-      editOne({
-        id,
-        name,
-        email,
-        password,
-        role,
-      })
-        .then((user) => res.json(user))
-        .catch((err) =>
-          res.status(400).json({
-            err,
-          })
-        );
-    } else {
-      res.sendStatus(401);
-    }
-  })
-  .delete((req, res) => {
-    const { id } = req.params;
 
-    if (isAdmin(req) || (isUser(req) && req.user.uid === id)) {
-      deleteOne(id)
-        .then((user) => res.json(user).status(200))
-        .catch((err) => res.status(400).json(err));
-    } else {
-      res.sendStatus(401);
-    }
-  });
+    .route("/:id")
+    .get((req, res) => {
+        const {
+            id
+        } = req.params;
+        if (isAdmin(req) || (isUser(req) && req.user.uid == id)) {
+            getOne(id)
+                .then((user) => res.json(user))
+                .catch((err) => res.status(404).json(err));
+        } else {
+            res.sendStatus(401)
+        }
+    })
+    .put((req, res) => {
+        const {
+            id
+        } = req.params;
+        const {
+            name,
+            email,
+            password,
+            role,
+            address
+        } = req.body;
+        if (isAdmin(req) || (isUser(req) && req.user.uid === id)) {
+            editOne({
+                id,
+                name,
+                email,
+                password,
+                role,
+                address
+            })
+                .then((user) => res.json(user))
+                .catch((err) => res.status(400).json({
+                    err
+                }));
+        } else {
+            res.sendStatus(401)
+        }
+
+
+
+    })
+    .delete((req, res) => {
+        const {
+            id
+        } = req.params;
+
+        if (isAdmin(req) || (isUser(req) && req.user.uid === id)) {
+            deleteOne(id)
+                .then((user) => res.json(user).status(200))
+                .catch((err) => res.status(400).json(err));
+        } else {
+            res.sendStatus(401)
+        }
+
+    });
+
 
 router.route("/:id/orders").get((req, res) => {
   const { id } = req.params;
@@ -96,7 +113,6 @@ router.route("/:id/orders").get((req, res) => {
 // Retorna todas las reviews hechas por el usuario según su id
 router.route("/:id/reviews").get((req, res) => {
   const { id } = req.params;
-
   if (isAdmin(req) || (isUser(req) && req.user.uid === id)) {
     getReviews({
       idUser: id,
@@ -142,6 +158,7 @@ router.route("/:id/toguest").put((req, res) => {
   } else {
     res.sendStatus(401);
   }
+
 });
 
 router.route("/reset/resetpassword")

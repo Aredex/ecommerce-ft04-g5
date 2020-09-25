@@ -56,9 +56,15 @@ export default function useUser() {
     if (user) setLocalUser(user);
   }
 
+  async function updateUserData(user) {
+    console.log(user)
+    const { data } = await Axios.put(`http://localhost:3001/users/${user.id}`, user);
+    if (data) setLocalUser({ ...localUser, user: data });
+  }
+
   function logOut() {
     removeLocalUser();
   }
 
-  return { localUser, register, loginWithEmail, loginWithToken, logOut, isAdmin, userLogin };
+  return { localUser, register, loginWithEmail, loginWithToken, logOut, isAdmin, userLogin, updateUserData };
 }

@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import { getOrderById } from "services/orders";
 import style from "./OrderDetail.module.scss";
 import InputField from "components/InputField";
+import { Formik } from "formik";
 
 function OrderDetail() {
   const prefixStyle = { width: "8rem" };
@@ -23,68 +24,72 @@ function OrderDetail() {
     <div>
       {order && (
         <section>
-          <div className={style.row}>
-            <InputField
-              value={order.id}
-              prefix="Orden Nº"
-              name="id"
-              prefixStyle={prefixStyle}
-              readOnly
-              style={InputStyle}
-            />
-          </div>
-          <div className={style.row}>
-            <InputField
-              value={order.user.name}
-              prefix="Cliente"
-              name="userId"
-              prefixStyle={prefixStyle}
-              readOnly
-              style={InputStyle}
-            />
-            <InputField
-              value={order.address}
-              prefix="Dirección"
-              name="address"
-              prefixStyle={prefixStyle}
-              readOnly
-              style={InputStyle}
-            />
-            <InputField
-              value={order.status}
-              prefix="Status"
-              name="status"
-              prefixStyle={prefixStyle}
-              readOnly
-              style={InputStyle}
-            />
-          </div>
-          <div className={style.row}>
-            <InputField
-              value={new Date(order.createdAt).toLocaleString()}
-              prefix="F. creación"
-              name="createdAt"
-              prefixStyle={prefixStyle}
-              readOnly
-              style={InputStyle}
-            />
-            <InputField
-              value={new Date(order.updatedAt).toLocaleString()}
-              prefix="F. modificación"
-              name="updatedAt"
-              prefixStyle={prefixStyle}
-              readOnly
-              style={InputStyle}
-            />
-            <InputField
-              value={`$ ${parseFloat(total).toFixed(2)}`}
-              prefix="Total"
-              name="total"
-              prefixStyle={prefixStyle}
-              readOnly
-              style={InputStyle}
-            />
-          </div>
+          <Formik>
+            <>
+              <div className={style.row}>
+                <InputField
+                  value={order.id}
+                  prefix="Orden Nº"
+                  name="id"
+                  prefixStyle={prefixStyle}
+                  readOnly
+                  style={InputStyle}
+                />
+              </div>
+              <div className={style.row}>
+                <InputField
+                  value={order.user.name}
+                  prefix="Cliente"
+                  name="userId"
+                  prefixStyle={prefixStyle}
+                  readOnly
+                  style={InputStyle}
+                />
+                <InputField
+                  value={order.address}
+                  prefix="Dirección"
+                  name="address"
+                  prefixStyle={prefixStyle}
+                  readOnly
+                  style={InputStyle}
+                />
+                <InputField
+                  value={order.status}
+                  prefix="Status"
+                  name="status"
+                  prefixStyle={prefixStyle}
+                  readOnly
+                  style={InputStyle}
+                />
+              </div>
+              <div className={style.row}>
+                <InputField
+                  value={new Date(order.createdAt).toLocaleString()}
+                  prefix="F. creación"
+                  name="createdAt"
+                  prefixStyle={prefixStyle}
+                  readOnly
+                  style={InputStyle}
+                />
+                <InputField
+                  value={new Date(order.updatedAt).toLocaleString()}
+                  prefix="F. modificación"
+                  name="updatedAt"
+                  prefixStyle={prefixStyle}
+                  readOnly
+                  style={InputStyle}
+                />
+                <InputField
+                  value={`$ ${parseFloat(total).toFixed(2)}`}
+                  prefix="Total"
+                  name="total"
+                  prefixStyle={prefixStyle}
+                  readOnly
+                  style={InputStyle}
+                />
+              </div>
+            </>
+          </Formik>
         </section>
       )}
       <section>

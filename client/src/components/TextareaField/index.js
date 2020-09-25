@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { useFormikContext } from "formik";
+import { Field, useFormikContext } from "formik";
 import style from "./index.module.scss";
 
 function TextareaField(props) {
@@ -12,19 +12,25 @@ function TextareaField(props) {
       : formikContext.setFieldValue(props.name, event.target.value);
   }
 
+  useEffect(() => {
+    formikContext.validateField && formikContext.validateField(props.name)
+  }, [formikContext.validateField])
+
   return (
-    <div className={style.inputField}>
+    <div className={style.inputField} style={props.style}>
       <div className={style.prefix} style={props.prefixStyle}>
         {props.prefix}
       </div>
       <div className={style.input}>
-        <textarea
+        <Field
+          as="textarea"
           rows={5}
           name={props.name}
           value={props.value ? props.value : formikContext.values[props.name]}
           type={props.type}
           onChange={handleChange}
           readOnly={props.readOnly}
+          validate={props.validate}
         />
       </div>
       <div className={style.sufix}>{props.sufix}</div>
