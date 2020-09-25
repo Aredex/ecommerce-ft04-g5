@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function getOrderById(id) {
   return axios
-    .get(`${process.env.API}/orders/${id}`)
+    .get(`${process.env.REACT_APP_API}/orders/${id}`)
     .then((response) => {
       return response.data;
     })

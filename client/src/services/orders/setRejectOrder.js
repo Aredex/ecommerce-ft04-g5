@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function setRejectOrder(idOrder, address) {
   return axios
-    .put(`${process.env.API}/orders/${idOrder}/rejected`, { address })
+    .put(`${process.env.REACT_APP_API}/orders/${idOrder}/rejected`, { address })
     .then((response) => {
       return response.data;
     })

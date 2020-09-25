@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function setCompletedOrder(idOrder) {
   return axios
-    .put(`${process.env.API}/orders/${idOrder}/finalized`)
+    .put(`${process.env.REACT_APP_API}/orders/${idOrder}/finalized`)
     .then((response) => {
       return response.data;
     })

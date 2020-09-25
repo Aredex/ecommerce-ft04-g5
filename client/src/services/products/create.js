@@ -8,7 +8,7 @@ export default async function create(
   imageUrl
 ) {
   return axios
-    .post(`${process.env.API}/products`, {
+    .post(`${process.env.REACT_APP_API}/products`, {
       name,
       description,
       price,

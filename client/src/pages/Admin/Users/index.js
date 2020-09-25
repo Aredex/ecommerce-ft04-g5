@@ -8,15 +8,15 @@ const Users = () => {
   const [users, setUsers] = useState([]);
   const [formikData, setFormikData] = useState(null);
   const getAll = useCallback(() => {
-    Axios.get(`${process.env.API}/users`).then(({ data }) => setUsers(data));
+    Axios.get(`${process.env.REACT_APP_API}/users`).then(({ data }) => setUsers(data));
   }, []);
   const getById = useCallback((id) => {
-    return Axios.get(`${process.env.API}/users/${id}`).then(
+    return Axios.get(`${process.env.REACT_APP_API}/users/${id}`).then(
       ({ data }) => data
     );
   }, []);
   const update = useCallback(({ id, name, email, password, role }) => {
-    return Axios.put(`${process.env.API}/users/${id}`, {
+    return Axios.put(`${process.env.REACT_APP_API}/users/${id}`, {
       name,
       email,
       password,
@@ -25,7 +25,7 @@ const Users = () => {
   }, []);
 
   const create = useCallback(({ name, email, password, role }) => {
-    return Axios.post(`${process.env.API}/users/`, {
+    return Axios.post(`${process.env.REACT_APP_API}/users/`, {
       name,
       email,
       password,
@@ -33,7 +33,7 @@ const Users = () => {
     }).then(({ data }) => data);
   }, []);
   const remove = useCallback((id) => {
-    return Axios.delete(`${process.env.API}/users/${id}`).then(
+    return Axios.delete(`${process.env.REACT_APP_API}/users/${id}`).then(
       ({ data }) => data
     );
   }, []);

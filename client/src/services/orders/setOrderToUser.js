@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function setOrderToUser(idOrder, idUser) {
   return axios
-    .post(`${process.env.API}/orders/${idOrder}/user/${idUser}`)
+    .post(`${process.env.REACT_APP_API}/orders/${idOrder}/user/${idUser}`)
     .then((response) => {
       return response.data;
     })

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function resetPassword(password, token) {
   return axios
-    .put(`${process.env.API}/users/reset/resetpassword`, { newPassword: password, token })
+    .put(`${process.env.REACT_APP_API}/users/reset/resetpassword`, { newPassword: password, token })
     .then((response) => {
       return response.data;
     })

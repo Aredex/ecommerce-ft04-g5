@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function setPrepareOrder(idOrder, address) {
   return axios
-    .put(`${process.env.API}/orders/${idOrder}/preparing`, { address })
+    .put(`${process.env.REACT_APP_API}/orders/${idOrder}/preparing`, { address })
     .then((response) => {
       return response.data;
     })
