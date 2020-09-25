@@ -53,12 +53,12 @@ router.route('/meli/callback').get(async (req, res) => {
         card_last_four_digits: body.card.last_four_digits
       })
       sendEmail(order_product)
-      res.redirect('http://localhost:3000/checkout/success')
+      res.redirect(`${process.env.CALLBACK_URL_BASE || 'http://localhost:3000'}/checkout/success`)
     } catch (error) {
       res.status(200).json(error)
     }
   } else {
-    res.redirect(`http://localhost:3000/checkout/cancel?order=${req.query.external_reference}`)
+    res.redirect(`${process.env.CALLBACK_URL_BASE || 'http://localhost:3000'}/checkout/cancel?order=${req.query.external_reference}`)
   }
 })
 module.exports = router;
