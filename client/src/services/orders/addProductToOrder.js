@@ -7,7 +7,7 @@ export default async function addProducToOrder(
   idUser
 ) {
   return axios
-    .post(`${process.env.API}/orders/${orderId}/product/${idProduct}`, {
+    .post(`${process.env.REACT_APP_API}/orders/${orderId}/product/${idProduct}`, {
       amount,
       idUser,
     })

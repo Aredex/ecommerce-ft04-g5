@@ -43,7 +43,7 @@ export default function useOrders() {
             // removeLocalShoppingCart()
             console.log(orderInCreation)
 
-            Axios.post(`${process.env.API}/orders/${orderInCreation.id}/products`, {
+            Axios.post(`${process.env.REACT_APP_API}/orders/${orderInCreation.id}/products`, {
               idUser: userLogin.user.id,
               products: localShoppingCart.products,
             }).then(({ data }) => {
@@ -85,7 +85,7 @@ export default function useOrders() {
             // orderInCreation = orderInCreation.products.concat(localShoppingCart.products)
             // removeLocalShoppingCart()
 
-            Axios.post(`${process.env.API}/orders/products`, {
+            Axios.post(`${process.env.REACT_APP_API}/orders/products`, {
               idUser: userLogin.user.id,
               products: localShoppingCart.products,
             }).then(({ data }) => {
@@ -157,7 +157,7 @@ export default function useOrders() {
       if (shoppingCart) {
         if (shoppingCart.id) {
           Axios.post(
-            `${process.env.API}/orders/${shoppingCart.id}/product/${id}`,
+            `${process.env.REACT_APP_API}/orders/${shoppingCart.id}/product/${id}`,
             { amount, idUser: userLogin.user.id }
           ).then(({ data }) => {
             let total = 0;
@@ -189,7 +189,7 @@ export default function useOrders() {
           );
         }
       } else {
-        Axios.post(`${process.env.API}/orders/products`, {
+        Axios.post(`${process.env.REACT_APP_API}/orders/products`, {
           idUser: userLogin.user.id,
           products: shoppingCart ? [...shoppingCart.products, { id, amount }] : [{ id, amount }],
         }).then(({ data }) => {
@@ -247,7 +247,7 @@ export default function useOrders() {
       productSearchResult.amount++;
       if (userLogin) {
         Axios.post(
-          `${process.env.API}/orders/${shoppingCart.id}/product/${productSearchResult.id}`,
+          `${process.env.REACT_APP_API}/orders/${shoppingCart.id}/product/${productSearchResult.id}`,
           { amount: productSearchResult.amount, idUser: userLogin.user.id }
         ).then(({ data }) => {
           let total = 0;
@@ -291,7 +291,7 @@ export default function useOrders() {
       productSearchResult.amount--;
       if (userLogin) {
         Axios.post(
-          `${process.env.API}/orders/${shoppingCart.id}/product/${productSearchResult.id}`,
+          `${process.env.REACT_APP_API}/orders/${shoppingCart.id}/product/${productSearchResult.id}`,
           { amount: productSearchResult.amount, idUser: userLogin.user.id }
         ).then(({ data }) => {
           let total = 0;
@@ -329,7 +329,7 @@ export default function useOrders() {
   const removeProduct = async (id) => {
     if (userLogin) {
       await Axios.delete(
-        `${process.env.API}/orders/${shoppingCart.id}/product/${id}`)
+        `${process.env.REACT_APP_API}/orders/${shoppingCart.id}/product/${id}`)
       let data = await getOrderById(shoppingCart.id)
       if (data.length === 0) {
         dispatch(

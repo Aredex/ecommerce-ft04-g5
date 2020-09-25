@@ -42,7 +42,7 @@ export default function Reset() {
       email: "",
     },
     onSubmit: async ({ email }) => {
-      await Axios.post(`${process.env.API}/users/reset/password`, { email });
+      await Axios.post(`${process.env.REACT_APP_API}/users/reset/password`, { email });
       history.push("/");
     }
   });
@@ -113,7 +113,7 @@ export default function Reset() {
             <div className={style.buttonGroup}>
               <button
                 onClick={() =>
-                  (window.location = `${process.env.API}/auth/login/google`)
+                  (window.location = `${process.env.REACT_APP_API}/auth/login/google`)
                 }
               >
                 <i className="fab fa-google"></i>
@@ -121,7 +121,7 @@ export default function Reset() {
               <button
                 onClick={() =>
                   (window.location =
-                    `${process.env.API}/auth/login/facebook`)
+                    `${process.env.REACT_APP_API}/auth/login/facebook`)
                 }
               >
                 <i className="fab fa-facebook"></i>

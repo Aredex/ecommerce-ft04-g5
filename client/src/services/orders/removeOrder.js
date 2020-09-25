@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function removeOrder(id) {
   return axios
-    .delete(`${process.env.API}/orders/${id}`)
+    .delete(`${process.env.REACT_APP_API}/orders/${id}`)
     .then((response) => {
       return response.data;
     })

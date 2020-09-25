@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function setConfirmOrder(idOrder, address) {
   return axios
-    .put(`${process.env.API}/orders/${idOrder}/confirmed`, { address })
+    .put(`${process.env.REACT_APP_API}/orders/${idOrder}/confirmed`, { address })
     .then((response) => {
       return response.data;
     })

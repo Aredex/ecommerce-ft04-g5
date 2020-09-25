@@ -41,14 +41,14 @@ export default function useUser() {
 
   async function loginWithToken(token) {
     token = token.split("#")[0];
-    const { data: user } = await Axios.get(`${process.env.API}/auth/me`, {
+    const { data: user } = await Axios.get(`${process.env.REACT_APP_API}/auth/me`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (user) setLocalUser({ user, token });
   }
 
   async function register(name, email, password) {
-    const { data: user } = await Axios.post(`${process.env.API}/auth/register`, {
+    const { data: user } = await Axios.post(`${process.env.REACT_APP_API}/auth/register`, {
       name,
       email,
       password,
@@ -58,7 +58,7 @@ export default function useUser() {
 
   async function updateUserData(user) {
     console.log(user)
-    const { data } = await Axios.put(`${process.env.API}/users/${user.id}`, user);
+    const { data } = await Axios.put(`${process.env.REACT_APP_API}/users/${user.id}`, user);
     if (data) setLocalUser({ ...localUser, user: data });
   }
 

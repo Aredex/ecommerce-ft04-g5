@@ -86,7 +86,7 @@ export default function SignUp() {
             <div className={style.buttonGroup}>
               <button
                 onClick={() =>
-                  (window.location = `${process.env.API}/auth/login/google`)
+                  (window.location = `${process.env.REACT_APP_API}/auth/login/google`)
                 }
               >
                 <i className="fab fa-google"></i>
@@ -94,7 +94,7 @@ export default function SignUp() {
               <button
                 onClick={() =>
                   (window.location =
-                    `${process.env.API}/auth/login/facebook`)
+                    `${process.env.REACT_APP_API}/auth/login/facebook`)
                 }
               >
                 <i className="fab fa-facebook"></i>
