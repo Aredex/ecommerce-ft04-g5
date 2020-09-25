@@ -53,6 +53,11 @@
         box-shadow: 0 1px 8px #c5c5c5;
       }
     }
+    p{
+      margin:0;
+      font-size: .8em;
+      color: #cc3000;
+    }
 
     .buttonSubmit {
       background: #00cc76;
@@ -62,14 +67,14 @@
         background: #00cc76;
       }
     }
-    .a {
-      transition-property: color;
-      transition-duration: 0.25s;
-      font-weight: 600;
+    .buttonSubmitDisabled {
+      background: #ffffff;
+      color: #00cc76;
       cursor: pointer;
       :hover {
-        color: #00cc76;
+        background: #ffffff;
       }
+      pointer-events: none;
     }
   }
   .otherMethods {
@@ -134,4 +139,7 @@
       }
     }
   }
+}
+.visible{
+  pointer-events: none;
 }

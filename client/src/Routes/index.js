@@ -2,6 +2,7 @@ import React from "react";
 import { Route } from "react-router-dom";
 import CrudComponent from "pages/Crud";
 import Product from "pages/Product";
+import Reset from "pages/Reset";
 import SignIn from "pages/SignIn";
 import SignUp from "pages/SignUp";
 import Admin from "pages/Admin";
@@ -23,6 +24,7 @@ const Routes = () => {
       <Route exact path="/products/:id" component={Product}></Route>
       <Route path="/profile" component={Profile}></Route>
       <Route exact path="/sign-in" component={SignIn}></Route>
+      <Route exact path="/reset" component={Reset}></Route>
       <Route exact path="/sign-up" component={SignUp}></Route>
       <Route path="/admin" component={Admin}></Route>
       <Route exact path="/CRUD/" component={CrudComponent}></Route>
