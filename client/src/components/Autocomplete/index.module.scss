@@ -3,6 +3,7 @@
 
 .autocomplete {
   width: stretch;
+width: -moz-available;
   display: flex;
   flex-wrap: wrap;
   font-family: "Ubuntu", sans-serif;

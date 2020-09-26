@@ -12,6 +12,7 @@
 }
 .prefix {
   width: stretch;
+width: -moz-available;
   text-align: left;
   padding: 0.25rem 0.5rem;
   background: #e3e3e3;
@@ -19,6 +20,7 @@
 }
 .input {
   width: stretch;
+width: -moz-available;
 
   display: flex;
 

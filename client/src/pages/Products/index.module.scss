@@ -5,6 +5,7 @@
   position: relative;
   display: grid;
   width: stretch;
+width: -moz-available;
   height: auto;
   padding: 0 1rem;
 
@@ -38,6 +39,7 @@
     span,
     button {
       width: stretch;
+width: -moz-available;
       display: none;
     }
 
@@ -79,6 +81,7 @@
     transition: 0.5s;
     padding: 0;
     width: stretch;
+width: -moz-available;
 
     li {
       list-style-type: none;
