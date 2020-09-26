@@ -31,8 +31,8 @@ let preference = {
     installments: 1
   },
   back_urls: {
-    success: "http://localhost:3001/payment/meli/callback",
-    failure: "http://localhost:3001/payment/meli/callback",
+    success: `${process.env.API}/payment/meli/callback`,
+    failure: `${process.env.API}/payment/meli/callback`,
   },
   auto_return: "approved",
 };
@@ -55,12 +55,12 @@ router.route('/meli/callback').get(async (req, res) => {
         transaction_amount: body.transaction_amount
       })
       sendEmail(order_product)
-      res.redirect('http://localhost:3000/checkout/success')
+      res.redirect(`${process.env.CALLBACK_URL_BASE || 'http://localhost:3000'}/checkout/success`)
     } catch (error) {
       res.status(200).json(error)
     }
   } else {
-    res.redirect(`http://localhost:3000/checkout/cancel?order=${req.query.external_reference}`)
+    res.redirect(`${process.env.CALLBACK_URL_BASE || 'http://localhost:3000'}/checkout/cancel?order=${req.query.external_reference}`)
   }
 })
 module.exports = router;

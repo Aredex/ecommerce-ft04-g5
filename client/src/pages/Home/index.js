@@ -17,7 +17,7 @@ const Home = (props) => {
                     className={style.button}
                     onClick={() => history.push("/products")}
                 >
-                    ver nuestro catalogo
+                    nuestro catalogo
                 </button>
             </div>
             <img
