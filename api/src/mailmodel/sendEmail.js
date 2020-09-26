@@ -42,7 +42,7 @@ function sendEmail(obj) {
   modelEmail = modelEmail.replace("%username%", obj.user.name.toUpperCase())
   modelEmail = modelEmail.replace("%orderid%", obj.id)
   nodemailerMailgun.sendMail({
-    from: 'gardenRy@gardenRy.com',
+    from: 'gardenry@gardenry.shop',
     to: obj.user.email, // An array if you have multiple recipients.
     subject: 'Confirmamos tu compra!',
     html: modelEmail

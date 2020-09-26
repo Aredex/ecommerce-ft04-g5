@@ -134,7 +134,7 @@ const toPaymentOrder = async ({
     let poderComprar = true;
 
     Order.products.map((product) => {
-        if (product.order_product.amount >= product.stock) {
+        if (product.order_product.amount > product.stock) {
             poderComprar = false;
         }
     });
