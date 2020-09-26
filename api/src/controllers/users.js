@@ -64,7 +64,7 @@ const editOne = ({ id, name, email, password, role, address }) => {
         if (name) user.name = name;
         if (email) user.email = email;
         if (password) {
-          console.log("ANDO POR ACÁ");
+        
           if (password.includes(" ")) {
             return reject({
               error: {

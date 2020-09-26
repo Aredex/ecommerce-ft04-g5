@@ -85,7 +85,7 @@ passport.use(
       profileFields: ["id", "emails", "displayName"],
     },
     async function (accessToken, refreshToken, profile, done) {
-      console.log(profile);
+      
       let user = await getOneByFacebookId(profile.id);
       if (!user)
         user = await createOne(

@@ -15,7 +15,7 @@ function Success() {
     reloadShoppingCart();
     (async () => {
       const order_data = await getOrderById(order);
-      console.log(order_data)
+      
       setInit_point(order_data[0].init_point)
     })()
   }, [])

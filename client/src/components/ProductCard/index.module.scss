@@ -73,6 +73,7 @@ width: -moz-available;
     .name {
       text-transform: capitalize;
       font-size: 0.75rem;
+      text-overflow: ellipsis;
      
     } 
 
