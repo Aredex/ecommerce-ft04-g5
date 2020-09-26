@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import style from "./index.module.scss";
 import Modal from "components/Modal";
+import { FaStar } from "react-icons/fa";
+import useUser from "hooks/useUser";
+import Axios from "axios";
+import { useDispatch } from "react-redux";
+import { getProductDetail } from "store/Actions/Products/ProductsActions";
 
 const Star = ({ size, fill, stroke }) => (
   <svg
@@ -18,58 +23,153 @@ const Star = ({ size, fill, stroke }) => (
   </svg>
 );
 
-const ModalReview = ({ reviews, onClose }) => {
+const ModalReview = ({ reviews, onClose, idProduct }) => {
+  const [rating, setRating] = useState(null);
+  const [hover, setHover] = useState(null);
+  const [review, setReview] = useState({
+    rating: "",
+    estrellas: "",
+  });
+
+  const { localUser } = useUser()
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (localUser) {
+      const myReview = reviews.find(x => x.userId === localUser.user.id)
+      if (myReview) {
+        setReview({
+          rating: myReview.description,
+          estrellas: myReview.stars,
+        })
+        setRating(myReview.stars)
+      }
+    }
+  }, [reviews, localUser])
+
+
+  const onChange = (e) => {
+    setReview({
+      ...review,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = {
+      stars: review.estrellas,
+      title: 'pon cualquier cosa',
+      description: review.rating,
+      idUser: localUser.user.id,
+      idProduct
+    }
+    await Axios.post(`${process.env.REACT_APP_API}/reviews`, data)
+    dispatch(getProductDetail(idProduct));
+  };
+
   return (
     <Modal>
       <Modal.Header>Calificaciones:</Modal.Header>
       <Modal.Body>
         {reviews &&
           Array.isArray(reviews) &&
-          reviews.map(({ id, rating, message }) => (
+          reviews.map(({ id, stars, description }) => (
             <article key={id} className={style.review}>
               <div className={style.rating}>
                 <Star
-                  fill={rating >= 0.5 ? "#00cc76" : "transparent"}
+                  fill={stars >= 0.5 ? "#00cc76" : "transparent"}
                   stroke={"#00cc76"}
                   size={"1rem"}
                 />
                 <Star
-                  fill={rating >= 1.5 ? "#00cc76" : "transparent"}
+                  fill={stars >= 1.5 ? "#00cc76" : "transparent"}
                   stroke={"#00cc76"}
                   size={"1rem"}
                 />
                 <Star
-                  fill={rating >= 2.5 ? "#00cc76" : "transparent"}
+                  fill={stars >= 2.5 ? "#00cc76" : "transparent"}
                   stroke={"#00cc76"}
                   size={"1rem"}
                 />
                 <Star
-                  fill={rating >= 3.5 ? "#00cc76" : "transparent"}
+                  fill={stars >= 3.5 ? "#00cc76" : "transparent"}
                   stroke={"#00cc76"}
                   size={"1rem"}
                 />
                 <Star
-                  fill={rating >= 4.5 ? "#00cc76" : "transparent"}
+                  fill={stars >= 4.5 ? "#00cc76" : "transparent"}
                   stroke={"#00cc76"}
                   size={"1rem"}
                 />
               </div>
-              <div className={style.message}>{message}</div>
+              <div className={style.message}>{description}</div>
             </article>
           ))}
       </Modal.Body>
       <Modal.Footer>
-        <button type="button" onClick={onClose}>
-          Cerrar
+        <section className={style.reviewForm}>
+          {localUser && <section className={style.Input}>
+            <div>
+              {[...Array(5)].map((star, i) => {
+                const ratingValue = i + 1;
+
+                return (
+                  <label key={i}>
+                    <input
+                      type="radio"
+                      name="estrellas"
+                      value={ratingValue}
+                      onClick={() => setRating(ratingValue)}
+                      onChange={onChange}
+                    />
+                    <FaStar
+                      className="star"
+                      color={ratingValue <= (hover || rating) ? "#00cc76" : "grey"}
+                      size={25}
+                      onMouseEnter={() => setHover(ratingValue)}
+                      onMouseLeave={() => setHover(null)}
+                    />
+                  </label>
+                );
+              })}
+            </div>
+            <textarea
+              rows={5}
+              name="rating"
+              type="text"
+              placeholder="Ingresa tu reseña..."
+              value={review.rating}
+              onChange={onChange}
+            />
+          </section>}
+          <section className={style.buttonGroup}>
+
+            <button type="button" onClick={onClose}>
+              Cerrar
         </button>
+            {localUser && <button type="submit" className={style.primary} onClick={handleSubmit}>
+              Enviar
+        </button>}
+          </section>
+        </section>
       </Modal.Footer>
     </Modal>
   );
 };
 
-const ReviewButton = ({ rating, reviews }) => {
+const ReviewButton = ({ reviews, idProduct }) => {
   const [showModal, setShowModal] = useState(false);
-
+  const rating = useMemo(() => {
+    if (reviews.length > 0) {
+      let result = reviews.reduce((result, item) => {
+        result += Number(item.stars)
+        return result
+      }, 0)
+      return result / reviews.length
+    }
+    return 0
+  }, [reviews])
   return (
     <>
       <div className={style.reviewButton} onClick={() => setShowModal(true)}>
@@ -101,7 +201,7 @@ const ReviewButton = ({ rating, reviews }) => {
         />
       </div>
       {showModal && (
-        <ModalReview reviews={reviews} onClose={() => setShowModal(false)} />
+        <ModalReview reviews={reviews} idProduct={idProduct} onClose={() => setShowModal(false)} />
       )}
     </>
   );

@@ -24,7 +24,7 @@ const Orders = () => {
           </tr>
         </thead>
         <tbody>
-          {orders != undefined &&
+          {orders !== undefined &&
             orders.map(({ id, userId, status, createdAt, updatedAt }) => (
               <tr key={id}>
                 <td>{id}</td>

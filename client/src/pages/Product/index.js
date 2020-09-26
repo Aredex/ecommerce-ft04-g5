@@ -8,7 +8,7 @@ import ReviewButton from "components/ReviewButton";
 import useOrders from "hooks/useOrders";
 import { useHistory, useParams } from "react-router";
 
-const Product = (props) => {
+const Product = () => {
   const [count, setCount] = useState(1);
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -17,8 +17,7 @@ const Product = (props) => {
     return () => {
       dispatch(getProductDetail());
     };
-  }, []);
-
+  }, [dispatch, id]);
   const history = useHistory();
   const product = useSelector((x) => x.ProductsReducer.productDetail);
   const handleOnAdd = () => {
@@ -50,16 +49,8 @@ const Product = (props) => {
             <label>$</label>
             <p>{product.price}</p>
           </div>
-          <ReviewButton
-            rating={2.3}
-            reviews={[
-              {
-                id: 1,
-                rating: 2,
-                message: "Mensaje de la review!",
-              },
-            ]}
-          />
+
+          <ReviewButton reviews={product.reviews} idProduct={product.id} />
           {product.stock > 0 ? (
             <AddToCart
               onAdd={handleOnAdd}
@@ -78,8 +69,8 @@ const Product = (props) => {
               }
             />
           ) : (
-            <h1>No contamos con stock</h1>
-          )}
+              <h1>No contamos con stock</h1>
+            )}
           <div className={style.category}>
             <div className={style.separator}>Categorias</div>
             <section>
@@ -100,6 +91,11 @@ const Product = (props) => {
               <span>Descripción</span>
             </div>
             {product.description}
+          </div>
+          <div className={style.description}>
+            <div className={style.separator}>
+              <span>Reviews</span>
+            </div>
           </div>
         </div>
       </div>

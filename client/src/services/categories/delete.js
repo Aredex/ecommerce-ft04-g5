@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function remove(id) {
   return axios
-    .delete(`http://localhost:3001/categories/${id}`)
+    .delete(`${process.env.REACT_APP_API}/categories/${id}`)
     .then((response) => {
       return response.data;
     })

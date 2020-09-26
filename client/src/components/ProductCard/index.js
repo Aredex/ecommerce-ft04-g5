@@ -17,7 +17,9 @@ const ProductCard = ({ img, title, price, onClick, stock }) => {
           {price}
         </span>
         <span className={style.name}>{title}</span>
+      
       </section>
+      <span className={style.overlay}>Ver Más</span>
     </div>
   );
 };
