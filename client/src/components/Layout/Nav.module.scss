@@ -18,6 +18,7 @@
     transition: transform 0.25s;
     justify-content: space-between;
     top:0;
+    border-right: solid 1px #e3e3e3;
 
     @include respond-to("default") {
       max-width: initial;
