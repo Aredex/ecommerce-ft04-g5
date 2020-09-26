@@ -28,7 +28,7 @@ const getAll = () => {
 
 const createOne = (name, email, password, role, googleId, facebookId) => {
   return new Promise((resolve, reject) => {
-    
+
     if (password && password.includes(" ")) {
       return reject({
         error: {
@@ -64,7 +64,6 @@ const editOne = ({ id, name, email, password, role, address }) => {
         if (name) user.name = name;
         if (email) user.email = email;
         if (password) {
-          console.log("ANDO POR ACÁ");
           if (password.includes(" ")) {
             return reject({
               error: {
