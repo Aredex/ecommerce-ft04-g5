@@ -7,7 +7,7 @@ function StepBar({ value, steps }) {
   return (
     <div className={style.stepBar}>
       {steps && steps.map((step, i) =>
-        <div key={step.value} className={[style.step, stage > i ? style.complete : ''].join(' ')}>
+        <div key={step.value} className={[style.step, stage > i ? style.complete : '', stage === i ? style.completeExact : ''].join(' ')}>
           <span>{step.label}</span>
           <div className={style.dot}>
             <i className={stage > i ? 'fas fa-check' : 'far fa-clock'} />
