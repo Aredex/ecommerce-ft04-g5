@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AddToCart from "components/AddToCart";
+import Load from "components/Load";
 import noImage from "noImage.svg";
 import style from "./index.module.scss";
 import { getProductDetail } from "store/Actions/Products/ProductsActions";
@@ -100,11 +101,9 @@ const Product = () => {
         </div>
       </div>
     );
-  } else
+  } else 
     return (
-      <div>
-        <span>Cargando...</span>
-      </div>
+      <Load></Load>
     );
 };
 
