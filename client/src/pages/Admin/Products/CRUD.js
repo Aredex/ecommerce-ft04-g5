@@ -10,6 +10,8 @@ import { useForm } from "hooks/useForm";
 
 const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
   const [addingImage, setAddingImage] = useState(false);
+  const [firstAddImage, setfirstAddImage] = useState(true);
+
   const [{ imageUrl }, handleInputChange, resetImageUrl] = useForm({
     imageUrl: "",
   });
@@ -20,6 +22,7 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
   };
 
   const handleAddImg = (setFieldValue, values) => {
+    if(firstAddImage) setfirstAddImage(false);
     if (!addingImage) {
       setAddingImage(true);
     }
@@ -33,6 +36,7 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
       }
 
       resetImageUrl();
+
       setAddingImage(false);
     }
   };
@@ -78,21 +82,24 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
               />
 
               <>
-                {addingImage && (
-                  <div>
-                    <InputField
-                      prefix="URL de imagen"
-                      name="imageUrl"
-                      prefixStyle={prefixStyle}
-                      readOnly={estado.readOnly}
-                      onChange={handleInputChange}
-                      value={imageUrl}
-                    />
-                  </div>
-                )}
+                {!firstAddImage && 
+                  <div className ={addingImage? style.imgurl: style.imgurld} >
+                  <InputField
+                    prefix="URL de imagen"
+                    name="imageUrl"
+                    prefixStyle={prefixStyle}
+                    readOnly={estado.readOnly}
+                    onChange={handleInputChange}
+                    value={imageUrl}
+                  />
+                </div>
+                }
+                    
+                
+                  
 
                 <div
-                  className={style.primary}
+                  className={style.img}
                   onClick={() => handleAddImg(setFieldValue, values)}
                 >
                   {addingImage ? "Aceptar" : "Añadir nueva imagen"}

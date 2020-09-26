@@ -5,10 +5,24 @@
   position: relative;
   display: grid;
   width: stretch;
-width: -moz-available;
+  width: -moz-available;
   height: auto;
   padding: 0 1rem;
   padding-bottom: 1rem;
+  animation: fade-in 1s;
+  animation-fill-mode: forwards;  
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      left:2em;
+    }
+    to {
+      opacity: 1;
+      left:0;
+    }
+  }
+  
 
   @include respond-to("default") {
     grid-template-columns: 1fr;
