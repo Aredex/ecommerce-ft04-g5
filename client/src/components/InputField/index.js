@@ -12,9 +12,10 @@ function InputField(props) {
       : formikContext.setFieldValue(props.name, event.target.value);
   }
 
+  const { validateField } = formikContext
   useEffect(() => {
-    formikContext.validateField && formikContext.validateField(props.name)
-  }, [formikContext, props.name])
+    validateField && validateField(props.name)
+  }, [validateField, props.name])
 
   return (
     <div

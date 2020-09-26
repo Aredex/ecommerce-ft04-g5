@@ -11,10 +11,10 @@ function TextareaField(props) {
       ? props.onChange(event)
       : formikContext.setFieldValue(props.name, event.target.value);
   }
-
+  const { validateField } = formikContext
   useEffect(() => {
-    formikContext.validateField && formikContext.validateField(props.name)
-  }, [formikContext, props.name])
+    validateField && validateField(props.name)
+  }, [validateField, props.name])
 
   return (
     <div className={style.inputField} style={props.style}>
