@@ -57,7 +57,6 @@ export default function useUser() {
   }
 
   async function updateUserData(user) {
-    console.log(user)
     const { data } = await Axios.put(`${process.env.REACT_APP_API}/users/${user.id}`, user);
     if (data) setLocalUser({ ...localUser, user: data });
   }

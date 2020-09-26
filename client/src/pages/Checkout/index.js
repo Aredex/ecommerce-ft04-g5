@@ -39,7 +39,6 @@ function Checkout() {
     const { data } = await Axios.post(`${process.env.REACT_APP_API}/orders/${id}/toPayment`, {
       address: userLogin.user.address
     })
-    alert(data.redirect)
     window.location = data.redirect
   }
 

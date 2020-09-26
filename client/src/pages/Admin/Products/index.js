@@ -52,7 +52,6 @@ const Products = ({
   const handleDelete = async (id, name) => {
     var r = window.confirm(`Desea eliminar ${name}`);
     if (r === true) {
-      console.log(id, "test");
       await removeProduct(id);
       disabledProductCRUD();
     }
@@ -70,8 +69,6 @@ const Products = ({
           categories,
           imageUrl,
         } = values;
-
-        console.log(imageUrl);
 
         await updateProduct(
           state.productDetail.id,
@@ -100,7 +97,6 @@ const Products = ({
     }
     if (bandera.create) {
       onSubmit = async (values) => {
-        console.log(values.categories)
         var { name, description, price, stock, imageUrl, categories } = values;
 
         imageUrl = imageUrl

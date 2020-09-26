@@ -26,7 +26,6 @@ export default function useOrders() {
         const { orders } = user
 
         let orderInCreation = orders.find((order) => order.status === "IN CREATION")
-        console.log(orderInCreation)
         if (orderInCreation) {
           let total = 0;
           const products = orderInCreation.products.reduce((result, item) => {
@@ -37,12 +36,6 @@ export default function useOrders() {
           orderInCreation.products = products
 
           if (localShoppingCart) {
-            console.log('ESTO SI FUNCIONA?', localShoppingCart)
-
-            // orderInCreation = orderInCreation.products.concat(localShoppingCart.products)
-            // removeLocalShoppingCart()
-            console.log(orderInCreation)
-
             Axios.post(`${process.env.REACT_APP_API}/orders/${orderInCreation.id}/products`, {
               idUser: userLogin.user.id,
               products: localShoppingCart.products,
@@ -80,11 +73,6 @@ export default function useOrders() {
           }
         } else {
           if (localShoppingCart) {
-            console.log('ESTO SI FUNCIONA?', localShoppingCart)
-
-            // orderInCreation = orderInCreation.products.concat(localShoppingCart.products)
-            // removeLocalShoppingCart()
-
             Axios.post(`${process.env.REACT_APP_API}/orders/products`, {
               idUser: userLogin.user.id,
               products: localShoppingCart.products,
