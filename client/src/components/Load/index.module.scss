@@ -1,0 +1,36 @@
+.load{
+    display: grid;
+    height: 90%;
+    align-items: center;
+    justify-content: center;
+    span{
+        display: block;
+        font-size: 2rem;
+        background-color: #00cc76;
+        padding: .5em;
+        border-radius: .5em;
+        color: #ffffff;
+    }
+}
+
+.loader {
+    width: 4rem;
+    height: 4rem;
+    margin:auto;
+    margin-top: 1em;
+    border: 1rem solid #00cc76;
+    border-top: 1rem solid #666;
+    border-radius: 50%;
+    animation-name: girar;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+  @keyframes girar {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
