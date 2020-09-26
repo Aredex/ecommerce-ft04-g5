@@ -41,7 +41,7 @@ const Products = ({
     } else {
       getProducts();
     }
-  }, [query.name]);
+  }, [query.name, getProducts, searchProduct]);
 
   useEffect(() => {
     if (query.category) {
@@ -49,7 +49,7 @@ const Products = ({
     } else {
       getProducts();
     }
-  }, [query.category]);
+  }, [query.category, getProducts, productsFromCategory]);
 
   if (query.name) {
     products = state.productSearch;

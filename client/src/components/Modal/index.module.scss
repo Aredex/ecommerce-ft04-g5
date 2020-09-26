@@ -33,6 +33,9 @@
 }
 .body {
   padding: 1rem;
+  max-height: 50vh;
+  overflow: hidden;
+  overflow-y: auto;
 }
 .footer {
   background: #e3e3e3;

@@ -1,26 +1,40 @@
-const { getOne: getProduct } = require("./products");
-const { Order, Product, User, Op } = require("../db");
+const {
+    getOne: getProduct
+} = require("./products");
+const {
+    Order,
+    Product,
+    User,
+    Op,
+    Image
+} = require("../db");
 
 // Obtiene todas las ordenes hechas y puede filtrar según su status
 
-const getAllFiler = ({ search }) => {
+const getAllFiler = ({
+    search
+}) => {
     return new Promise((resolve, reject) => {
         if (!isNaN(search)) {
             search = Number(search);
-            console.log(search);
 
             getOne(search)
                 .then((order) => resolve(order))
                 .catch((err) => reject(err));
         } else {
-            getAll({ search })
+            getAll({
+                search
+            })
                 .then((order) => resolve(order))
                 .catch((err) => reject(err));
         }
     });
 };
 
-const getAll = ({ status, search }) => {
+const getAll = ({
+    status,
+    search
+}) => {
     let where = {};
     let obj = {};
     let include = [Product, User];
@@ -31,7 +45,14 @@ const getAll = ({ status, search }) => {
     }
 
     if (search) {
-        obj = { model: User, where: { name: { [Op.substring]: search } } };
+        obj = {
+            model: User,
+            where: {
+                name: {
+                    [Op.substring]: search
+                }
+            }
+        };
         include[1] = obj;
     }
 
@@ -39,7 +60,9 @@ const getAll = ({ status, search }) => {
         Order.findAll({
             where,
             include,
-            order: [["id", "ASC"]],
+            order: [
+                ["id", "ASC"]
+            ],
         })
             .then((orders) => {
                 if (orders.length === 0) {
@@ -47,29 +70,59 @@ const getAll = ({ status, search }) => {
                         error: {
                             name: "ApiFindError",
                             type: "Orders error",
-                            errors: [
-                                {
-                                    message:
-                                        "there are no orders in the database",
-                                    type: "not found",
-                                    value: null,
-                                },
-                            ],
+                            errors: [{
+                                message: "there are no orders in the database",
+                                type: "not found",
+                                value: null,
+                            },],
                         },
                     });
                 }
 
                 resolve(orders);
             })
-            .catch((err) => reject({ error: err }));
+            .catch((err) => reject({
+                error: err
+            }));
     });
 };
 
-const confirmedOrder = async ({ id, address }) => {
+const confirmedOrder = async ({
+    id,
+    payment_method_id,
+    payment_type_id,
+    payment_status,
+    payment_status_detail,
+    card_expiration_month,
+    card_expiration_year,
+    card_first_six_digits,
+    card_last_four_digits
+}) => {
+    const Order = await getOne(id);
+    Order.status = "CONFIRMED";
+    Order.payment_method_id = payment_method_id
+    Order.payment_type_id = payment_type_id
+    Order.payment_status = payment_status
+    Order.payment_status_detail = payment_status_detail
+    Order.card_expiration_month = card_expiration_month
+    Order.card_expiration_year = card_expiration_year
+    Order.card_first_six_digits = card_first_six_digits
+    Order.card_last_four_digits = card_last_four_digits
+    await Order.save()
+    return Order
+};
+
+const toPaymentOrder = async ({
+    id,
+    address,
+    init_point
+}) => {
     if (!address) {
         return new Promise((resolve, reject) => {
             reject({
-                error: { message: "Es necesario tener la dirección de envío" },
+                error: {
+                    message: "Es necesario tener la dirección de envío"
+                },
             });
         });
     }
@@ -87,8 +140,7 @@ const confirmedOrder = async ({ id, address }) => {
         if (!poderComprar) {
             return reject({
                 error: {
-                    message:
-                        "No se puede hacer la compra, uno de los productos no tiene el stock suficiente",
+                    message: "No se puede hacer la compra, uno de los productos no tiene el stock suficiente",
                 },
             });
         }
@@ -104,54 +156,79 @@ const confirmedOrder = async ({ id, address }) => {
 
         Promise.all(products)
             .then(() => {
-                Order.status = "CONFIRMED";
+                Order.status = "PENDING_PAYMENT";
                 Order.address = address;
-                return Order.save();
+                Order.init_point = init_point;
+                Order.save();
             })
-            .then((order) => resolve(order))
-            .catch((err) => reject({ error: err }));
+            .catch((err) => reject({
+                error: err
+            }));
+
+        getOne(id)
+            .then((e) => {
+                resolve(e)
+            })
     });
 };
 
 // Busca una orden por su ID
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
-        Order.findOne({ where: { id }, include: [Product, User] })
+        Order.findOne({
+            where: {
+                id
+            },
+            include: [{
+                model: Product,
+                include: {
+                    model: Image
+                }
+            }, User]
+        })
             .then((order) => {
                 if (!order) {
                     return reject({
                         error: {
                             name: "ApiFindError",
                             type: "Orders error",
-                            errors: [
-                                {
-                                    message:
-                                        "order does not exist in the database",
-                                    type: "not found",
-                                    value: null,
-                                },
-                            ],
+                            errors: [{
+                                message: "order does not exist in the database",
+                                type: "not found",
+                                value: null,
+                            },],
                         },
                     });
                 }
 
                 resolve(order);
             })
-            .catch((err) => reject({ error: err }));
+            .catch((err) => reject({
+                error: err
+            }));
     });
 };
 
 // Crea una orden
 const createOne = (status, address) => {
     return new Promise((resolve, reject) => {
-        Order.create({ status, address })
+        Order.create({
+            status,
+            address
+        })
             .then((order) => resolve(order))
-            .catch((err) => reject({ error: err }));
+            .catch((err) => reject({
+                error: err
+            }));
     });
 };
 
 // Edita una orden según el parámetro enviado
-const editOne = ({ id, status, address }) => {
+const editOne = ({
+    id,
+    status,
+    address
+}) => {
     return new Promise((resolve, reject) => {
         getOne(id)
             .then((order) => {
@@ -160,8 +237,16 @@ const editOne = ({ id, status, address }) => {
 
                 return order.save();
             })
+            .then((order) => {
+                if (order.products.length === 0) {
+                    return order.destroy()
+                }
+                return order
+            })
             .then((order) => resolve(order))
-            .catch((err) => reject({ error: err }));
+            .catch((err) => reject({
+                error: err
+            }));
     });
 };
 
@@ -172,9 +257,13 @@ const deleteOne = (id) => {
             .then((order) => {
                 order.destroy();
 
-                resolve({ description: "successfully remove" });
+                resolve({
+                    description: "successfully remove"
+                });
             })
-            .catch((err) => reject({ error: err }));
+            .catch((err) => reject({
+                error: err
+            }));
     });
 };
 
@@ -184,7 +273,9 @@ const emptyOrder = (id) => {
         getOne(id)
             .then((order) => order.setProducts([]))
             .then((order) => resolve(order))
-            .catch((err) => reject({ error: err }));
+            .catch((err) => reject({
+                error: err
+            }));
     });
 };
 
@@ -195,6 +286,7 @@ module.exports = {
     editOne,
     deleteOne,
     emptyOrder,
+    toPaymentOrder,
     confirmedOrder,
     getAllFiler,
 };

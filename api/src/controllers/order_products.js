@@ -161,14 +161,16 @@ const addProductToOrder = async ({
 };
 
 const removeProductToOrder = async (idProduct, idOrder) => {
-    const Product = await getProduct(idProduct);
-    const Order = await getOrder(idOrder);
-
-    return new Promise((resolve, reject) => {
-        Order.removeProduct(Product)
-            .then((product_order) => resolve(product_order))
-            .catch((err) => reject({ error: err }));
-    });
+    try {
+        const Product = await getProduct(idProduct);
+        let Order = await getOrder(idOrder);
+        const product_order = await Order.removeProduct(Product)
+        Order = await getOrder(idOrder);
+        if (Order.products.length < 1) {
+            return await Order.destroy()
+        }
+        return product_order;
+    } catch (err) { return err }
 };
 
 module.exports = {

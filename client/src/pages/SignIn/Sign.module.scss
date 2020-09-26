@@ -62,6 +62,15 @@
         background: #00cc76;
       }
     }
+    .a {
+      transition-property: color;
+      transition-duration: 0.25s;
+      font-weight: 600;
+      cursor: pointer;
+      :hover {
+        color: #00cc76;
+      }
+    }
   }
   .otherMethods {
     display: flex;

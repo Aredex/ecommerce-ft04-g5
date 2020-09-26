@@ -23,6 +23,7 @@
 
     header {
       width: stretch;
+width: -moz-available;
       background: #fff;
       display: flex;
       justify-content: flex-end;
@@ -30,6 +31,7 @@
 
       span {
         width: stretch;
+width: -moz-available;
         text-align: left;
         margin: 0 1.25rem;
         font-weight: 600;
@@ -41,6 +43,7 @@
       flex-direction: column;
       align-items: flex-start;
       width: stretch;
+width: -moz-available;
       overflow: hidden;
       overflow-y: auto;
     }
@@ -87,104 +90,11 @@
   }
 }
 
-.productCard {
-  border-radius: 0.5rem;
-  border: solid 1px #e3e3e3;
-  width: stretch;
-  margin: 0.25rem 1rem;
-  background: #fff;
-  transition: 0.25s;
-  box-shadow: 2px 1px 8px transparent;
-
-  &:hover {
-    box-shadow: 2px 1px 8px #d3d3d3;
-  }
-
-  .productName {
-    font-weight: 600;
-    text-align: left;
-    width: stretch;
-    margin: 0;
-    padding: 0.25rem 0.5rem;
-    border-bottom: solid 1px #e3e3e3;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-transform: capitalize;
-
-    i {
-      cursor: pointer;
-      transition: color 0.25s;
-
-      &:hover {
-        color: $--danger-color;
-      }
-    }
-  }
-
-  .data {
-    display: flex;
-    position: relative;
-  }
-
-  .dataItem {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    padding: 0.25rem;
-
-    label {
-      padding: 0.25rem;
-      font-size: 0.75rem;
-    }
-
-    span {
-      border: solid 1px #e3e3e3;
-      border-radius: 0.25rem;
-      display: flex;
-      justify-content: center;
-      overflow: hidden;
-      align-items: center;
-      height: 2rem;
-      div {
-        width: stretch;
-      }
-      section {
-        width: fit-content;
-
-        button {
-          width: 2rem;
-          height: 1rem;
-          margin: 0;
-          padding: 0;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: #fff;
-          border: none;
-          cursor: pointer;
-          transition: color 0.25s;
-
-          &:focus {
-            outline: none;
-          }
-
-          &:hover {
-            color: $--primary-color;
-          }
-        }
-      }
-    }
-  }
-}
-
 .totalOrder {
   display: flex;
   margin: 0.5rem 1rem;
   width: stretch;
+width: -moz-available;
 
   span {
     font-weight: 600;
@@ -193,11 +103,13 @@
   .money {
     text-align: right;
     width: stretch;
+width: -moz-available;
   }
 }
 
 .checkOut {
   width: stretch;
+width: -moz-available;
   background: #00cc76;
   color: #fff;
   cursor: pointer;
@@ -214,4 +126,26 @@
     margin-right: 0.25rem;
     content: "$";
   }
+}
+
+.emptyDraw {
+  height: 50vh;
+  width: 100%;
+  margin: 0 auto;
+  object-fit: contain;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+.buttonToHome,.buttonToProducts {
+  background: #00cc76;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  margin: 1rem auto;
+  font-size: 1.5rem;
+  padding: 1rem;
+  font-weight: 100;
+  border-radius: 9999px;
+  width: 100vw;
+  max-width: 20rem;
 }

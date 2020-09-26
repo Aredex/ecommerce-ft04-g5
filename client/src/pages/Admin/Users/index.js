@@ -2,20 +2,21 @@ import React, { useState, useEffect, useCallback } from "react";
 import style from "./index.module.scss";
 import Axios from "axios";
 import CRUD from "./CRUD";
+import { toAdmin, toGuest } from "services/user";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [formikData, setFormikData] = useState(null);
   const getAll = useCallback(() => {
-    Axios.get("http://localhost:3001/users").then(({ data }) => setUsers(data));
+    Axios.get(`${process.env.REACT_APP_API}/users`).then(({ data }) => setUsers(data));
   }, []);
   const getById = useCallback((id) => {
-    return Axios.get(`http://localhost:3001/users/${id}`).then(
+    return Axios.get(`${process.env.REACT_APP_API}/users/${id}`).then(
       ({ data }) => data
     );
   }, []);
   const update = useCallback(({ id, name, email, password, role }) => {
-    return Axios.put(`http://localhost:3001/users/${id}`, {
+    return Axios.put(`${process.env.REACT_APP_API}/users/${id}`, {
       name,
       email,
       password,
@@ -24,7 +25,7 @@ const Users = () => {
   }, []);
 
   const create = useCallback(({ name, email, password, role }) => {
-    return Axios.post(`http://localhost:3001/users/`, {
+    return Axios.post(`${process.env.REACT_APP_API}/users/`, {
       name,
       email,
       password,
@@ -32,7 +33,7 @@ const Users = () => {
     }).then(({ data }) => data);
   }, []);
   const remove = useCallback((id) => {
-    return Axios.delete(`http://localhost:3001/users/${id}`).then(
+    return Axios.delete(`${process.env.REACT_APP_API}/users/${id}`).then(
       ({ data }) => data
     );
   }, []);
@@ -56,11 +57,13 @@ const Users = () => {
             });
             setFormikData(null);
           },
+          onPromote: async () => { await toAdmin(id); getAll(); setFormikData(null); },
+          onDegrade: async () => { await toGuest(id); getAll(); setFormikData(null); },
           update: true,
         });
       });
     },
-    [setFormikData, getById]
+    [setFormikData, getById, getAll, update]
   );
   const handleCreate = useCallback(() => {
     setFormikData({
@@ -80,7 +83,7 @@ const Users = () => {
       },
       create: true,
     });
-  }, [setFormikData]);
+  }, [setFormikData, create, getAll]);
 
   const handleDelete = useCallback(
     (id, name) => {
@@ -91,12 +94,12 @@ const Users = () => {
           .then(() => setFormikData(null));
       }
     },
-    [setFormikData]
+    [setFormikData, getAll, remove]
   );
 
   useEffect(() => {
     getAll();
-  }, []);
+  }, [getAll]);
 
   return (
     <section>
@@ -116,7 +119,7 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {users != undefined &&
+          {users !== undefined &&
             users.map(({ id, name, email, role, status }) => (
               <tr key={id}>
                 <td>{id}</td>

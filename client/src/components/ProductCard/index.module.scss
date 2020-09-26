@@ -11,6 +11,21 @@
   overflow: hidden;
   cursor: pointer;
 
+    &:hover{
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+      transition: 0.5s all;
+      opacity: .8;
+      .price, .name{
+        opacity: 0
+      }
+      .overlay{
+        opacity: 1;
+        transition: .7s ease-in-out;
+        padding-top: 1.5rem;
+
+      }
+
+  }
   img {
     width: 100%;
     height: 100%;
@@ -26,6 +41,7 @@
   .noStock {
     position: absolute;
     width: stretch;
+width: -moz-available;
     height: 100%;
     grid-area: 1 / 1 / span 1 / span 1;
     justify-content: center;
@@ -46,15 +62,35 @@
     justify-content: flex-start;
     text-align: left;
     padding: 0.5rem;
+    
 
     .price {
       font-size: 1rem;
       font-weight: 600;
       padding-bottom: 0.5rem;
+      
     }
     .name {
       text-transform: capitalize;
       font-size: 0.75rem;
-    }
+     
+    } 
+
+    
   }
-}
+  
+  }
+  .overlay {
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5);
+    color: #f1f1f1;
+    width: 100%;
+    height: 7vh;
+    transition: .5s ease;
+    opacity:0;
+    font-size: 1rem;
+ 
+  }
