@@ -45,7 +45,7 @@ function Checkout() {
   function validateName(value) {
     let error;
     if (!value) {
-      error = 'Necesitamos su nombre y apellido para poder continuar.';
+      error = 'Necesitamos su nombre completo para poder continuar.';
     }
     return error;
   }
@@ -110,13 +110,13 @@ function Checkout() {
             {({ errors, handleSubmit }) => (
               <Card className={errors.name ? style.error : ''}>
                 <Card.Header>
-                  Nombre y apellido
+                  Nombre completo
                 </Card.Header>
                 <Card.Body>
                   <span>
                     Debe confirmar que tanto su nombre como apellidos están correctos antes de proceder al pago de la orden.
                   </span>
-                  <InputField readOnly={state.nameReadOnly} prefix="Nombre y apellido" prefixStyle={{ background: '#f3f3f3', width: '10rem' }} inputStyle={{ textTransform: 'capitalize' }} name="name" style={{ margin: '0.5rem 0rem', maxWidth: '20rem' }} validate={validateName} />
+                  <InputField readOnly={state.nameReadOnly} prefix="Nombre completo" prefixStyle={{ background: '#f3f3f3', width: '10rem' }} inputStyle={{ textTransform: 'capitalize' }} name="name" style={{ margin: '0.5rem 0rem', maxWidth: '20rem' }} validate={validateName} />
                   {errors.name && <div className={style.error}>{errors.name}</div>}
                 </Card.Body>
                 <Card.Footer>
