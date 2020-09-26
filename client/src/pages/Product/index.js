@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AddToCart from "components/AddToCart";
-import noImage from "noImage.svg";
+import noImage from "assets/noImage.svg";
 import style from "./index.module.scss";
 import { getProductDetail } from "store/Actions/Products/ProductsActions";
 import { useSelector, useDispatch } from "react-redux";
