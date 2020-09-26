@@ -58,7 +58,7 @@ export default function Reset() {
       error.passwordC = 'Las contraseñas no coinciden'
     }
     setError(error)
-    console.log(error)
+    
   }, [formik.values])
 
 
