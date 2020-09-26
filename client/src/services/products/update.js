@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function update(id, name, description, price, stock, imageUrl) {
   return axios
-    .put(`http://localhost:3001/products/${id}`, {
+    .put(`${process.env.REACT_APP_API}/products/${id}`, {
       name,
       description,
       price,

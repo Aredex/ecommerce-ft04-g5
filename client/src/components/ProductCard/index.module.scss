@@ -41,6 +41,7 @@
   .noStock {
     position: absolute;
     width: stretch;
+width: -moz-available;
     height: 100%;
     grid-area: 1 / 1 / span 1 / span 1;
     justify-content: center;
@@ -72,6 +73,7 @@
     .name {
       text-transform: capitalize;
       font-size: 0.75rem;
+      text-overflow: ellipsis;
      
     } 
 

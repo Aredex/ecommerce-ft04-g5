@@ -20,12 +20,12 @@ var nodemailerMailgun = nodemailer.createTransport(mg(auth));
 function dispatch(obj) {
 
   var modelEmail = fs.readFileSync("./src/mailmodel/dispatch.html", 'utf8', function (err, data) {
-    if (err) console.log(err);
+    if (err) console.error(err);
     return data
   })
 
   var dataTemplate = obj.products.reduce(function (acc, current) {
-    var imagen= current.images[0] ? current.images[0].url : 'https://cdn.iconscout.com/icon/free/png-256/no-image-1771002-1505134.png'
+    var imagen = current.images[0] ? current.images[0].url : 'https://cdn.iconscout.com/icon/free/png-256/no-image-1771002-1505134.png'
     return `${acc}<a class="imagen" href="http://localhost:3000/products/${current.id}" style="display:block;margin: .5em 1em; grid-auto-columns: 100%;text-decoration: none; color:#000000;font-weight: 600;">
         <p style="margin-bottom: .5em; text-transform: capitalize;">${current.name}</p>
         <img  style="height: 8em; width: 8em; border-radius: 50%; border: #00cc76 solid .2em;" src='${imagen}'/>
@@ -40,18 +40,18 @@ function dispatch(obj) {
   modelEmail = modelEmail.replace("%name%", obj.user.name.toUpperCase())
   modelEmail = modelEmail.replace("%order%", obj.id)
 
-   nodemailerMailgun.sendMail({
+  nodemailerMailgun.sendMail({
     from: 'gardenRy@gardenRy.com',
-    to: obj.user.email, 
+    to: obj.user.email,
     subject: 'Enviamos tu pedido!',
     html: modelEmail
   }, function (err, info) {
     if (err) {
-      console.log('Error: ' + err);
+      console.error('Error: ' + err);
     } else {
-      console.log('Response: ' + info);
+      console.info('Response: ' + info);
     }
-  });  
+  });
 
   return modelEmail;
 }
