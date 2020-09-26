@@ -8,7 +8,7 @@ const UserDetail = ({ name, logOut, data }) => {
         <div className={style.userform}>
             <span>
                 <i className="fa fa-user"></i>
-                <span onClick={() => push('/profile')}>Hola {name}!</span>
+                <span onClick={() => push('/profile')}>Hola {name.split(' ')[0]}!</span>
                 <a
                     href="/sign-in"
                     onClick={() => logOut()}
