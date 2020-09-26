@@ -69,7 +69,6 @@ const Products = ({
           categories,
           imageUrl,
         } = values;
-
         await updateProduct(
           state.productDetail.id,
           name,
