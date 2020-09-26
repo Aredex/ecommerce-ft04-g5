@@ -40,10 +40,8 @@ function Profile() {
           </NavLink>
         </div>
       </aside>
-      <section>
-        <Route path="/profile" exact component={General} />
-        <Route path="/profile/orders" exact component={Orders} />
-      </section>
+      <Route path="/profile" exact component={General} />
+      <Route path="/profile/orders" exact component={Orders} />
     </div>
   )
 }

@@ -29,7 +29,7 @@ function Orders() {
   };
   console.log(orders)
   return (
-    <div>
+    <div className={style.orderPage}>
       <Card>
         <Card.Header>
           ultimas 5 ordenes
