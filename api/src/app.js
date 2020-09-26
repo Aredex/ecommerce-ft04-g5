@@ -42,15 +42,6 @@ server.all("*", function (req, res, next) {
   })(req, res, next);
 });
 
-// server.use((req, _res, next) => {
-//   console.log("pre-test");
-//   passport.authorize("bearer", function (_err, user) {
-//     console.log("test");
-//     if (user) req.user = user;
-//     next();
-//   });
-// });
-
 server.use(passport.initialize());
 
 server.use("/", routes);
