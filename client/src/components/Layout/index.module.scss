@@ -5,7 +5,7 @@
   display: grid;
   grid-template-rows: auto 1fr auto;
   grid-template-columns: 1fr;
-  height: 100vh;
+  height: 100%;
 }
 .header {
   background: white;
@@ -35,7 +35,7 @@ width: -moz-available;
       background: #fff;
       width: fit-content;
       min-width: 15rem;
-      height: calc(100vh - 4rem);
+      height: calc(100% - 4rem);
       transform: translateX(-100%);
       transition: transform 0.25s;
       justify-content: space-between;
