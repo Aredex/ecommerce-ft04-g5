@@ -14,7 +14,7 @@ function InputField(props) {
 
   useEffect(() => {
     formikContext.validateField && formikContext.validateField(props.name)
-  }, [formikContext.validateField])
+  }, [formikContext, props.name])
 
   return (
     <div

@@ -15,17 +15,13 @@ export default function Reset() {
   const { localUser } = useUser()
   const history = useHistory()
 
-  const [visible, setVisible] = useState(false)
   const [error, setError] = useState({})
 
   useEffect(() => {
     if (localUser) history.push('/')
   }, [localUser, history])
 
-  const { loginWithToken } = useUser();
-
   const query = useQuery();
-
 
   const formik = useFormik({
     initialValues: {
@@ -54,7 +50,7 @@ export default function Reset() {
     } else if (!/(?=.*[0-9])/.test(formik.values.password)) {
       error.password = 'La contraseña es invalida, debe tener al menos un numero';
     }
-    if (formik.values.password != formik.values.passwordC) {
+    if (formik.values.password !== formik.values.passwordC) {
       error.passwordC = 'Las contraseñas no coinciden'
     }
     setError(error)
