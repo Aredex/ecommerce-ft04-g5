@@ -19,6 +19,7 @@ var nodemailerMailgun = nodemailer.createTransport(mg(auth));
 
 
 function sendEmail(obj) {
+  console.log(obj)
   var modelEmail = fs.readFileSync("./src/mailmodel/index.html", 'utf8', function (err, data) {
     if (err) console.log(err);
     return data
@@ -34,6 +35,9 @@ function sendEmail(obj) {
         </a>`
   }, "<div>")
   dataTemplate += "</div>"
+  modelEmail = modelEmail.replace("%transactionamount%",obj.transaction_amount)
+  modelEmail = modelEmail.replace("%card%",obj.payment_method_id)
+  modelEmail = modelEmail.replace("%cardlastnumbers%",obj.card_last_four_digits)
   modelEmail = modelEmail.replace("%listProducts%", dataTemplate)
   modelEmail = modelEmail.replace("%address%", obj.address.toUpperCase())
   modelEmail = modelEmail.replace("%username%", obj.user.name.toUpperCase())
