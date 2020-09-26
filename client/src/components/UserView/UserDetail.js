@@ -1,12 +1,14 @@
 import React from "react";
+import { useHistory } from "react-router";
 import style from "./index.module.scss";
 
 const UserDetail = ({ name, logOut, data }) => {
+    const { push } = useHistory()
     return (
         <div className={style.userform}>
             <span>
                 <i className="fa fa-user"></i>
-                Hola {name}!
+                <span onClick={() => push('/profile')}>Hola {name}!</span>
                 <a
                     href="/sign-in"
                     onClick={() => logOut()}

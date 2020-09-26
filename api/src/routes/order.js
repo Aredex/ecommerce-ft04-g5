@@ -306,7 +306,8 @@ router.route("/:id/confirmed").put((req, res) => {
         })
         .catch((err) => {
             console.log(err)
-            res.status(400).json(err)});
+            res.status(400).json(err)
+        });
 });
 // Ruta para especificar que una orden ya ha sido comprada
 router.route("/:id/toPayment").post(async (req, res) => {
@@ -338,8 +339,8 @@ router.route("/:id/toPayment").post(async (req, res) => {
             },
             external_reference: Order.id.toString(),
             back_urls: {
-                success: "http://localhost:3001/payment/meli/callback",
-                failure: "http://localhost:3001/payment/meli/callback",
+                success: `${process.env.API}/payment/meli/callback`,
+                failure: `${process.env.API}/payment/meli/callback`,
             },
             auto_return: "approved",
         };
@@ -433,16 +434,16 @@ router.route("/:id/delivered").get((req, res) => {
     } = req.params;
 
     // if (isAdmin(req)) {
-        editOne({
-            id,
-            status: "DELIVERED"
+    editOne({
+        id,
+        status: "DELIVERED"
+    })
+        .then((order_product) => {
+            var aux = dispatch(order_product)
+            res.send(aux)
+            // res.json(order_product).status(204)})
         })
-            .then((order_product) =>{ 
-                var aux = dispatch(order_product)
-                res.send(aux)              
-                // res.json(order_product).status(204)})
-            })
-            .catch((err) => res.status(400).json(err));
+        .catch((err) => res.status(400).json(err));
 
     // } else {
     //     res.sendStatus(401)

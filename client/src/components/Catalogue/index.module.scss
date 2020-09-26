@@ -2,6 +2,7 @@
 
 .catalogue {
   width: stretch;
+width: -moz-available;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(10rem, 10rem));
   grid-template-rows: 1fr;

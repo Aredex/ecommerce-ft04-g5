@@ -38,6 +38,7 @@
 }
 .reviewForm {
   width: stretch;
+width: -moz-available;
   .Input {
     display: flex;
     flex-direction: column;
@@ -100,6 +101,7 @@ label {
 
 .input {
   width: stretch;
+width: -moz-available;
 
   display: flex;
 
