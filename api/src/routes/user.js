@@ -99,7 +99,8 @@ router
   });
 
 
-router.route("/orders").get((req, res) => {
+router.route("/me/orders").get((req, res) => {
+
   if (isUser(req)) {
     getOrderByUser(req.user.uid)
       .then((orders) => res.json(orders).status(200))
@@ -108,6 +109,7 @@ router.route("/orders").get((req, res) => {
     res.sendStatus(401);
   }
 });
+
 router.route("/:id/orders").get((req, res) => {
   const { id } = req.params;
   if (isAdmin(req) || (isUser(req) && req.user.uid === id)) {
