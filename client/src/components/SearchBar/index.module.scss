@@ -12,6 +12,7 @@ width: -moz-available;
   transition-property: background, box-shadow;
   transition-duration: 0.25s;
   margin: 0 0.5rem;
+  justify-content: space-between;
 
   input {
     margin: 0;
@@ -21,7 +22,7 @@ width: -moz-available;
     border: none;
     text-align: center;
     @include respond-to("default") {
-      width: calc(100vw - 16.6rem);
+      width: calc(100vw - 17rem);
     }
   }
   input:focus,
