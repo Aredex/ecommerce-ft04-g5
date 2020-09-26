@@ -36,7 +36,7 @@ function Checkout() {
    * @param id Id de la orden a procesar
    */
   const toPayment = async (id) => {
-    const { data } = await Axios.post(`http://localhost:3001/orders/${id}/toPayment`, {
+    const { data } = await Axios.post(`${process.env.REACT_APP_API}/orders/${id}/toPayment`, {
       address: userLogin.user.address
     })
     alert(data.redirect)

@@ -70,8 +70,8 @@ router.route("/me").get(async (req, res) => {
     res.sendStatus(401);
   } else {
     const user = await getOne(req.user.uid);
-    const { id, name, email, role, status, createdAt, updatedAt } = user;
-    res.json({ id, name, email, role, status, createdAt, updatedAt });
+    const { id, name, email, role, status, createdAt, updatedAt, address } = user;
+    res.json({ id, name, email, role, status, createdAt, updatedAt, address });
   }
 });
 

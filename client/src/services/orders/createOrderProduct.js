@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function createOrderProduct(products, idUser) {
   return axios
-    .post(`http://localhost:3001/orders/products`, { products, idUser })
+    .post(`${process.env.REACT_APP_API}/orders/products`, { products, idUser })
     .then((response) => {
       return response.data;
     })

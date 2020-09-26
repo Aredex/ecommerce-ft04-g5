@@ -31,8 +31,8 @@ let preference = {
     installments: 1
   },
   back_urls: {
-    success: "http://localhost:3001/payment/meli/callback",
-    failure: "http://localhost:3001/payment/meli/callback",
+    success: `${process.env.API}/payment/meli/callback`,
+    failure: `${process.env.API}/payment/meli/callback`,
   },
   auto_return: "approved",
 };
@@ -41,6 +41,7 @@ router.route('/meli/callback').get(async (req, res) => {
   if (req.query.collection_status !== 'null') {
     try {
       const { body } = await mercadopago.payment.get(req.query.collection_id)
+      console.log(body.transaction_amount)
       const order_product = await confirmedOrder({
         id: req.query.external_reference,
         payment_method_id: body.payment_method_id,
@@ -50,7 +51,8 @@ router.route('/meli/callback').get(async (req, res) => {
         card_expiration_month: body.card.expiration_month,
         card_expiration_year: body.card.expiration_year,
         card_first_six_digits: body.card.first_six_digits,
-        card_last_four_digits: body.card.last_four_digits
+        card_last_four_digits: body.card.last_four_digits,
+        transaction_amount: body.transaction_amount
       })
       sendEmail(order_product)
       res.redirect(`${process.env.CALLBACK_URL_BASE || 'http://localhost:3000'}/checkout/success`)
