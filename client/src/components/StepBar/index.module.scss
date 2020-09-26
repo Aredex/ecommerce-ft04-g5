@@ -1,12 +1,14 @@
 @import "var.scss";
+@import 'bp.scss';
+
 .stepBar {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   position: relative;
   .step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    place-items: center;
     position: relative;
     color: #3e3e3e;
     
@@ -19,6 +21,7 @@
       z-index: 1;
       position: relative;
       background: #fff;
+      grid-area: 2 / 1 / span 1 / span 1;
       i {
         font-size: 1rem;
         margin: auto;
@@ -32,6 +35,12 @@
       width: 100%;
       text-align: center;
       margin-bottom: 0.5rem;
+      @include respond-to("default") {
+        display: none;
+      }
+      @include respond-to("small") {
+        display: initial;
+      }
     }
 
 
@@ -52,15 +61,27 @@
 }
 .step.complete {
   color: $--primary-color;
-  + .step {
-    &::before {
-      background: linear-gradient(90deg, $--primary-color 0%, #fff 75%);
-    }
-  }
-
   + .step.complete {
     &::before {
       background: $--primary-color;
+    }
+  }
+  + .step.completeExact {
+    &::before {
+      background: $--primary-color;
+    }
+  }
+}
+.step.completeExact{
+  color: $--primary-color;
+  span {
+    @include respond-to("default") {
+      display: initial;
+    }
+  }
+  + .step {
+    &::before {
+      background: linear-gradient(90deg, $--primary-color 0%, #fff 75%);
     }
   }
 }
