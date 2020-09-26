@@ -99,6 +99,15 @@ router
   });
 
 
+router.route("/orders").get((req, res) => {
+  if (isUser(req)) {
+    getOrderByUser(req.user.uid)
+      .then((orders) => res.json(orders).status(200))
+      .catch((err) => res.json(err));
+  } else {
+    res.sendStatus(401);
+  }
+});
 router.route("/:id/orders").get((req, res) => {
   const { id } = req.params;
   if (isAdmin(req) || (isUser(req) && req.user.uid === id)) {
@@ -109,6 +118,7 @@ router.route("/:id/orders").get((req, res) => {
     res.sendStatus(401);
   }
 });
+
 
 // Retorna todas las reviews hechas por el usuario según su id
 router.route("/:id/reviews").get((req, res) => {
