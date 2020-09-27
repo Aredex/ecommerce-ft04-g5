@@ -62,6 +62,12 @@ export const startDeletingImage = (id) => {
     };
 };
 
+export const startDeletingLocalImage = (id) => {
+    return async (dispatch) => {
+        dispatch(deleteImage(id));
+    };
+};
+
 // Actions
 
 export const selectProduct = (product, images) => ({

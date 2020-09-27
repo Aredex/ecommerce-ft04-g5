@@ -99,6 +99,8 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                                     prefix="Imágenes"
                                     prefixStyle={prefixStyle}
                                     estado={estado}
+                                    setFieldValue={setFieldValue}
+                                    values={values}
                                 />
                             )}
 
