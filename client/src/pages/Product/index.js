@@ -46,8 +46,15 @@ const Product = () => {
     };
 
     useEffect(() => {
+
         linkProducts();
         // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        // TheProductOnCart = products.find((product) => product.id === id);
+        // if (TheProductOnCart) {
+        //     setCount(TheProductOnCart.amount);
+        // }
+        console.log(products);
     }, [products]);
 
     useEffect(() => {

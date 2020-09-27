@@ -165,12 +165,17 @@ const toPaymentOrder = async ({ id, address, init_point }) => {
 
 const rejectedOrder = async (id) => {
     let order = await getOne(id);
-
     if (order.status === "REJECTED") {
         return new Promise((resolve, reject) => {
             reject({ error: { message: "La orden ya ha sido rechazada" } });
         });
     }
+    const result = await order.products.map(async (p) => {
+        const product = await getProduct(p.id);
+        product.stock = product.stock + p.order_product.amount;
+        await product.save();
+        return product;
+    });
 
     if (!order.status !== "REJECTED") {
         order.status = "REJECTED";
