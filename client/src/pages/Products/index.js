@@ -31,7 +31,8 @@ const Products = ({
   useEffect(() => {
     (async () => {
       const result = await getAllCategories();
-      result && setCategories(result);
+
+      result && setCategories(result.sort((a,b)=>a.name.toUpperCase() > b.name.toUpperCase()? 1:-1));
     })();
   }, []);
 

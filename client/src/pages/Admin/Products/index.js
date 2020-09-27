@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect , useState } from "react";
 import style from "./index.module.scss";
 import CRUD from "./CRUD";
 import * as actionsProducts from "store/Actions/Products/ProductsActions";
@@ -32,7 +32,10 @@ const Products = ({
     state.productRemove,
   ]);
 
-  const products = state.productCards;
+  const[filter,setFilter] = useState("name");
+  const[order,setOrder] = useState(true);
+
+  var products = state.productCards;
   const bandera = {
     readOnly: state.productReadOnly,
     update: state.productUpdate,
@@ -117,9 +120,18 @@ const Products = ({
             await addCategoryProduct(creado.id, category.id);
           }
         }
-
         disabledProductCRUD();
       };
+    }
+  }
+  function handleFilter(e){
+    e.preventDefault()
+    setOrder(!order)
+    setFilter(e.target.name); 
+    if(filter == "name" || filter == "description"){
+      products = order ? products.sort((a,b)=>a[filter].toUpperCase() > b[filter].toUpperCase()? 1:-1): products.sort((a,b)=>a[filter].toUpperCase() < b[filter].toUpperCase()? 1:-1);
+    }else{
+      products = order ? products.sort((a,b)=>a[filter] > b[filter]? 1:-1): products.sort((a,b)=>a[filter] < b[filter]? 1:-1);
     }
   }
 
@@ -128,10 +140,10 @@ const Products = ({
       <table className={style.table}>
         <thead>
           <tr>
-            <th>Nombre:</th>
-            <th>Descripción:</th>
-            <th>Precio:</th>
-            <th>Stock:</th>
+            <th><button className={filter == "name" ? order? style.asc: style.desc:null } name ="name"onClick={handleFilter}>Nombre:</button></th>
+            <th><button className={filter == "description" ? order? style.asc: style.desc:null } name ="description"onClick={handleFilter}>Descripción:</button></th>
+            <th><button className={filter == "price" ? order? style.asc: style.desc:null} name ="price"onClick={handleFilter}>Precio:</button></th>
+            <th><button className={filter == "stock" ? order? style.asc: style.desc:null} name ="stock"onClick={handleFilter}>Stock:</button></th>
             <th style={{ width: "11rem" }}>
               <button onClick={() => handleCreate()}>
                 <i className="fas fa-plus"></i> Agregar
@@ -140,8 +152,7 @@ const Products = ({
           </tr>
         </thead>
         <tbody>
-          {products !== undefined &&
-            products.map((product, key) => (
+          {products !== undefined && products.map((product, key) => (
               <tr key={key}>
                 <td>{product.name}</td>
                 <td>{product.description}</td>
