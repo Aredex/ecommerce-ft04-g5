@@ -23,21 +23,24 @@ const Product = () => {
         (state) => state.orders?.shoppingCart?.products
     );
 
+    const [isAdded, setIsAdded] = useState(false);
+
     let TheProductOnCart = null;
 
     const linkProducts = () => {
         if (products && products?.length > 0 && id) {
-            TheProductOnCart = products.find((p) => p.id == id);
-            console.log("PRODUCT", TheProductOnCart);
-            console.log("ID", id);
-            setCount(TheProductOnCart.amount);
+            TheProductOnCart = products.find((p) => p.id === parseInt(id));
+            if (TheProductOnCart) {
+                setCount(TheProductOnCart.amount);
+                setIsAdded(true);
+            }
         } else {
             setCount(1);
+            setIsAdded(false);
         }
     };
 
     useEffect(() => {
-        console.log("HEY!!");
         linkProducts();
     }, [products]);
 
@@ -84,6 +87,7 @@ const Product = () => {
                     />
                     {product.stock > 0 ? (
                         <AddToCart
+                            isAdded={isAdded}
                             onAdd={handleOnAdd}
                             onSubstract={hableOnSubstract}
                             value={count}

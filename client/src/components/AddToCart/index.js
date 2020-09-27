@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import style from "./index.module.scss";
 
 const AddToCart = ({
@@ -9,8 +8,13 @@ const AddToCart = ({
     value,
     disableAdd,
     disableSubstract,
+    isAdded,
 }) => {
     const [added, setAdded] = useState(false);
+
+    useEffect(() => {
+        if (isAdded) setAdded(true);
+    }, [isAdded]);
 
     return (
         <div className={style.inputNumber}>
@@ -38,7 +42,7 @@ const AddToCart = ({
             >
                 <>
                     <i className={["fas", "fa-shopping-cart"].join(" ")}></i>
-                    {"Añadir al Carro"}
+                    {!added ? "Añadir al Carro" : "Tienes en el carro"}
                 </>
             </button>
         </div>
