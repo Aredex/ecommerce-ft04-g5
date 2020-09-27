@@ -11,21 +11,46 @@ const AddToCart = ({
     isAdded,
 }) => {
     const [added, setAdded] = useState(false);
+    const [firstTime, setFirstTime] = useState(true);
 
     useEffect(() => {
         if (isAdded) setAdded(true);
         else setAdded(false);
     }, [isAdded]);
 
+    const handleOnAdd = () => {
+        onAdd();
+        setFirstTime(false);
+    };
+
+    const handleOnSubstract = () => {
+        onSubstract();
+        setFirstTime(false);
+    };
+
+    const levelToShow = () => {
+        if (added) {
+            if (firstTime) {
+                return "Tienes en el carro";
+            }
+            return "Modifica el carro";
+        }
+
+        return "Añade al carro";
+    };
+
     return (
         <div className={style.inputNumber}>
             <>
                 <input value={value} readOnly></input>
                 <section>
-                    <button onClick={onAdd} disabled={disableAdd}>
+                    <button onClick={handleOnAdd} disabled={disableAdd}>
                         <i className={["fas", "fa-angle-up"].join(" ")}></i>
                     </button>
-                    <button onClick={onSubstract} disabled={disableSubstract}>
+                    <button
+                        onClick={handleOnSubstract}
+                        disabled={disableSubstract}
+                    >
                         <i className={["fas", "fa-angle-down"].join(" ")}></i>
                     </button>
                 </section>
@@ -35,15 +60,16 @@ const AddToCart = ({
                 type="submit"
                 className={style.submit}
                 onClick={() => {
-                    if (!added) {
+                    // if (!added) {
                         onSubmit();
                         setAdded(true);
-                    }
+                        setFirstTime(true);
+                    // }
                 }}
             >
                 <>
                     <i className={["fas", "fa-shopping-cart"].join(" ")}></i>
-                    {!added ? "Añadir al Carro" : "Tienes en el carro"}
+                    {levelToShow()}
                 </>
             </button>
         </div>

@@ -35,6 +35,9 @@ const Product = () => {
             if (TheProductOnCart) {
                 setCount(TheProductOnCart.amount);
                 setIsAdded(true);
+            } else {
+                setIsAdded(false);
+                setCount(1);
             }
         } else {
             setCount(1);
@@ -44,7 +47,7 @@ const Product = () => {
 
     useEffect(() => {
         linkProducts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [products]);
 
     useEffect(() => {
@@ -56,6 +59,7 @@ const Product = () => {
 
     const handleOnAdd = () => {
         setCount(count + 1);
+        // setIsAdded(false);
     };
 
     const hableOnSubstract = () => {
@@ -64,6 +68,7 @@ const Product = () => {
         }
 
         setCount(count - 1);
+        // setIsAdded(false);
     };
 
     if (product) {
