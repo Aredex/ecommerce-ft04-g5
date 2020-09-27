@@ -6,12 +6,16 @@ import InputField from "components/InputField";
 import TextareaField from "components/TextareaField";
 import Modal from "components/Modal";
 import TagField from "components/TagField";
+import ImagesContainer from "components/ImagesContainer";
 import { useForm } from "hooks/useForm";
 import ImagesProduct from "components/imagesProduct/ImagesProduct";
+import { useDispatch } from "react-redux";
+import { startAddingImage } from "Disparchers/productImages";
 
 const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
     const [addingImage, setAddingImage] = useState(false);
     const [firstAddImage, setfirstAddImage] = useState(true);
+    const dispatch = useDispatch();
 
     const [{ imageUrl }, handleInputChange, resetImageUrl] = useForm({
         imageUrl: "",
@@ -36,12 +40,13 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                         ? [...values.imageUrl, imageUrl]
                         : [imageUrl]
                 );
+                resetImageUrl();
             }
-
             resetImageUrl();
 
             setAddingImage(false);
         }
+        resetImageUrl();
     };
 
     const prefixStyle = { width: "8rem" };
@@ -68,6 +73,8 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                             <ImagesProduct
                                 prefix="Imágenes"
                                 prefixStyle={prefixStyle}
+                                estado={estado}
+                                id={values.id}
                             />
 
                             <TextareaField
@@ -100,6 +107,7 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                                         }
                                     >
                                         <InputField
+                                            autoComplete="off"
                                             prefix="URL de imagen"
                                             name="imageUrl"
                                             prefixStyle={prefixStyle}
@@ -113,9 +121,17 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                                 {!estado.readOnly && (
                                     <div
                                         className={style.img}
-                                        onClick={() =>
-                                            handleAddImg(setFieldValue, values)
-                                        }
+                                        onClick={() => {
+                                            handleAddImg(setFieldValue, values);
+                                            if (addingImage) {
+                                                dispatch(
+                                                    startAddingImage(
+                                                        values.id,
+                                                        imageUrl
+                                                    )
+                                                );
+                                            }
+                                        }}
                                     >
                                         {addingImage
                                             ? "Aceptar"

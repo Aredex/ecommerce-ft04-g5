@@ -17,7 +17,7 @@ const ImageProductReducer = (state = initialState, action) => {
     case types.addImage:
       return {
         ...state,
-        productImages: [state.productImages, action.payload.image],
+        productImages: [...state.productImages, action.payload.image],
       };
 
     case types.removeImage:
