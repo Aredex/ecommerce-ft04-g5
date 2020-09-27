@@ -8,7 +8,7 @@ import ReactGA from 'react-ga';
 function App() {
   const location = useLocation()
   useEffect(() => { ReactGA.initialize('UA-154949513-1') }, [])
-  useEffect(() => { ReactGA.pageview(location) }, [location])
+  useEffect(() => { ReactGA.pageview(location.pathname) }, [location])
   return (
     <div className="App">
       <Layout>
