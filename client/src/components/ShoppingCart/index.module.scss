@@ -6,7 +6,7 @@
 
   aside {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0rem, 25rem);
     grid-template-rows: auto 1fr auto;
     position: fixed;
     right: 0;

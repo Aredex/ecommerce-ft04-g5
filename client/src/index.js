@@ -6,7 +6,11 @@ import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store/index";
+import ReactGA from 'react-ga';
 require("dotenv").config();
+
+ReactGA.initialize('UA-154949513-1');
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 ReactDOM.render(
   <React.StrictMode>
