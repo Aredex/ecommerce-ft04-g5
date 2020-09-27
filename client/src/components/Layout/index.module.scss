@@ -96,6 +96,38 @@ width: -moz-available;
   overflow: hidden;
   overflow-y: auto;
 }
+
+.content::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+.content::-webkit-scrollbar:vertical {
+  width:1rem;
+}
+
+.content::-webkit-scrollbar-button:increment,.content::-webkit-scrollbar-button {
+  display: none;
+} 
+
+.content::-webkit-scrollbar:horizontal {
+  height: 1rem;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background-color: $--primary-color;
+  border-radius: 20px;
+  border: 2px solid #f1f2f3;
+}
+
+.content::-webkit-scrollbar-track {
+  border-radius: 9999px;  
+}
+
+
+
+
+
+
+
 .footer {
   height: 0rem;
 }
