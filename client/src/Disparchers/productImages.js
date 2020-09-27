@@ -22,11 +22,15 @@ export const startAddingImage = (productId, imageUrl) => {
 
 export const startSelectingProduct = (id) => {
     return async (dispatch) => {
-        const { data } = await axios.get(
-            `${process.env.REACT_APP_API}/products/${id}`
-        );
-        const { images } = data;
-        dispatch(selectProduct(data, images));
+        if (id) {
+            const { data } = await axios.get(
+                `${process.env.REACT_APP_API}/products/${id}`
+            );
+            const { images } = data;
+            dispatch(selectProduct(data, images));
+        } else {
+            dispatch(deselectProduct());
+        }
     };
 };
 
@@ -60,4 +64,8 @@ export const deleteImage = (id) => ({
     payload: {
         id,
     },
+});
+
+export const deselectProduct = () => ({
+    type: types.deselectProduct,
 });

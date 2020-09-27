@@ -8,16 +8,16 @@ import style from "./index.module.scss";
 
 function ImagesContainer({ id, estado }) {
     const dispatch = useDispatch();
-    const { productActive, productImages } = useSelector(
-        (state) => state.imageProduct
-    );
+    const { productImages } = useSelector((state) => state.imageProduct);
 
     const handleDeleteImage = (id) => {
         dispatch(startDeletingImage(id));
     };
 
     useEffect(() => {
-        dispatch(startSelectingProduct(id));
+        if (id) {
+            dispatch(startSelectingProduct(id));
+        }
     }, [id, dispatch]);
 
     return (

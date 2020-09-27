@@ -70,13 +70,6 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                                 readOnly={estado.readOnly}
                             />
 
-                            <ImagesProduct
-                                prefix="Imágenes"
-                                prefixStyle={prefixStyle}
-                                estado={estado}
-                                id={values.id}
-                            />
-
                             <TextareaField
                                 prefix="Descripción"
                                 name="description"
@@ -96,6 +89,15 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                                 name="stock"
                                 readOnly={estado.readOnly}
                             />
+
+                            {!estado.create && (
+                                <ImagesProduct
+                                    prefix="Imágenes"
+                                    prefixStyle={prefixStyle}
+                                    estado={estado}
+                                    id={values.id}
+                                />
+                            )}
 
                             <>
                                 {!firstAddImage && (
