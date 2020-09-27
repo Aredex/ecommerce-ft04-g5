@@ -12,6 +12,9 @@ import { useHistory, useParams } from "react-router";
 const Product = () => {
     const [count, setCount] = useState(1);
 
+    const history = useHistory();
+    const product = useSelector((x) => x.ProductsReducer.productDetail);
+
     const dispatch = useDispatch();
 
     const { id } = useParams();
@@ -20,9 +23,33 @@ const Product = () => {
         (state) => state.orders?.shoppingCart?.products
     );
 
+    const [isAdded, setIsAdded] = useState(false);
+
+    const { addProduct } = useOrders();
+
     let TheProductOnCart = null;
 
+    const linkProducts = () => {
+        if (products && products?.length > 0 && id) {
+            TheProductOnCart = products.find((p) => p.id === parseInt(id));
+            if (TheProductOnCart) {
+                setCount(TheProductOnCart.amount);
+                setIsAdded(true);
+            } else {
+                setIsAdded(false);
+                setCount(1);
+            }
+        } else {
+            setCount(1);
+            setIsAdded(false);
+        }
+    };
+
     useEffect(() => {
+
+        linkProducts();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         // TheProductOnCart = products.find((product) => product.id === id);
         // if (TheProductOnCart) {
         //     setCount(TheProductOnCart.amount);
@@ -36,10 +63,10 @@ const Product = () => {
             dispatch(getProductDetail());
         };
     }, [dispatch, id]);
-    const history = useHistory();
-    const product = useSelector((x) => x.ProductsReducer.productDetail);
+
     const handleOnAdd = () => {
         setCount(count + 1);
+        // setIsAdded(false);
     };
 
     const hableOnSubstract = () => {
@@ -48,9 +75,8 @@ const Product = () => {
         }
 
         setCount(count - 1);
+        // setIsAdded(false);
     };
-
-    const { addProduct } = useOrders();
 
     if (product) {
         const imageURL = product.images[0]?.url || noImage;
@@ -74,6 +100,7 @@ const Product = () => {
                     />
                     {product.stock > 0 ? (
                         <AddToCart
+                            isAdded={isAdded}
                             onAdd={handleOnAdd}
                             onSubstract={hableOnSubstract}
                             value={count}
