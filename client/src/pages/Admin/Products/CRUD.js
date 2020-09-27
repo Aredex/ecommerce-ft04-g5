@@ -7,7 +7,6 @@ import TextareaField from "components/TextareaField";
 import Modal from "components/Modal";
 import TagField from "components/TagField";
 import { useForm } from "hooks/useForm";
-import ImagesProduct from "./ImagesProduct";
 
 const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
     const [addingImage, setAddingImage] = useState(false);
