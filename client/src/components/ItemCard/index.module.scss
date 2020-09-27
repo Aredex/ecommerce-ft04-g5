@@ -2,11 +2,13 @@
 
 .itemCard {
   width: stretch;
+width: -moz-available;
 
   .productName {
     font-weight: 600;
     text-align: left;
     width: stretch;
+width: -moz-available;
     margin: 0;
     padding: 0.25rem 0.5rem;
     border-bottom: solid 1px #e3e3e3;
@@ -54,6 +56,7 @@
       height: 2rem;
       div {
         width: stretch;
+width: -moz-available;
       }
       section {
         width: fit-content;

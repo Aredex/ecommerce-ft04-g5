@@ -2,12 +2,15 @@
 
 .catalogue {
   width: stretch;
+width: -moz-available;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(10rem, 10rem));
   grid-template-rows: 1fr;
   justify-content: center;
   gap: 1rem;
   padding: 0.5rem;
+  height: fit-content;
+  
   @include respond-to("default") {
     padding: 0rem;
     gap: 0.5rem;

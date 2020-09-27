@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function setUpdateOrder(id, status, address) {
   return axios
-    .put(`http://localhost:3001/orders/${id}`, { status, address })
+    .put(`${process.env.REACT_APP_API}/orders/${id}`, { status, address })
     .then((response) => {
       return response.data;
     })

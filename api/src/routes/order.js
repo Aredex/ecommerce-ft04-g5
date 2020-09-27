@@ -263,8 +263,8 @@ router.route("/:id/toPayment").post(async (req, res) => {
             },
             external_reference: Order.id.toString(),
             back_urls: {
-                success: "http://localhost:3001/payment/meli/callback",
-                failure: "http://localhost:3001/payment/meli/callback",
+                success: `${process.env.API}/payment/meli/callback`,
+                failure: `${process.env.API}/payment/meli/callback`,
             },
             auto_return: "approved",
         };

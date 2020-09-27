@@ -13,6 +13,7 @@ $border: solid 1px #a3a3a3;
 }
 .prefix {
   width: stretch;
+width: -moz-available;
   text-align: left;
   padding: 0.25rem 0.5rem;
   background: #e3e3e3;
@@ -23,6 +24,7 @@ $border: solid 1px #a3a3a3;
 }
 .input {
   width: stretch;
+width: -moz-available;
   display: flex;
   flex-wrap: wrap;
   margin: 0;
@@ -38,6 +40,7 @@ $border: solid 1px #a3a3a3;
   p {
     text-align: center;
     width: stretch;
+width: -moz-available;
     border-color: transparent;
   }
   span {
@@ -51,6 +54,7 @@ $border: solid 1px #a3a3a3;
 }
 .sufix {
   width: stretch;
+width: -moz-available;
   text-align: left;
   background: #e3e3e3;
   color: #3e3e3e;
@@ -64,6 +68,7 @@ $border: solid 1px #a3a3a3;
     border: $border;
     padding: 0.25rem;
     width: stretch;
+width: -moz-available;
     border-radius: 0.25rem;
     &:focus {
       outline: none;
@@ -80,6 +85,7 @@ $border: solid 1px #a3a3a3;
     position: absolute;
     border: $border;
     width: stretch;
+width: -moz-available;
     z-index: 110;
     color: #3e3e3e;
     background: #e3e3e3;

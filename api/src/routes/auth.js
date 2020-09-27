@@ -29,10 +29,10 @@ router.route("/login/google/callback").get(function (req, res, next) {
   passport.authorize("google", function (err, user) {
     if (err) return next(err);
     if (!user) {
-      res.redirect("http://localhost:3000/sign-in?error=401");
+      res.redirect(`${process.env.CALLBACK_URL_BASE || 'http://localhost:3000'}/sign-in?error=401`);
     } else {
       const token = jwt.sign({ uid: user.id, role: user.role }, secret);
-      res.redirect(`http://localhost:3000/sign-in?token=${token}`);
+      res.redirect(`${process.env.CALLBACK_URL_BASE || 'http://localhost:3000'}/sign-in?token=${token}`);
     }
   })(req, res, next);
 });
@@ -41,10 +41,10 @@ router.route("/login/facebook/callback").get(function (req, res, next) {
   passport.authorize("facebook", function (err, user) {
     if (err) return next(err);
     if (!user) {
-      res.redirect("http://localhost:3000/sign-in?error=401");
+      res.redirect(`${process.env.CALLBACK_URL_BASE || 'http://localhost:3000'}/sign-in?error=401`);
     } else {
       const token = jwt.sign({ uid: user.id, role: user.role }, secret);
-      res.redirect(`http://localhost:3000/sign-in?token=${token}`);
+      res.redirect(`${process.env.CALLBACK_URL_BASE || 'http://localhost:3000'}/sign-in?token=${token}`);
     }
   })(req, res, next);
 });
@@ -70,8 +70,8 @@ router.route("/me").get(async (req, res) => {
     res.sendStatus(401);
   } else {
     const user = await getOne(req.user.uid);
-    const { id, name, email, role, status, createdAt, updatedAt } = user;
-    res.json({ id, name, email, role, status, createdAt, updatedAt });
+    const { id, name, email, role, status, createdAt, updatedAt, address } = user;
+    res.json({ id, name, email, role, status, createdAt, updatedAt, address });
   }
 });
 
