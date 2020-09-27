@@ -4,7 +4,7 @@
 .page {
   display: grid;
   grid-template-rows: auto;
-  min-height: 100%;
+  height: 100%;
   width: 100%;
   margin: 0 auto;
   @include respond-to("default") {
@@ -124,8 +124,15 @@
 }
 
 .orderPage {
+  height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+
   @include respond-to("default") {
     width: 100vw;
+  }
+  .ordersCard {
+    margin-bottom: 1.5rem;
   }
   .order {
     display: flex;
