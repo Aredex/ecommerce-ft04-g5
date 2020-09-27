@@ -27,7 +27,7 @@ const Product = () => {
         // if (TheProductOnCart) {
         //     setCount(TheProductOnCart.amount);
         // }
-        console.log(products)
+        console.log(products);
     }, [products]);
 
     useEffect(() => {
@@ -114,14 +114,11 @@ const Product = () => {
                             <span>Descripción</span>
                         </div>
                         {product.description}
-                      </div>
                     </div>
-                  </div>
-                );
-              } else 
-                return (
-                  <Load></Load>
-                );
+                </div>
+            </div>
+        );
+    } else return <Load></Load>;
 };
 
 export default Product;
