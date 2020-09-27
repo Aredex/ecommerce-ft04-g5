@@ -1,19 +1,9 @@
-const {
-    getOne: getProduct
-} = require("./products");
-const {
-    Order,
-    Product,
-    User,
-    Op,
-    Image
-} = require("../db");
+const { getOne: getProduct } = require("./products");
+const { Order, Product, User, Op, Image } = require("../db");
 
 // Obtiene todas las ordenes hechas y puede filtrar según su status
 
-const getAllFiler = ({
-    search
-}) => {
+const getAllFiler = ({ search }) => {
     return new Promise((resolve, reject) => {
         if (!isNaN(search)) {
             search = Number(search);
@@ -23,7 +13,7 @@ const getAllFiler = ({
                 .catch((err) => reject(err));
         } else {
             getAll({
-                search
+                search,
             })
                 .then((order) => resolve(order))
                 .catch((err) => reject(err));
@@ -31,10 +21,7 @@ const getAllFiler = ({
     });
 };
 
-const getAll = ({
-    status,
-    search
-}) => {
+const getAll = ({ status, search }) => {
     let where = {};
     let obj = {};
     let include = [Product, User];
@@ -49,9 +36,9 @@ const getAll = ({
             model: User,
             where: {
                 name: {
-                    [Op.substring]: search
-                }
-            }
+                    [Op.substring]: search,
+                },
+            },
         };
         include[1] = obj;
     }
@@ -60,9 +47,7 @@ const getAll = ({
         Order.findAll({
             where,
             include,
-            order: [
-                ["id", "ASC"]
-            ],
+            order: [["id", "ASC"]],
         })
             .then((orders) => {
                 if (orders.length === 0) {
@@ -70,20 +55,25 @@ const getAll = ({
                         error: {
                             name: "ApiFindError",
                             type: "Orders error",
-                            errors: [{
-                                message: "there are no orders in the database",
-                                type: "not found",
-                                value: null,
-                            },],
+                            errors: [
+                                {
+                                    message:
+                                        "there are no orders in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
                         },
                     });
                 }
 
                 resolve(orders);
             })
-            .catch((err) => reject({
-                error: err
-            }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
     });
 };
 
@@ -96,31 +86,27 @@ const confirmedOrder = async ({
     card_expiration_month,
     card_expiration_year,
     card_first_six_digits,
-    card_last_four_digits
+    card_last_four_digits,
 }) => {
     const Order = await getOne(id);
     Order.status = "CONFIRMED";
-    Order.payment_method_id = payment_method_id
-    Order.payment_type_id = payment_type_id
-    Order.payment_status = payment_status
-    Order.payment_status_detail = payment_status_detail
-    Order.card_expiration_month = card_expiration_month
-    Order.card_expiration_year = card_expiration_year
-    Order.card_first_six_digits = card_first_six_digits
-    Order.card_last_four_digits = card_last_four_digits
-    await Order.save()
+    Order.payment_method_id = payment_method_id;
+    Order.payment_type_id = payment_type_id;
+    Order.payment_status = payment_status;
+    Order.payment_status_detail = payment_status_detail;
+    Order.card_expiration_month = card_expiration_month;
+    Order.card_expiration_year = card_expiration_year;
+    Order.card_first_six_digits = card_first_six_digits;
+    Order.card_last_four_digits = card_last_four_digits;
+    await Order.save();
 };
 
-const toPaymentOrder = async ({
-    id,
-    address,
-    init_point
-}) => {
+const toPaymentOrder = async ({ id, address, init_point }) => {
     if (!address) {
         return new Promise((resolve, reject) => {
             reject({
                 error: {
-                    message: "Es necesario tener la dirección de envío"
+                    message: "Es necesario tener la dirección de envío",
                 },
             });
         });
@@ -130,7 +116,7 @@ const toPaymentOrder = async ({
     let poderComprar = true;
 
     Order.products.map((product) => {
-        if (product.order_product.amount >= product.stock) {
+        if (product.order_product.amount > product.stock) {
             poderComprar = false;
         }
     });
@@ -139,7 +125,8 @@ const toPaymentOrder = async ({
         if (!poderComprar) {
             return reject({
                 error: {
-                    message: "No se puede hacer la compra, uno de los productos no tiene el stock suficiente",
+                    message:
+                        "No se puede hacer la compra, uno de los productos no tiene el stock suficiente",
                 },
             });
         }
@@ -160,14 +147,36 @@ const toPaymentOrder = async ({
                 Order.init_point = init_point;
                 Order.save();
             })
-            .catch((err) => reject({
-                error: err
-            }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
 
-        getOne(id)
-            .then((e) => {
-                resolve(e)
+        getOne(id).then((e) => {
+            resolve(e);
+        });
+    });
+};
+
+const rejectedOrder = async (id) => {
+    let order = await getOne(id);
+    order.status = "REJECTED";
+    order = await order.save();
+
+    const result = await order.products.forEach(async (p) => {
+        const product = await getProduct(p.id);
+        product.stock = product.stock + p.order_product.amount;
+        await product.save();
+    });
+
+    return new Promise((resolve, reject) => {
+        Promise.all(result)
+            .then(() => {
+                return getOne(id);
             })
+            .then((order) => resolve(order))
+            .catch(reject);
     });
 };
 
@@ -176,14 +185,17 @@ const getOne = (id) => {
     return new Promise((resolve, reject) => {
         Order.findOne({
             where: {
-                id
+                id,
             },
-            include: [{
-                model: Product,
-                include: {
-                    model: Image
-                }
-            }, User]
+            include: [
+                {
+                    model: Product,
+                    include: {
+                        model: Image,
+                    },
+                },
+                User,
+            ],
         })
             .then((order) => {
                 if (!order) {
@@ -191,20 +203,25 @@ const getOne = (id) => {
                         error: {
                             name: "ApiFindError",
                             type: "Orders error",
-                            errors: [{
-                                message: "order does not exist in the database",
-                                type: "not found",
-                                value: null,
-                            },],
+                            errors: [
+                                {
+                                    message:
+                                        "order does not exist in the database",
+                                    type: "not found",
+                                    value: null,
+                                },
+                            ],
                         },
                     });
                 }
 
                 resolve(order);
             })
-            .catch((err) => reject({
-                error: err
-            }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
     });
 };
 
@@ -213,21 +230,19 @@ const createOne = (status, address) => {
     return new Promise((resolve, reject) => {
         Order.create({
             status,
-            address
+            address,
         })
             .then((order) => resolve(order))
-            .catch((err) => reject({
-                error: err
-            }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
     });
 };
 
 // Edita una orden según el parámetro enviado
-const editOne = ({
-    id,
-    status,
-    address
-}) => {
+const editOne = ({ id, status, address }) => {
     return new Promise((resolve, reject) => {
         getOne(id)
             .then((order) => {
@@ -238,14 +253,16 @@ const editOne = ({
             })
             .then((order) => {
                 if (order.products.length === 0) {
-                    return order.destroy()
+                    return order.destroy();
                 }
-                return order
+                return order;
             })
             .then((order) => resolve(order))
-            .catch((err) => reject({
-                error: err
-            }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
     });
 };
 
@@ -257,12 +274,14 @@ const deleteOne = (id) => {
                 order.destroy();
 
                 resolve({
-                    description: "successfully remove"
+                    description: "successfully remove",
                 });
             })
-            .catch((err) => reject({
-                error: err
-            }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
     });
 };
 
@@ -272,9 +291,11 @@ const emptyOrder = (id) => {
         getOne(id)
             .then((order) => order.setProducts([]))
             .then((order) => resolve(order))
-            .catch((err) => reject({
-                error: err
-            }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
     });
 };
 
@@ -288,4 +309,5 @@ module.exports = {
     toPaymentOrder,
     confirmedOrder,
     getAllFiler,
+    rejectedOrder,
 };
