@@ -30,6 +30,7 @@ function InputField(props) {
           <div className={style.inputPrefix}>{props.inputPrefix}</div>
         )}
         <Field
+        autoComplete="off"
           name={props.name}
           value={props.value ? props.value : formikContext.values[props.name]}
           type={props.type}
