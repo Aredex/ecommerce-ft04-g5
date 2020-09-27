@@ -1,19 +1,27 @@
 import {
     startDeletingImage,
+    startDeletingLocalImage,
     startSelectingProduct,
 } from "Disparchers/productImages";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import style from "./index.module.scss";
 
-function ImagesContainer({ id, estado }) {
+function ImagesContainer({ id, estado, setFieldValue, values }) {
     const dispatch = useDispatch();
-    const { productActive, productImages } = useSelector(
-        (state) => state.imageProduct
-    );
+    const { productImages } = useSelector((state) => state.imageProduct);
 
-    const handleDeleteImage = (id) => {
-        dispatch(startDeletingImage(id));
+    const handleDeleteImage = (imageId, url) => {
+        if (!id) {
+            setFieldValue(
+                "imageUrl",
+                values.imageUrl.filter((img) => img != url)
+            );
+            dispatch(startDeletingLocalImage(imageId));
+            // console.log(url);
+        } else {
+            dispatch(startDeletingImage(imageId));
+        }
     };
 
     useEffect(() => {
@@ -24,13 +32,13 @@ function ImagesContainer({ id, estado }) {
         <div className={style.imgcontainer}>
             {productImages.map(({ id, url }) => (
                 <div key={id}>
-                    {estado.update && (
+                    {!estado.readOnly && (
                         <i
                             className={[
                                 "far fa-times-circle",
                                 style.removeButton,
                             ].join(" ")}
-                            onClick={() => handleDeleteImage(id)}
+                            onClick={() => handleDeleteImage(id, url)}
                         />
                     )}
 

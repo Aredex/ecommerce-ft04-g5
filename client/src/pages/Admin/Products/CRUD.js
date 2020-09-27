@@ -40,13 +40,10 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                         ? [...values.imageUrl, imageUrl]
                         : [imageUrl]
                 );
-                resetImageUrl();
             }
-            resetImageUrl();
 
             setAddingImage(false);
         }
-        resetImageUrl();
     };
 
     const prefixStyle = { width: "8rem" };
@@ -70,13 +67,6 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                                 readOnly={estado.readOnly}
                             />
 
-                            <ImagesProduct
-                                prefix="Imágenes"
-                                prefixStyle={prefixStyle}
-                                estado={estado}
-                                id={values.id}
-                            />
-
                             <TextareaField
                                 prefix="Descripción"
                                 name="description"
@@ -96,6 +86,23 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                                 name="stock"
                                 readOnly={estado.readOnly}
                             />
+
+                            {!estado.create ? (
+                                <ImagesProduct
+                                    prefix="Imágenes"
+                                    prefixStyle={prefixStyle}
+                                    estado={estado}
+                                    id={values.id}
+                                />
+                            ) : (
+                                <ImagesProduct
+                                    prefix="Imágenes"
+                                    prefixStyle={prefixStyle}
+                                    estado={estado}
+                                    setFieldValue={setFieldValue}
+                                    values={values}
+                                />
+                            )}
 
                             <>
                                 {!firstAddImage && (
@@ -124,12 +131,21 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                                         onClick={() => {
                                             handleAddImg(setFieldValue, values);
                                             if (addingImage) {
-                                                dispatch(
-                                                    startAddingImage(
-                                                        values.id,
-                                                        imageUrl
-                                                    )
-                                                );
+                                                if (!estado.create) {
+                                                    dispatch(
+                                                        startAddingImage(
+                                                            values.id,
+                                                            imageUrl
+                                                        )
+                                                    );
+                                                } else {
+                                                    dispatch(
+                                                        startAddingImage(
+                                                            null,
+                                                            imageUrl
+                                                        )
+                                                    );
+                                                }
                                             }
                                         }}
                                     >
