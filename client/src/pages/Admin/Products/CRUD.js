@@ -90,6 +90,67 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                     />
                   </div>
                 )}
+                <div className={style.imgcontainer}>
+                  <div>
+                        <i
+          className={[
+            "far fa-times-circle",
+            style.removeButton,
+          ].join(" ")}
+          onClick={() =>console.log("anda")}/>
+                        <img src="https://www.acceseo.com/wp-content/uploads/2020/09/guillermo-villanueva-bonealive.jpg"></img>
+                  </div>
+
+                  <div><i
+          className={[
+            "far fa-times-circle",
+            style.removeButton,
+          ].join(" ")}
+          onClick={() =>console.log("anda")}/><img src="https://interactive-examples.mdn.mozilla.net/media/examples/plumeria.jpg"></img></div>
+                  <div><i
+          className={[
+            "far fa-times-circle",
+            style.removeButton,
+          ].join(" ")}
+          onClick={() =>console.log("anda")}/><img src="https://www.w3schools.com/css/paris.jpg"></img></div>
+                  <div><i
+          className={[
+            "far fa-times-circle",
+            style.removeButton,
+          ].join(" ")}
+          onClick={() =>console.log("anda")}/><img src="https://www.w3schools.com/css/rock600x400.jpg"></img></div>
+                  <div><i
+          className={[
+            "far fa-times-circle",
+            style.removeButton,
+          ].join(" ")}
+          onClick={() =>console.log("anda")}/><img src="https://static.vecteezy.com/system/resources/previews/001/189/527/non_2x/palm-tree-png.png"></img></div>
+                  <div><i
+          className={[
+            "far fa-times-circle",
+            style.removeButton,
+          ].join(" ")}
+          onClick={() =>console.log("anda")}/><img src="https://www.jardineriaon.com/wp-content/uploads/2018/10/jubaea-chilensis-palmera-1024x683.jpg"></img></div>
+                  <div><i
+          className={[
+            "far fa-times-circle",
+            style.removeButton,
+          ].join(" ")}
+          onClick={() =>console.log("anda")}/><img src="https://images-na.ssl-images-amazon.com/images/I/61DHLYtetoL._AC_SY400_.jpg"></img></div>
+                  <div><i
+          className={[
+            "far fa-times-circle",
+            style.removeButton,
+          ].join(" ")}
+          onClick={() =>console.log("anda")}/><img src="https://revista-ambiente.com.ar/wp-content/uploads/2020/02/Caracter%C3%ADsticas-de-las-palmeras-777x437.jpg"></img></div>
+                  <div><i
+          className={[
+            "far fa-times-circle",
+            style.removeButton,
+          ].join(" ")}
+          onClick={() =>console.log("anda")}/><img src="https://www.acceseo.com/wp-content/uploads/2020/09/guillermo-villanueva-bonealive.jpg"></img></div>
+
+                </div>
 
                 <div
                   className={style.primary}
