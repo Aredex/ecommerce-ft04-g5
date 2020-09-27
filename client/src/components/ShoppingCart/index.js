@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import style from "./index.module.scss";
-import { useRouteMatch, useHistory } from "react-router";
+import { useRouteMatch, useHistory, useLocation } from "react-router";
 import useOrders from "hooks/useOrders";
 import ItemCard from "components/ItemCard";
 import emptyDraw from 'assets/shoppingCartEmpty.svg'
 
 function ShoppingCart() {
   const [showCart, setShowCart] = useState(false);
-
+  const location = useLocation();
   const { isExact: isHome } = useRouteMatch("/");
   const { push } = useHistory();
 
   useEffect(() => {
     setShowCart(false);
-  }, []);
+  }, [location]);
 
   const {
     shoppingCart,
