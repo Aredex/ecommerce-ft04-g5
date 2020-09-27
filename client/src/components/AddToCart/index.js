@@ -10,28 +10,22 @@ const AddToCart = ({
     disableAdd,
     disableSubstract,
 }) => {
-    const [added, setAdded] = useState(false);  
+    const [added, setAdded] = useState(false);
 
     return (
         <div className={style.inputNumber}>
-            {!added && (
-                <>
-                    <input value={value} readOnly></input>
-                    <section>
-                        <button onClick={onAdd} disabled={disableAdd}>
-                            <i className={["fas", "fa-angle-up"].join(" ")}></i>
-                        </button>
-                        <button
-                            onClick={onSubstract}
-                            disabled={disableSubstract}
-                        >
-                            <i
-                                className={["fas", "fa-angle-down"].join(" ")}
-                            ></i>
-                        </button>
-                    </section>
-                </>
-            )}
+            <>
+                <input value={value} readOnly></input>
+                <section>
+                    <button onClick={onAdd} disabled={disableAdd}>
+                        <i className={["fas", "fa-angle-up"].join(" ")}></i>
+                    </button>
+                    <button onClick={onSubstract} disabled={disableSubstract}>
+                        <i className={["fas", "fa-angle-down"].join(" ")}></i>
+                    </button>
+                </section>
+            </>
+
             <button
                 type="submit"
                 className={style.submit}
@@ -42,16 +36,10 @@ const AddToCart = ({
                     }
                 }}
             >
-                {!added ? (
-                    <>
-                        <i
-                            className={["fas", "fa-shopping-cart"].join(" ")}
-                        ></i>
-                        {"Añadir al Carro"}
-                    </>
-                ) : (
-                    <>Gracias!</>
-                )}
+                <>
+                    <i className={["fas", "fa-shopping-cart"].join(" ")}></i>
+                    {"Añadir al Carro"}
+                </>
             </button>
         </div>
     );

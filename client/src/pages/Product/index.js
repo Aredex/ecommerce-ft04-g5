@@ -12,6 +12,9 @@ import { useHistory, useParams } from "react-router";
 const Product = () => {
     const [count, setCount] = useState(1);
 
+    const history = useHistory();
+    const product = useSelector((x) => x.ProductsReducer.productDetail);
+
     const dispatch = useDispatch();
 
     const { id } = useParams();
@@ -22,12 +25,20 @@ const Product = () => {
 
     let TheProductOnCart = null;
 
+    const linkProducts = () => {
+        if (products && products?.length > 0 && id) {
+            TheProductOnCart = products.find((p) => p.id == id);
+            console.log("PRODUCT", TheProductOnCart);
+            console.log("ID", id);
+            setCount(TheProductOnCart.amount);
+        } else {
+            setCount(1);
+        }
+    };
+
     useEffect(() => {
-        // TheProductOnCart = products.find((product) => product.id === id);
-        // if (TheProductOnCart) {
-        //     setCount(TheProductOnCart.amount);
-        // }
-        console.log(products)
+        console.log("HEY!!");
+        linkProducts();
     }, [products]);
 
     useEffect(() => {
@@ -36,8 +47,7 @@ const Product = () => {
             dispatch(getProductDetail());
         };
     }, [dispatch, id]);
-    const history = useHistory();
-    const product = useSelector((x) => x.ProductsReducer.productDetail);
+
     const handleOnAdd = () => {
         setCount(count + 1);
     };
@@ -114,14 +124,11 @@ const Product = () => {
                             <span>Descripción</span>
                         </div>
                         {product.description}
-                      </div>
                     </div>
-                  </div>
-                );
-              } else 
-                return (
-                  <Load></Load>
-                );
+                </div>
+            </div>
+        );
+    } else return <Load></Load>;
 };
 
 export default Product;
