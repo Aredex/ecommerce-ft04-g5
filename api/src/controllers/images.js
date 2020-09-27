@@ -36,6 +36,7 @@ const getAll = () => {
 };
 
 const getByUrl = (url) => {
+    // console.log(url);
     return new Promise((resolve, reject) => {
         Image.findOne({ where: { url } })
             .then((image) => resolve(image))

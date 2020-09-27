@@ -57,6 +57,13 @@ function Nav() {
           >
             Sobre nosotros
           </NavLink>
+          <NavLink
+            className={style.navLink}
+            activeClassName={style.activeNav}
+            to="/contactus"
+          >
+            Contactenos
+          </NavLink>
           {isAdmin && (
             <NavLink
               className={style.navLink}

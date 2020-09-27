@@ -140,7 +140,7 @@ export default function useOrders() {
         (x) => x.id === id
       ) : undefined;
       if (productSearchResult) {
-        amount += productSearchResult.amount;
+          productSearchResult.amount += amount;
       }
       if (shoppingCart) {
         if (shoppingCart.id) {
@@ -215,7 +215,7 @@ export default function useOrders() {
         (x) => x.id === id
       );
       if (productSearchResult) {
-        productSearchResult.amount += amount;
+        productSearchResult.amount = amount;
         productSearchResult.price = price;
       } else {
         newShoppingCart.products.push({ id, name, price, amount, stock });
