@@ -23,15 +23,13 @@ useEffect(() => {
   state.orderDetail]);
 
   const orders = state.allOrders
-  
-  
-
-  
 
 
 
   const handleChange = async (e, id, address)=>{
-    console.log(id, e.target.value)
+
+    var r = window.confirm(`Desea caambiar el estado de la orden a ${e.target.value}`);
+   
       switch(e.target.value){
 
         case "DELIVERED":
