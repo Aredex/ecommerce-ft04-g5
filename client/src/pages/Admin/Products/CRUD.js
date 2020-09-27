@@ -7,6 +7,7 @@ import TextareaField from "components/TextareaField";
 import Modal from "components/Modal";
 import TagField from "components/TagField";
 import { useForm } from "hooks/useForm";
+import ImagesProduct from "components/imagesProduct/ImagesProduct";
 
 const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
     const [addingImage, setAddingImage] = useState(false);
@@ -63,6 +64,12 @@ const CRUD = ({ formikData, onClose, onSubmit, estado }) => {
                                 name="name"
                                 readOnly={estado.readOnly}
                             />
+
+                            <ImagesProduct
+                                prefix="Imágenes"
+                                prefixStyle={prefixStyle}
+                            />
+
                             <TextareaField
                                 prefix="Descripción"
                                 name="description"
