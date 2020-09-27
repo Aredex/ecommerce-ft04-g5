@@ -3,14 +3,18 @@ export const initialState = {
   searchOrder: [],
   orderDetail: undefined,
   orderReadOnly: null,
-  orderUpdate: null,
-  orderRemove: null
+  orderUpdate: null
 };
 
 
 
 export default function orders_reducer(state = initialState, action){
 	switch(action.type){
+		case "RESET_STATE":
+		     return {
+		     	...state,
+		     	orderUpdate: null
+		     }
 		case "GET_ALL_ORDERS":
 		    return {
 		    	...state,

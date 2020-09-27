@@ -33,7 +33,8 @@ export function getAllOrdersAction() {
 }
 
 export function removeOrderAction(id){
-  return function (dispatch) {
+  return function (dispatch) {    
+      dispatch({type: "RESET_STATE"})
     return removeOrder(id)
     .then( function(data){
       dispatch({ type: "REMOVE_ORDER", payload: data}) 
@@ -43,6 +44,7 @@ export function removeOrderAction(id){
 
 export function setCompletedOrdeAction(id){
   return function (dispatch) {
+      dispatch({type: "RESET_STATE"})
     return setCompletedOrder(id)
     .then( function(data){
       dispatch({ type: "REMOVE_ORDER", payload: data}) 
@@ -54,7 +56,9 @@ export function setCompletedOrdeAction(id){
 
 //----------------------\\\\
 export function setConfirmOrderAction(id, address){
+
   return function(dispatch){
+      dispatch({type: "RESET_STATE"})
     return setConfirmOrder(id, address)
     .then( function(data){
       dispatch({type: "CONFIRM_ORDER", payload: data})
@@ -65,7 +69,8 @@ export function setConfirmOrderAction(id, address){
 
 export function setDeliveredOrderAction(id, address){
   return function(dispatch){
-    return setDeliveredOrder(id)
+      dispatch({type: "RESET_STATE"})  
+    return setDeliveredOrder(id)  
     .then( function(data){
       dispatch({type: "DELIVERED_ORDER", payload: data})
     })
@@ -73,7 +78,8 @@ export function setDeliveredOrderAction(id, address){
 }
 
 export function setPrepareOrderAction(id, address){
-  return function(dispatch){
+  return function(dispatch){    
+      dispatch({type: "RESET_STATE"})
     return setPrepareOrder(id)
     .then( function(data){
       dispatch({type: "PREPARE_ORDER", payload: data})
@@ -82,7 +88,8 @@ export function setPrepareOrderAction(id, address){
 }
 
 export function setRejectOrderAction(id){
-  return function (dispatch) {
+  return function (dispatch) {    
+      dispatch({type: "RESET_STATE"})
     return setRejectOrder(id)
     .then( function(data){
       dispatch({ type: "REJECT_ORDER", payload: data}) 
@@ -91,7 +98,8 @@ export function setRejectOrderAction(id){
 }
 
 export function setFinalizedOrderAction(id){
-  return function (dispatch) {
+  return function (dispatch) {    
+      dispatch({type: "RESET_STATE"})
     return setFinalizedOrder(id)
     .then( function(data){
       dispatch({ type: "FINALIZED_ORDER", payload: data}) 
@@ -101,6 +109,7 @@ export function setFinalizedOrderAction(id){
 
 export function setSendOrderAction(id){
   return function (dispatch) {
+      dispatch({type: "RESET_STATE"})
     return setSendOrder(id)
     .then( function(data){
       dispatch({ type: "SEND_ORDER", payload: data}) 

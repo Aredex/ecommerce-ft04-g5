@@ -20,21 +20,13 @@ useEffect(() => {
     getAllOrdersAction();
   }, [state.orderReadOnly,
   state.orderUpdate,
-  state.orderDetail,
-  state.orderRemove]);
+  state.orderDetail]);
 
   const orders = state.allOrders
   
   
 
-  const handleRemove = async (id) => {
-    var r = window.confirm(`Desea eliminar la orden N°${id}`);
-    if (r === true) {
-      console.log(state)
-      await removeOrderAction(id);
-      disabledCRUD();
   
-    }  }
 
 
 
@@ -96,9 +88,6 @@ useEffect(() => {
                   <i className="fas fa-search"></i>
                 </button>
                 <Select status={status} id={id} handleChange={handleChange} address={address}/>
-                <button onClick={() => handleRemove(id)}>
-                  <i className="fas fa-trash-alt"></i>
-                </button>
               </td>            
               </tr> 
             ))}
