@@ -29,7 +29,7 @@ useEffect(() => {
   const handleChange = async (e, id, address)=>{
 
     var r = window.confirm(`Desea caambiar el estado de la orden a ${e.target.value}`);
-   
+   if (r == true) { 
       switch(e.target.value){
 
         case "DELIVERED":
@@ -54,6 +54,7 @@ useEffect(() => {
               break;
 
       }
+    }
 
       
    }
