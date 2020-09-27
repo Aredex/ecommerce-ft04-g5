@@ -15,9 +15,7 @@ function ImagesContainer({ id, estado }) {
     };
 
     useEffect(() => {
-        if (id) {
-            dispatch(startSelectingProduct(id));
-        }
+        dispatch(startSelectingProduct(id));
     }, [id, dispatch]);
 
     return (

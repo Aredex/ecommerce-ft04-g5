@@ -15,13 +15,13 @@ const ImageProductReducer = (state = initialState, action) => {
             };
 
         case types.deselectProduct:
+            return initialState;
+
+        case types.addImage:
             return {
                 ...state,
                 productImages: [...state.productImages, action.payload.image],
             };
-
-        case types.addImage:
-            return initialState;
 
         case types.removeImage:
             return {
