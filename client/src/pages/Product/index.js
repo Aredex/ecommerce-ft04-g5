@@ -25,6 +25,8 @@ const Product = () => {
 
     const [isAdded, setIsAdded] = useState(false);
 
+    const { addProduct } = useOrders();
+
     let TheProductOnCart = null;
 
     const linkProducts = () => {
@@ -42,6 +44,7 @@ const Product = () => {
 
     useEffect(() => {
         linkProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [products]);
 
     useEffect(() => {
@@ -62,8 +65,6 @@ const Product = () => {
 
         setCount(count - 1);
     };
-
-    const { addProduct } = useOrders();
 
     if (product) {
         const imageURL = product.images[0]?.url || noImage;

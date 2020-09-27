@@ -1,7 +1,5 @@
-import useOrders from "hooks/useOrders";
 import React, { useEffect, useState } from "react";
 import style from "./index.module.scss";
-import { useParams } from "react-router";
 
 const AddToCart = ({
     onAdd,
