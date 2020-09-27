@@ -11,6 +11,7 @@ import { useHistory } from "react-router";
 import style from "./index.module.scss";
 import checkoutDraw from "assets/checkout.svg";
 import emptyDraw from "assets/shoppingCartEmpty.svg";
+import notFound from 'assets/notFound.svg';
 
 function Checkout() {
     const {
@@ -104,7 +105,19 @@ function Checkout() {
     }
 
    
-
+    if (!userLogin) {
+      return (
+        <div className={style.page}>
+            <img src={notFound} alt="" className={style.emptyDraw} />
+            <button
+                className={style.buttonToProducts}
+                onClick={() => push("/sign-in")}
+            >
+                Inicia Sesion para continuar
+            </button>
+        </div>
+    );
+    }
 
     if (userLogin && shoppingCart) {
         return (
