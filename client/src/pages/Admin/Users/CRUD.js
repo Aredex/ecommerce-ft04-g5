@@ -50,7 +50,7 @@ const CRUD = ({ formikData, onClose }) => {
                 </button> :
                 <button
                   type="button"
-                  className={style.primary}
+                  className={style.changerole}
                   onClick={formikData.onDegrade}
                 >
                   Degradar a GUEST

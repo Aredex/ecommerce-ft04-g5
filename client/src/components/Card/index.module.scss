@@ -17,9 +17,10 @@
 }
 
 .header {
-  font-weight: 600;
+    font-weight: 600;
     text-align: left;
     width: stretch;
+    width: -moz-available;
     margin: 0;
     padding: 0.25rem 0.5rem;
     border-bottom: solid 1px #e3e3e3;
@@ -30,20 +31,21 @@
     overflow: hidden;
     text-overflow: ellipsis;
     text-transform: capitalize;
+    
+  i {
+    cursor: pointer;
+    transition: color 0.25s;
 
-    i {
-      cursor: pointer;
-      transition: color 0.25s;
-
-      &:hover {
-        color: $--danger-color;
-      }
+    &:hover {
+      color: $--danger-color;
     }
+  }
 }
 
 .body {
   text-align: left;
   width: stretch;
+  width: -moz-available;
   margin: 0;
   padding: 0.25rem 0.5rem;
   font-size: 0.75rem;

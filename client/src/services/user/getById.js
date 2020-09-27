@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function getById(id) {
   return axios
-    .get(`http://localhost:3001/users/${id}`)
+    .get(`${process.env.REACT_APP_API}/users/${id}`)
     .then((response) => {
       return response.data;
     })

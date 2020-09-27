@@ -6,6 +6,7 @@
 }
 .table {
   width: stretch;
+width: -moz-available;
   table-layout: fixed;
   th,
   td {
@@ -14,6 +15,11 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  th{
+    position: sticky;
+    top: 0;
+    background-color: #ffffff;
   }
   tr:nth-child(even) {
     background-color: #00000011;

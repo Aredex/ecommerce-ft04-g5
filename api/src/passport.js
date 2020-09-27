@@ -48,7 +48,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/login/google/callback",
+      callbackURL: `${process.env.API}/auth/login/google/callback`,
       session: false,
     },
     async (token, tokenSecret, profile, done) => {
@@ -81,11 +81,10 @@ passport.use(
     {
       clientID: FACEBOOK_APP_ID,
       clientSecret: FACEBOOK_APP_SECRET,
-      callbackURL: "/auth/login/facebook/callback",
+      callbackURL: `${process.env.API}/auth/login/facebook/callback`,
       profileFields: ["id", "emails", "displayName"],
     },
     async function (accessToken, refreshToken, profile, done) {
-      console.log(profile);
       let user = await getOneByFacebookId(profile.id);
       if (!user)
         user = await createOne(

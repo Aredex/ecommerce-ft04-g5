@@ -96,7 +96,8 @@ const confirmedOrder = async ({
     card_expiration_month,
     card_expiration_year,
     card_first_six_digits,
-    card_last_four_digits
+    card_last_four_digits,
+    transaction_amount
 }) => {
     const Order = await getOne(id);
     Order.status = "CONFIRMED";
@@ -108,7 +109,10 @@ const confirmedOrder = async ({
     Order.card_expiration_year = card_expiration_year
     Order.card_first_six_digits = card_first_six_digits
     Order.card_last_four_digits = card_last_four_digits
+    Order.transaction_amount= transaction_amount
+
     await Order.save()
+    return Order
 };
 
 const toPaymentOrder = async ({
@@ -130,7 +134,7 @@ const toPaymentOrder = async ({
     let poderComprar = true;
 
     Order.products.map((product) => {
-        if (product.order_product.amount >= product.stock) {
+        if (product.order_product.amount > product.stock) {
             poderComprar = false;
         }
     });
