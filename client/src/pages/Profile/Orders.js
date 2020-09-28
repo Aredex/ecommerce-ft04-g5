@@ -50,13 +50,13 @@ function Order({ order, showStatus, toPayment, rejectOrder }) {
               onClick={() => toPayment(order)}
             >
               Proceder al pago
-        </button>
+            </button>
             <button
               className={style.buttonCancelOrder}
               onClick={() => rejectOrder(order)}
             >
               Cancelar orden
-        </button>
+            </button>
           </section>
         }
       </>
@@ -65,7 +65,24 @@ function Order({ order, showStatus, toPayment, rejectOrder }) {
         <h2>Detalle de la orden:</h2>
         <section className={style.headerInfo}>
           <div>
-            <CreditCard order={order} />
+            <CreditCard order={order}>
+              {order.status === 'PENDING_PAYMENT' &&
+                <section className={style.creditCardPendingActionGroup}>
+                  <button
+                    className={style.buttonToPayment}
+                    onClick={() => toPayment(order)}
+                  >
+                    Proceder al pago
+                  </button>
+                  <button
+                    className={style.buttonCancelOrder}
+                    onClick={() => rejectOrder(order)}
+                  >
+                    Cancelar orden
+                  </button>
+                </section>
+              }
+            </CreditCard>
           </div>
           <div className={style.info}>
             <div>
