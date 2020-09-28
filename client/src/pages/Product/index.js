@@ -26,20 +26,20 @@ const Product = () => {
     setCount(count + 1);
   };
 
-   var [index, setIndex] = useState(0)
-   useEffect(()=>{
-     if(product){
-      if(product.images[0]){
+  var [index, setIndex] = useState(0)
+  useEffect(() => {
+    if (product) {
+      if (product.images[0]) {
         const intervalo = setInterval(() => {
-          if(index === (product.images.length-1)) setIndex(0)
+          if (index === (product.images.length - 1)) setIndex(0)
           else setIndex(index + 1);
-        }, 5000); 
-        return ()=>{
+        }, 5000);
+        return () => {
           clearInterval(intervalo);
         }
       }
-     }
-    },[index,product]) 
+    }
+  }, [index, product])
 
   const hableOnSubstract = () => {
     if (count <= 1) {
@@ -47,37 +47,41 @@ const Product = () => {
     }
     setCount(count - 1);
   };
-  const handleImage = (type)=>{
-    if(type === "right"){
-      if(index === (product.images.length-1)){
+  const handleImage = (type) => {
+    if (type === "right") {
+      if (index === (product.images.length - 1)) {
         setIndex(0)
-      }else{
-        setIndex(index+1)
+      } else {
+        setIndex(index + 1)
       }
-    }else{
-      if(index === 0){
-        setIndex(product.images.length-1)
-      }else{
-        setIndex(index-1)
+    } else {
+      if (index === 0) {
+        setIndex(product.images.length - 1)
+      } else {
+        setIndex(index - 1)
       }
     }
   }
   const { addProduct } = useOrders();
   if (product) {
-    const images =  product.images[0]? product.images :  [{url:noImage}]
+    const images = product.images[0] ? product.images : [{ url: noImage }]
     return (
       <div className={style.page}>
-          <div className={style.carusel}>
-          {product.images[0] && <button onClick={()=>handleImage("left")} className={style.leftd}>
-          <i  className={["fas fa-angle-left", style.left].join(" ")}></i>
-          </button>}
-          {images.map((e, i)=>(
-            <img key={i}className ={index === i ?style.active:style.inactive}src={e.url} alt="" />
+        <div className={style.carusel}>
+          {product.images[0] &&
+            <button onClick={() => handleImage("left")} className={style.leftd}>
+              <i className={["fas fa-angle-left", style.left].join(" ")}></i>
+            </button>
+          }
+          {images.map((e, i) => (
+            <img key={i} className={index === i ? style.active : style.inactive} src={e.url} alt="" />
           ))}
-          {product.images[0] && <button  onClick={()=>handleImage("right")}  className={style.rightd}>
-          <i className={["fas fa-angle-right", style.right].join(" ")}></i>
-          </button>}
-          </div>
+          {product.images[0] &&
+            <button onClick={() => handleImage("right")} className={style.rightd}>
+              <i className={["fas fa-angle-right", style.right].join(" ")}></i>
+            </button>
+          }
+        </div>
         <div className={style.info}>
           <div className={style.name}>
             <h1>{product.name}</h1>
@@ -132,8 +136,11 @@ const Product = () => {
             <div className={style.separator}>
               <span>Reviews</span>
             </div>
-        );
-    } else return <Load></Load>;
+          </div>
+        </div>
+      </div>
+    );
+  } else return <Load></Load>;
 };
 
 export default Product;
