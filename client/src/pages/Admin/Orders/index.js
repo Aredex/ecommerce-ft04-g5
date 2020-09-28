@@ -22,7 +22,7 @@ useEffect(() => {
   state.orderUpdate,
   state.orderDetail]);
 
-  const orders = state.allOrders
+  var orders = state.allOrders
 
 
 
