@@ -44,6 +44,7 @@
 .carusel {
   position: relative;
   height: 80vh;
+  width:100%;
   border-radius: 0.5rem;
   overflow: hidden;
   @include respond-to("default") {
