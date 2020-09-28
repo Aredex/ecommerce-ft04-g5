@@ -56,7 +56,7 @@ export const startSelectingProduct = (id) => {
 
 export const startDeletingImage = (id) => {
     return async (dispatch) => {
-        await axios.delete(`http://localhost:3001/images/${id}`);
+        await axios.delete(`${process.env.REACT_APP_API}/images/${id}`);
 
         dispatch(deleteImage(id));
     };
