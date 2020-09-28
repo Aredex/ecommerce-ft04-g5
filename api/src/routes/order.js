@@ -214,9 +214,11 @@ router.route("/:idOrder/user/:idUser").post((req, res) => {
 });
 
 router.route("/user/:userId").get((req, res) => {
-    const { userId } = req.params;
+    let { userId } = req.params;
 
-    if (isAdmin(req) || (isUser(req) && req.user.uid === userId)) {
+    if (isAdmin(req) || (isUser(req) && req.user.uid === userId) || (isUser(req) && userId === 'me')) {
+        if (userId === 'me') userId = req.user.uid;
+        console.log('aca', userId)
         getProductsPurchasedByuser(userId)
             .then((order_product) => res.json(order_product))
             .catch((err) => res.status(400).json(err));
@@ -345,7 +347,7 @@ router.route("/:id/sent").put((req, res) => {
     }
 });
 
-// Ruta para especificar que una orden ya ha sido entregada
+// Ruta para especificar que una orden ya ha  entregada
 router.route("/:id/delivered").get((req, res) => {
     const { id } = req.params;
 

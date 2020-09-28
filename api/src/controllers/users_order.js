@@ -1,4 +1,4 @@
-const { Order, Product, Image, User } = require("../db");
+const { Order, Product, Image, User, Review } = require("../db");
 const { getOne: getUser } = require("./users");
 const { getOne: getOrder } = require("./orders");
 
@@ -8,7 +8,7 @@ const getOrderByUser = (userId) => {
             if (user) {
                 Order.findAll({
                     where: { userId },
-                    include: [{ model: Product, include: Image }, User],
+                    include: [{ model: Product, include: [Image, Review], }, User],
                 })
                     .then((user_order) => resolve(user_order))
                     .catch((err) => reject({ error: err }));
