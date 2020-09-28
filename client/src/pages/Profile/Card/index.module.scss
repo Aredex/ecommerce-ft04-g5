@@ -1,0 +1,53 @@
+@import "bp.scss";
+@import "var.scss";
+
+.creditCard {
+  margin: 1rem;
+  width: 17.5rem;
+  height: 10rem;
+  position: relative;
+  box-shadow: 1px 2px 4px #d3d3d3;
+  border-radius: 0.5rem;
+
+  background-image: linear-gradient(to right bottom, #ffffff, #f6f6f6, #ececec, #e3e3e3, #dadada);
+}
+.cardLogo {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  width: 3rem;
+  height: 2rem;
+  object-fit: contain;
+}
+.cardNumber {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4rem;
+  color: #e3e3e3;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 1rem;
+  width: fit-content;
+  margin: 0 auto;
+  .group {
+    display: grid;
+    grid-template-columns: repeat(4, 0.5rem);
+    column-gap: 0.25rem;
+    span{
+      text-shadow: 0 0 2px black;
+    }
+  }
+}
+.master.creditCard {
+  background-image: linear-gradient(to right top, #b99647, #98673e, #6b4034, #382222, #000000);
+}
+.visa.creditCard {
+  background-image: linear-gradient(to right top, #01060d, #000b20, #000e30, #000e40, #070a4c);
+}
+.oca.creditCard {
+  background-image: linear-gradient(to left top, #bcebff, #8bc7ea, #5da3d5, #337fc0, #075ba8);
+}
+.diners.creditCard {
+  background-image: linear-gradient(to right bottom, #f0f48f, #ded86f, #ccbc50, #baa030, #a88507);
+}

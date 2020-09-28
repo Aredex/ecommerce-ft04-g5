@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function getAll() {
   return axios
-    .get(`http://localhost:3001/categories`)
+    .get(`${process.env.REACT_APP_API}/categories`)
     .then((response) => {
       return response.data;
     })

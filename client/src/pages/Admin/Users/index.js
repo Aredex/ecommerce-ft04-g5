@@ -2,20 +2,25 @@ import React, { useState, useEffect, useCallback } from "react";
 import style from "./index.module.scss";
 import Axios from "axios";
 import CRUD from "./CRUD";
+import { toAdmin, toGuest } from "services/user";
 
 const Users = () => {
-  const [users, setUsers] = useState([]);
+  var [users, setUsers] = useState([]);
   const [formikData, setFormikData] = useState(null);
+
+  const[filter,setFilter] = useState("name");
+  const[order,setOrder] = useState(true);
+
   const getAll = useCallback(() => {
-    Axios.get("http://localhost:3001/users").then(({ data }) => setUsers(data));
+    Axios.get(`${process.env.REACT_APP_API}/users`).then(({ data }) => setUsers(data));
   }, []);
   const getById = useCallback((id) => {
-    return Axios.get(`http://localhost:3001/users/${id}`).then(
+    return Axios.get(`${process.env.REACT_APP_API}/users/${id}`).then(
       ({ data }) => data
     );
   }, []);
   const update = useCallback(({ id, name, email, password, role }) => {
-    return Axios.put(`http://localhost:3001/users/${id}`, {
+    return Axios.put(`${process.env.REACT_APP_API}/users/${id}`, {
       name,
       email,
       password,
@@ -24,7 +29,7 @@ const Users = () => {
   }, []);
 
   const create = useCallback(({ name, email, password, role }) => {
-    return Axios.post(`http://localhost:3001/users/`, {
+    return Axios.post(`${process.env.REACT_APP_API}/users/`, {
       name,
       email,
       password,
@@ -32,7 +37,7 @@ const Users = () => {
     }).then(({ data }) => data);
   }, []);
   const remove = useCallback((id) => {
-    return Axios.delete(`http://localhost:3001/users/${id}`).then(
+    return Axios.delete(`${process.env.REACT_APP_API}/users/${id}`).then(
       ({ data }) => data
     );
   }, []);
@@ -56,11 +61,13 @@ const Users = () => {
             });
             setFormikData(null);
           },
+          onPromote: async () => { await toAdmin(id); getAll(); setFormikData(null); },
+          onDegrade: async () => { await toGuest(id); getAll(); setFormikData(null); },
           update: true,
         });
       });
     },
-    [setFormikData, getById]
+    [setFormikData, getById, getAll, update]
   );
   const handleCreate = useCallback(() => {
     setFormikData({
@@ -80,7 +87,7 @@ const Users = () => {
       },
       create: true,
     });
-  }, [setFormikData]);
+  }, [setFormikData, create, getAll]);
 
   const handleDelete = useCallback(
     (id, name) => {
@@ -91,23 +98,34 @@ const Users = () => {
           .then(() => setFormikData(null));
       }
     },
-    [setFormikData]
+    [setFormikData, getAll, remove]
   );
 
   useEffect(() => {
     getAll();
-  }, []);
+  }, [getAll]);
+
+  function handleFilter(e){
+    e.preventDefault()
+    setOrder(!order)
+    setFilter(e.target.name); 
+    if(filter === "id"){
+      users = order ? users.sort((a,b)=>a[filter] > b[filter]? 1:-1): users.sort((a,b)=>a[filter] < b[filter]? 1:-1);
+    }else{
+      users = order ? users.sort((a,b)=>a[filter].toUpperCase() > b[filter].toUpperCase()? 1:-1): users.sort((a,b)=>a[filter].toUpperCase() < b[filter].toUpperCase()? 1:-1);
+    }
+  }
 
   return (
     <section>
       <table className={style.table}>
         <thead>
           <tr>
-            <th style={{ width: "3rem" }}>Id:</th>
-            <th>Nombre:</th>
-            <th>Email:</th>
-            <th style={{ width: "5rem" }}>Role:</th>
-            <th style={{ width: "5rem" }}>Estado:</th>
+          <th style={{ width: "3rem" }}><button className={filter === "id" ? order? style.asc: style.desc:null } name ="id"onClick={handleFilter}>Id:</button></th>
+          <th><button className={filter === "name" ? order? style.asc: style.desc:null } name ="name"onClick={handleFilter}>Nombre:</button></th>
+          <th><button className={filter === "email" ? order? style.asc: style.desc:null } name ="email"onClick={handleFilter}>Email:</button></th>
+          <th style={{ width: "5rem" }}><button className={filter === "role" ? order? style.asc: style.desc:null } name ="role"onClick={handleFilter}>Rol:</button></th>
+          <th style={{ width: "5rem" }}><button className={filter === "status" ? order? style.asc: style.desc:null } name ="status"onClick={handleFilter}>Estado:</button></th>
             <th style={{ width: "11rem" }}>
               <button onClick={() => handleCreate()}>
                 <i className="fas fa-plus"></i> Agregar
@@ -116,7 +134,7 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {users != undefined &&
+          {users !== undefined &&
             users.map(({ id, name, email, role, status }) => (
               <tr key={id}>
                 <td>{id}</td>

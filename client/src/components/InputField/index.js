@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { useFormikContext } from "formik";
+import { Field, useFormikContext } from "formik";
 import style from "./index.module.scss";
 
 function InputField(props) {
@@ -11,6 +11,11 @@ function InputField(props) {
       ? props.onChange(event)
       : formikContext.setFieldValue(props.name, event.target.value);
   }
+
+  const { validateField } = formikContext
+  useEffect(() => {
+    validateField && validateField(props.name)
+  }, [validateField, props.name])
 
   return (
     <div
@@ -24,12 +29,15 @@ function InputField(props) {
         {props.inputPrefix && (
           <div className={style.inputPrefix}>{props.inputPrefix}</div>
         )}
-        <input
+        <Field
+        autoComplete="off"
           name={props.name}
           value={props.value ? props.value : formikContext.values[props.name]}
           type={props.type}
           onChange={handleChange}
           readOnly={props.readOnly}
+          style={props.inputStyle}
+          validate={props.validate}
         />
         <div className={style.inputSufix}>{props.inputSufix}</div>
       </div>

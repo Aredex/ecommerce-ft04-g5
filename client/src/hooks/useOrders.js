@@ -3,23 +3,117 @@ import { useDispatch, useSelector } from "react-redux";
 import { setShoppingCart } from "store/Actions/Orders";
 import { useCallback, useEffect } from "react";
 import Axios from "axios";
-
-const user = null;
+import useUser from 'hooks/useUser';
+import { getById } from "services/user";
+import { getOrderById } from "services/orders";
 
 export default function useOrders() {
   const [
     localShoppingCart,
     setLocalShoppingCart,
-    removeLocalShoppingCart,
   ] = useLocalStorage("shopping_cart", undefined);
 
   const dispatch = useDispatch();
   const shoppingCart = useSelector((state) => state.orders.shoppingCart);
+  const { userLogin } = useUser()
 
-  useEffect(() => {
-    console.log("reload", shoppingCart, localShoppingCart);
-    // A futuro debe verificar si existe usuario
-    if (false) {
+  const reloadShoppingCart = useCallback(() => {
+    if (userLogin) {
+
+      (async () => {
+
+        const user = await getById(userLogin.user.id)
+        let orderInCreation
+        if (user) {
+          const { orders } = user
+          orderInCreation = orders.find((order) => order.status === "IN CREATION")
+        }
+
+        if (orderInCreation) {
+          let total = 0;
+          const products = orderInCreation.products.reduce((result, item) => {
+            const newItem = { id: item.id, name: item.name, price: item.order_product.price, amount: item.order_product.amount, stock: item.stock }
+            total += item.order_product.price * item.order_product.amount;
+            return [...result, newItem]
+          }, [])
+          orderInCreation.products = products
+
+          if (localShoppingCart) {
+            Axios.post(`${process.env.REACT_APP_API}/orders/${orderInCreation.id}/products`, {
+              idUser: userLogin.user.id,
+              products: localShoppingCart.products,
+            }).then(({ data }) => {
+              let total = 0;
+              total =
+                data &&
+                data.products &&
+                Array.isArray(data.products) &&
+                data.products.reduce((result, product) => {
+                  result += product.order_product.price * product.order_product.amount;
+                  return result;
+                }, 0);
+              setLocalShoppingCart(null)
+              dispatch(
+                setShoppingCart({
+                  id: data.id,
+                  status: data.status,
+                  address: data.adress,
+                  userId: data.userId,
+                  total,
+                  products: data.products.map((product) => ({
+                    id: product.id,
+                    name: product.name,
+                    price: product.order_product.price,
+                    amount: product.order_product.amount,
+                    stock: product.stock,
+                  })),
+                })
+              )
+            }
+            );
+          } else {
+            dispatch(setShoppingCart({ ...orderInCreation, total }))
+          }
+        } else {
+          if (localShoppingCart) {
+            Axios.post(`${process.env.REACT_APP_API}/orders/products`, {
+              idUser: userLogin.user.id,
+              products: localShoppingCart.products,
+            }).then(({ data }) => {
+              let total = 0;
+              total =
+                data &&
+                data.products &&
+                Array.isArray(data.products) &&
+                data.products.reduce((result, product) => {
+                  result += product.order_product.price * product.order_product.amount;
+                  return result;
+                }, 0);
+              setLocalShoppingCart(null)
+              dispatch(
+                setShoppingCart({
+                  id: data.id,
+                  status: data.status,
+                  address: data.adress,
+                  userId: data.userId,
+                  total,
+                  products: data.products.map((product) => ({
+                    id: product.id,
+                    name: product.name,
+                    price: product.order_product.price,
+                    amount: product.order_product.amount,
+                    stock: product.stock,
+                  })),
+                })
+              )
+            }
+            );
+          } else {
+            dispatch(setShoppingCart(undefined))
+          }
+        }
+      })()
+
     } else {
       let total = 0;
       total =
@@ -31,54 +125,81 @@ export default function useOrders() {
           return result;
         }, 0);
       localShoppingCart &&
-      localShoppingCart.products &&
-      Array.isArray(localShoppingCart.products) &&
-      localShoppingCart.products.length > 0
+        localShoppingCart.products &&
+        Array.isArray(localShoppingCart.products) &&
+        localShoppingCart.products.length > 0
         ? dispatch(setShoppingCart({ ...localShoppingCart, total }))
         : dispatch(setShoppingCart(undefined));
     }
-  }, [localShoppingCart]);
+  }, [localShoppingCart, userLogin, dispatch, setLocalShoppingCart])
+
+  useEffect(() => {
+    reloadShoppingCart()
+  }, [reloadShoppingCart]);
 
   const addProduct = (id, name, price, amount, stock) => {
-    if (user && shoppingCart) {
-      const productSearchResult = shoppingCart.products.find(
+    if (userLogin) {
+      const productSearchResult = shoppingCart ? shoppingCart.products.find(
         (x) => x.id === id
-      );
+      ) : undefined;
       if (productSearchResult) {
-        amount += productSearchResult.amount;
+        productSearchResult.amount += amount;
       }
-      if (shoppingCart.id) {
-        Axios.post(
-          `http://localhost:3001/orders/${shoppingCart.id}/product/${id}`,
-          { amount }
-        ).then(({ data }) =>
-          dispatch(
-            setShoppingCart({
-              id: data.id,
-              status: data.status,
-              address: data.adress,
-              userId: data.userId,
-              products: data.products.map((product) => ({
-                id: product.id,
-                name: product.name,
-                price: product.order_product.price,
-                amount: product.order_product.amount,
-                stock: product.stock,
-              })),
-            })
-          )
-        );
+      if (shoppingCart) {
+        if (shoppingCart.id) {
+          Axios.post(
+            `${process.env.REACT_APP_API}/orders/${shoppingCart.id}/product/${id}`,
+            { amount, idUser: userLogin.user.id }
+          ).then(({ data }) => {
+            let total = 0;
+            total =
+              data &&
+              data.products &&
+              Array.isArray(data.products) &&
+              data.products.reduce((result, product) => {
+                result += product.order_product.price * product.order_product.amount;
+                return result;
+              }, 0);
+            dispatch(
+              setShoppingCart({
+                id: data.id,
+                status: data.status,
+                address: data.adress,
+                userId: data.userId,
+                total,
+                products: data.products.map((product) => ({
+                  id: product.id,
+                  name: product.name,
+                  price: product.order_product.price,
+                  amount: product.order_product.amount,
+                  stock: product.stock,
+                })),
+              })
+            )
+          }
+          );
+        }
       } else {
-        Axios.post(`http://localhost:3001/orders/products`, {
-          idUser: user.id,
-          product: [...shoppingCart.products, { id, amount }],
-        }).then(({ data }) =>
+        Axios.post(`${process.env.REACT_APP_API}/orders/products`, {
+          idUser: userLogin.user.id,
+          products: shoppingCart ? [...shoppingCart.products, { id, amount }] : [{ id, amount }],
+        }).then(({ data }) => {
+          let total = 0;
+          total =
+            data &&
+            data.products &&
+            Array.isArray(data.products) &&
+            data.products.reduce((result, product) => {
+              result += product.order_product.price * product.order_product.amount;
+              return result;
+            }, 0);
           dispatch(
             setShoppingCart({
               id: data.id,
               status: data.status,
               address: data.adress,
               userId: data.userId,
+              total,
               products: data.products.map((product) => ({
                 id: product.id,
                 name: product.name,
@@ -88,6 +209,7 @@ export default function useOrders() {
               })),
             })
           )
+        }
         );
       }
     } else if (shoppingCart) {
@@ -96,7 +218,7 @@ export default function useOrders() {
         (x) => x.id === id
       );
       if (productSearchResult) {
-        productSearchResult.amount += amount;
+        productSearchResult.amount = amount;
         productSearchResult.price = price;
       } else {
         newShoppingCart.products.push({ id, name, price, amount, stock });
@@ -114,7 +236,41 @@ export default function useOrders() {
     );
     if (productSearchResult) {
       productSearchResult.amount++;
-      setLocalShoppingCart(newShoppingCart);
+      if (userLogin) {
+        Axios.post(
+          `${process.env.REACT_APP_API}/orders/${shoppingCart.id}/product/${productSearchResult.id}`,
+          { amount: productSearchResult.amount, idUser: userLogin.user.id }
+        ).then(({ data }) => {
+          let total = 0;
+          total =
+            data &&
+            data.products &&
+            Array.isArray(data.products) &&
+            data.products.reduce((result, product) => {
+              result += product.order_product.price * product.order_product.amount;
+              return result;
+            }, 0);
+          dispatch(
+            setShoppingCart({
+              id: data.id,
+              status: data.status,
+              address: data.adress,
+              userId: data.userId,
+              total,
+              products: data.products.map((product) => ({
+                id: product.id,
+                name: product.name,
+                price: product.order_product.price,
+                amount: product.order_product.amount,
+                stock: product.stock,
+              })),
+            })
+          )
+        }
+        );
+      } else {
+        setLocalShoppingCart(newShoppingCart);
+      }
     }
   };
   const decreaseAmount = (id) => {
@@ -124,20 +280,95 @@ export default function useOrders() {
     );
     if (productSearchResult) {
       productSearchResult.amount--;
-      setLocalShoppingCart(newShoppingCart);
+      if (userLogin) {
+        Axios.post(
+          `${process.env.REACT_APP_API}/orders/${shoppingCart.id}/product/${productSearchResult.id}`,
+          { amount: productSearchResult.amount, idUser: userLogin.user.id }
+        ).then(({ data }) => {
+          let total = 0;
+          total =
+            data &&
+            data.products &&
+            Array.isArray(data.products) &&
+            data.products.reduce((result, product) => {
+              result += product.order_product.price * product.order_product.amount;
+              return result;
+            }, 0);
+          dispatch(
+            setShoppingCart({
+              id: data.id,
+              status: data.status,
+              address: data.adress,
+              userId: data.userId,
+              total,
+              products: data.products.map((product) => ({
+                id: product.id,
+                name: product.name,
+                price: product.order_product.price,
+                amount: product.order_product.amount,
+                stock: product.stock,
+              })),
+            })
+          )
+        }
+        );
+      } else {
+        setLocalShoppingCart(newShoppingCart);
+      }
     }
   };
-  const removeProduct = (id) => {
-    const newShoppingCart = { ...shoppingCart };
-    newShoppingCart.products = newShoppingCart.products.reduce(
-      (result, product) => {
-        result = [...result];
-        if (product.id !== id) result.push(product);
-        return result;
-      },
-      []
-    );
-    setLocalShoppingCart(newShoppingCart);
+  const removeProduct = async (id) => {
+    if (userLogin) {
+      await Axios.delete(
+        `${process.env.REACT_APP_API}/orders/${shoppingCart.id}/product/${id}`)
+      let data = await getOrderById(shoppingCart.id)
+      if (data.length === 0) {
+        dispatch(
+          setShoppingCart(undefined))
+      } else {
+        data = data[0]
+        let total = 0;
+        total =
+          data &&
+          data.products &&
+          Array.isArray(data.products) &&
+          data.products.reduce((result, product) => {
+            result += product.order_product.price * product.order_product.amount;
+            return result;
+          }, 0);
+        dispatch(
+          setShoppingCart({
+            id: data.id,
+            status: data.status,
+            address: data.adress,
+            userId: data.userId,
+            total,
+            products: data.products ? data.products.map((product) => ({
+              id: product.id,
+              name: product.name,
+              price: product.order_product.price,
+              amount: product.order_product.amount,
+              stock: product.stock,
+            })) : [],
+          })
+        )
+      }
+    } else {
+      const newShoppingCart = { ...shoppingCart };
+      newShoppingCart.products = newShoppingCart.products.reduce(
+        (result, product) => {
+          result = [...result];
+          if (product.id !== id) result.push(product);
+          return result;
+        },
+        []
+      );
+      if (newShoppingCart.products.length === 0) {
+        setLocalShoppingCart(null)
+        dispatch(setShoppingCart(undefined))
+      }
+      else setLocalShoppingCart(newShoppingCart);
+    }
   };
 
   return {
@@ -146,5 +377,6 @@ export default function useOrders() {
     decreaseAmount,
     removeProduct,
     addProduct,
+    reloadShoppingCart
   };
 }

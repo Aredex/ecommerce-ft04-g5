@@ -24,8 +24,6 @@ export default function ProductsReducer(state = initialState, action) {
       };
 
     case "PRODUCTS_FROM_CATEGORY":
-      console.log("entro")
-      console.log(action.payload)
       return {
         ...state,
         categoryFilter: action.payload

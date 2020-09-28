@@ -4,4 +4,17 @@
   .actions {
     display: flex;
   }
+  .changerole{
+    border: solid 1px #a3a3a3;
+    border-radius: .25rem;
+    cursor: pointer;
+    margin: .5rem;
+    padding: 1rem;
+    background-color: #e3e3e3;
+    font-size: .85rem;
+  }
+  .changerole:hover{
+    transform: scale(1.05);
+  }
+  
 }

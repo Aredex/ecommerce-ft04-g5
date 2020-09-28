@@ -1,3 +1,5 @@
+@import "var.scss";
+
 .page {
   display: grid;
   grid-template-rows: 1fr;
@@ -6,6 +8,7 @@
 }
 .table {
   width: stretch;
+width: -moz-available;
   table-layout: fixed;
   th,
   td {
@@ -14,6 +17,11 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  th{
+    position: sticky;
+    top: 0;
+    background-color: #ffffff;
   }
   tr:nth-child(even) {
     background-color: #00000011;
@@ -29,6 +37,20 @@
       }
     }
   }
+
+  th{
+    button{
+      font-size: 1rem;
+      width: 100%;
+    }
+    .asc{
+      box-shadow: 0 -1rem 0 $--primary-color;
+    }
+    .desc{
+      box-shadow: 0 1rem 0 $--primary-color;
+    }
+  }
+  
   tbody {
     button {
       width: 3rem;

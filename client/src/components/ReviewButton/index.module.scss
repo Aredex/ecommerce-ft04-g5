@@ -24,6 +24,7 @@
   border-radius: 0.25rem;
   border: solid 1px #e3e3e3;
   text-align: left;
+  margin: 0.5rem 0;
 
   .rating {
     padding: 0.5rem;
@@ -31,5 +32,93 @@
   }
   .message {
     padding: 0.5rem;
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+}
+.reviewForm {
+  width: stretch;
+  width: -moz-available;
+  .Input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+
+    textarea {
+      height: auto;
+      border: solid 1px #3e3e3e;
+      font-size: inherit;
+      font-family: inherit;
+      padding: 0.25rem;
+      resize: none;
+      margin-top: 0.5rem;
+  
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  .buttonGroup {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+//////////////////////////////////////////////
+// #form {
+//   width: 250px;
+//   margin: 0 auto;
+//   height: 50px;
+// }
+
+// #form p {
+//   text-align: center;
+// }
+
+// #form label {
+//   font-size: 20px;
+// }
+
+input[type="radio"] {
+  display: none;
+}
+
+label {
+  color:rgb(128, 128, 128);
+} 
+
+.clasificacion {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  font-size: 30px;
+  margin: 0;
+  justify-content: center;
+}
+
+.TextRating {
+  height: 150px;
+  width: 100%;
+}
+
+.input {
+  width: stretch;
+  width: -moz-available;
+
+  display: flex;
+
+  border: solid 1px #a3a3a3;
+
+  margin: -1px 0;
+textarea {
+  width: 100%;
+  height: auto;
+  border: none;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0.25rem;
+  resize: none;
+
+  &:focus {
+    outline: none;
+  }
   }
 }

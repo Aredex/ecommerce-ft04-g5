@@ -31,7 +31,8 @@ const Products = ({
   useEffect(() => {
     (async () => {
       const result = await getAllCategories();
-      result && setCategories(result);
+
+      result && setCategories(result.sort((a,b)=>a.name.toUpperCase() > b.name.toUpperCase()? 1:-1));
     })();
   }, []);
 
@@ -41,7 +42,7 @@ const Products = ({
     } else {
       getProducts();
     }
-  }, [query.name]);
+  }, [query.name, getProducts, searchProduct]);
 
   useEffect(() => {
     if (query.category) {
@@ -49,7 +50,7 @@ const Products = ({
     } else {
       getProducts();
     }
-  }, [query.category]);
+  }, [query.category, getProducts, productsFromCategory]);
 
   if (query.name) {
     products = state.productSearch;
