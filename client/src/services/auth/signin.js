@@ -6,7 +6,9 @@ export default async function signin(username, password) {
         .then((response) => {
             return response.data;
         })
-        .catch(() => {
+        .catch((error) => {
+            const data = error.response.data
+            if (data.message) alert(data.message)
             return undefined;
         });
 }

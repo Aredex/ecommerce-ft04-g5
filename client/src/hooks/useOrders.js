@@ -23,9 +23,12 @@ export default function useOrders() {
       (async () => {
 
         const user = await getById(userLogin.user.id)
-        const { orders } = user
+        let orderInCreation
+        if (user) {
+          const { orders } = user
+          orderInCreation = orders.find((order) => order.status === "IN CREATION")
+        }
 
-        let orderInCreation = orders.find((order) => order.status === "IN CREATION")
         if (orderInCreation) {
           let total = 0;
           const products = orderInCreation.products.reduce((result, item) => {
@@ -140,7 +143,7 @@ export default function useOrders() {
         (x) => x.id === id
       ) : undefined;
       if (productSearchResult) {
-          productSearchResult.amount += amount;
+        productSearchResult.amount += amount;
       }
       if (shoppingCart) {
         if (shoppingCart.id) {
