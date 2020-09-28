@@ -81,8 +81,7 @@ router.route("/:id").get((req, res) => {
     ordersDevolution(id)
         .then((orders) => res.json(orders))
         .catch((err) => res.status(400).json(err));
-     })
-    .route("/:id")
+})
     .delete((req, res) => {
         const { id } = req.params;
         deleteOne(id)
