@@ -274,3 +274,33 @@
     }
   }
 }
+.reviewPage {
+  height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+
+  @include respond-to("default") {
+    width: 100vw;
+  }
+  .reviewCard {
+    margin-bottom: 1.5rem;
+  }
+  .product {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    .productName {
+      text-transform: capitalize;
+    }
+
+    .reviewButton {
+      margin: 0rem;
+    }
+
+    + .product {
+      border-top: solid 1px #e3e3e3;
+    }
+  }
+}

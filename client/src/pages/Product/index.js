@@ -132,11 +132,6 @@ const Product = () => {
             </div>
             {product.description}
           </div>
-          <div className={style.description}>
-            <div className={style.separator}>
-              <span>Reviews</span>
-            </div>
-          </div>
         </div>
       </div>
     );
