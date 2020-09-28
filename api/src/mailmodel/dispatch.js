@@ -41,7 +41,7 @@ function dispatch(obj) {
   modelEmail = modelEmail.replace("%order%", obj.id)
 
   nodemailerMailgun.sendMail({
-    from: 'gardenRy@gardenRy.com',
+    from: 'gardenry@gardenry.shop',
     to: obj.user.email,
     subject: 'Enviamos tu pedido!',
     html: modelEmail

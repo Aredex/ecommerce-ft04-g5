@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signin } from "services/auth";
 import { getUser } from "store/Actions/Users/UsersActions";
 import Axios from "axios";
+import ReactGA from 'react-ga';
 
 export default function useUser() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -21,7 +22,18 @@ export default function useUser() {
         Axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${localUser.token}`;
+        ReactGA.set({ userId: localUser.user.id })
+      } else {
+        Axios.defaults.headers.common[
+          "Authorization"
+        ] = ``;
+        ReactGA.set({ userId: undefined })
       }
+    } else {
+      Axios.defaults.headers.common[
+        "Authorization"
+      ] = ``;
+      ReactGA.set({ userId: undefined })
     }
     dispatch(getUser(localUser));
   }, [localUser, dispatch]);
@@ -37,6 +49,7 @@ export default function useUser() {
     const user = await signin(username, password);
     if (user) setLocalUser(user);
     dispatch(getUser(user));
+    ReactGA.set({ userId: user.user.id })
   }
 
   async function loginWithToken(token) {
