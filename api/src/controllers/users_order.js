@@ -24,6 +24,38 @@ const getOrderByUser = (userId) => {
     });
 };
 
+const getProductsPurchasedByuser = async (userId) => {
+    let products = [];
+    let productsToSend = [];
+    let obj = {};
+
+    const orders = await getOrderByUser(userId);
+
+    orders.forEach(async (order) => {
+        if (order.status === "CONFIRMED") {
+            // products.concat(order.products);
+            order.products.forEach((product) => {
+                products.push(product);
+            });
+        }
+    });
+
+    products.forEach((product) => {
+        if (!obj[product.id]) {
+            obj[product.id] = product;
+        } else {
+            obj[product.id].order_product.amount +=
+                product.order_product.amount;
+        }
+    });
+
+    for (const p in obj) {
+        productsToSend.push(obj[p]);
+    }
+
+    return productsToSend;
+};
+
 //-------------------------------------------------\\
 
 const setUsertoOrder = async (idUser, idOrder) => {
@@ -40,4 +72,5 @@ const setUsertoOrder = async (idUser, idOrder) => {
 module.exports = {
     getOrderByUser,
     setUsertoOrder,
+    getProductsPurchasedByuser,
 };
