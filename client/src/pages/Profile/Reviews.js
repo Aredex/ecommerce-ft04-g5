@@ -5,10 +5,10 @@ import useUser from 'hooks/useUser';
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import style from "./index.module.scss";
 
-function Review({ product }) {
+function Review({ product, onUpdate }) {
   return <div className={style.product}>
     <span className={style.productName}>{product.name}</span>
-    <ReviewButton className={style.reviewButton} reviews={product.reviews} idProduct={product.id} calificate />
+    <ReviewButton className={style.reviewButton} reviews={product.reviews} idProduct={product.id} calificate onUpdate={onUpdate} />
   </div>
 }
 
@@ -47,7 +47,7 @@ function Reviews() {
             Opina sobre estos artículos...
         </Card.Header>
           <Card.Body>
-            {withoutReview.map(product => <Review key={product.id} product={product} />)}
+            {withoutReview.map(product => <Review key={product.id} product={product} onUpdate={getOrders} />)}
           </Card.Body>
         </Card>
       }
@@ -57,7 +57,7 @@ function Reviews() {
             Artículos de los que opinaste
         </Card.Header>
           <Card.Body>
-            {withtReview.map(product => <Review key={product.id} product={product} />)}
+            {withtReview.map(product => <Review key={product.id} product={product} onUpdate={getOrders} />)}
           </Card.Body>
         </Card>
       }
