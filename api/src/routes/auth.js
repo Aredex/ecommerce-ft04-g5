@@ -11,7 +11,7 @@ router.route("/login/email").post(function (req, res, next) {
     if (!user) {
       return res
         .status(401)
-        .json({ status: "error", code: "unauthorized", info });
+        .json({ status: "error", code: "unauthorized", message: "usuario y/o contraseña inválida", info });
     } else {
       return res.json({
         user,
@@ -55,13 +55,20 @@ router.route("/register").post(async (req, res) => {
     password,
   } = req.body;
   try {
-    const user = await createOne(name, email, password)
-    return res.json({
-      user,
-      token: jwt.sign({ uid: user.id, role: user.role }, secret),
-    });
+    if (!name || !email || !password)
+      res.status(400).json({ message: 'datos incompletos' })
+    else {
+      const user = await createOne(name, email, password)
+      return res.json({
+        user,
+        token: jwt.sign({ uid: user.id, role: user.role }, secret),
+      });
+    }
   }
-  catch (err) { res.status(400).json(err) }
+  catch (err) {
+    console.log(err.message)
+    res.status(400).json({ message: 'email en uso' })
+  }
 })
 router.route("/me").get(async (req, res) => {
   if (!req.user) {
