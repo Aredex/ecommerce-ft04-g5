@@ -1,19 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
-import { Link, useHistory } from "react-router-dom";
-import { motion } from "framer-motion";
+import { useHistory } from "react-router-dom";
 import style from "./Sign.module.scss";
-import { createUser } from "store/Actions/Users/UsersActions"
-
-import { useSelector, useDispatch } from "react-redux";
-
+import useUser from "hooks/useUser";
 
 import logo from "logo.svg";
 
 export default function SignUp() {
 
-  const history = useHistory();
-  const dispatch = useDispatch();
+  const { localUser, register } = useUser()
+  const history = useHistory()
+
+  useEffect(() => {
+    if (localUser) history.push('/')
+  }, [localUser, history])
 
   const formik = useFormik({
     initialValues: {
@@ -23,11 +23,13 @@ export default function SignUp() {
       password: "",
       passwordConfirm: "",
     },
-    onSubmit: (values) => {
-      dispatch(createUser(values.name, values.email, values.passwordConfirm, "ADMIN"))
-        .then(() => {
-          history.push("/sign-in")
-        })
+    onSubmit: async (values) => {
+      if (values.password === values.passwordConfirm) {
+        await register(`${values.name} ${values.surname}`, values.email, values.password)
+        history.push("/");
+      } else {
+        alert('La contraseña no coincide.')
+      }
     },
   });
 
@@ -61,12 +63,14 @@ export default function SignUp() {
               name="password"
               type="password"
               placeholder="contraseña"
+              autoComplete="on"
               onChange={formik.handleChange}
             />
             <input
               name="passwordConfirm"
               type="password"
               placeholder="repetir contraseña"
+              autoComplete="off"
               onChange={formik.handleChange}
             />
             <input
@@ -80,10 +84,19 @@ export default function SignUp() {
               También puedes registrarte con
             </div>
             <div className={style.buttonGroup}>
-              <button>
+              <button
+                onClick={() =>
+                  (window.location = `${process.env.REACT_APP_API}/auth/login/google`)
+                }
+              >
                 <i className="fab fa-google"></i>
               </button>
-              <button>
+              <button
+                onClick={() =>
+                  (window.location =
+                    `${process.env.REACT_APP_API}/auth/login/facebook`)
+                }
+              >
                 <i className="fab fa-facebook"></i>
               </button>
             </div>

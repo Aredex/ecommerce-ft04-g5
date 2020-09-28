@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const isAdmin = require("../lib/isAdmin");
 const {
     createOne,
     getAll,
@@ -6,16 +7,20 @@ const {
     setProductAsociation,
     deleteOne,
     deleteMultiple,
+    getByUrl,
 } = require("../controllers/images");
 
 router
     .route("/")
     .post((req, res) => {
         const { url } = req.body;
-
-        createOne(url)
-            .then((img) => res.json(img))
-            .catch((err) => res.status(400).json(err));
+        if (isAdmin(req)) {
+            createOne(url)
+                .then((img) => res.json(img))
+                .catch((err) => res.status(400).json(err));
+        } else {
+            res.sendStatus(401);
+        }
     })
     .get((req, res) => {
         getAll()
@@ -24,12 +29,17 @@ router
     })
     .delete((req, res) => {
         const { ids } = req.body;
-
-        deleteMultiple(ids)
-            .then(() =>
-                res.status(204).json({ message: "Eliminado correctamente" })
-            )
-            .catch((err) => res.status(400).json(err));
+        if (isAdmin(req)) {
+            deleteMultiple(ids)
+                .then(() =>
+                    res.status(204).json({
+                        message: "Eliminado correctamente",
+                    })
+                )
+                .catch((err) => res.status(400).json(err));
+        } else {
+            res.sendStatus(401);
+        }
     });
 
 router
@@ -43,21 +53,38 @@ router
     })
     .delete((req, res) => {
         const { id } = req.params;
-
-        deleteOne(id)
-            .then(() =>
-                res.status(204).json({
-                    message: `Imagen con el id ${id} eliminada con éxito`,
-                })
-            )
-            .catch((err) => res.status(404).json(err));
+        if (isAdmin(req)) {
+            deleteOne(id)
+                .then(() =>
+                    res.status(204).json({
+                        message: `Imagen con el id ${id} eliminada con éxito`,
+                    })
+                )
+                .catch((err) => res.status(404).json(err));
+        } else {
+            res.sendStatus(401);
+        }
     });
 
 router.route("/:id/products/:idProduct").put((req, res) => {
     const { id, idProduct } = req.params;
-    setProductAsociation(id, idProduct)
+    if (isAdmin(req)) {
+        setProductAsociation(id, idProduct)
+            .then((img) => res.json(img))
+            .catch((err) => res.status(400).json(err));
+    } else {
+        res.sendStatus(401);
+    }
+});
+
+router.route("/url/url").post((req, res) => {
+    console.log("ANDO ACÁ MI GENTE");
+    const { url } = req.body;
+    getByUrl(url)
         .then((img) => res.json(img))
         .catch((err) => res.status(400).json(err));
+    console.log(url);
+    // res.json({ message: "lolamento" });
 });
 
 module.exports = router;

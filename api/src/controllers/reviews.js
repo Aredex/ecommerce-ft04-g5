@@ -1,6 +1,7 @@
 const { Review, Product, User } = require("../db");
 const { getOne: getUser } = require("./users");
 const { getOne: getProduct } = require("./products");
+const { getOrderByUser } = require("./users_order");
 
 const getAll = ({ idUser, idProduct }) => {
     return new Promise((resolve, reject) => {
@@ -108,7 +109,76 @@ const createReviewComplete = async ({
     description,
     idReview,
 }) => {
-    let review = null;
+    let review = null,
+        product,
+        user,
+        orders,
+        promises = [];
+
+    if (!idUser) {
+        throw new Error({
+            error: { message: "No has comprado este artículo" },
+        });
+    }
+
+    if (idUser) {
+        user = await getUser(idUser);
+    }
+
+    if (idProduct) {
+        user = await getUser(idUser);
+        product = await getProduct(idProduct);
+    }
+
+    orders = await getOrderByUser(idUser);
+
+    if (user && product) {
+        if (orders.length === 0) {
+            throw new Error({
+                error: { message: "No has comprado este artículo" },
+            });
+        }
+
+        const ordersFinalized = orders.filter(
+            (order) => order.status === "CONFIRMED"
+        );
+
+        if (!ordersFinalized) {
+            throw new Error({
+                error: { message: "No has comprado este artículo" },
+            });
+        }
+
+        const productBuyed = ordersFinalized.filter(
+            (Theproduct) => Theproduct.id == product.id
+        );
+
+        if (!productBuyed) {
+            throw new Error({
+                error: { message: "No has comprado este artículo" },
+            });
+        }
+    }
+
+    if (user && product) {
+        const reviesOfUser = await user.getReviews();
+        const review = reviesOfUser.find(
+            (review) => review.productId === product.id
+        );
+        if (review) {
+            try {
+                const reviewEdited = await editOne({
+                    id: review.id,
+                    stars,
+                    title,
+                    description,
+                });
+                return reviewEdited;
+            } catch (err) {
+                throw new Error(err);
+            }
+        }
+    }
 
     if (!idReview) {
         review = await createOne({ stars, title, description });
@@ -116,31 +186,24 @@ const createReviewComplete = async ({
         review = await getOne(idReview);
     }
 
-    let product,
-        user,
-        promises = [];
-
     if (idProduct) {
-        product = await getProduct(idProduct);
         promises.push(review.setProduct(product));
     }
     if (idUser) {
-        user = await getUser(idUser);
         promises.push(review.setUser(user));
     }
 
     if (idProduct || idUser) {
-        return new Promise((resolve, reject) => {
-            Promise.all(promises)
-                .then((res) => resolve(res[0]))
-                .catch((err) => reject({ error: err }));
-        });
+        try {
+            const reviewResolved = await Promise.all(promises);
+            return reviewResolved[0];
+        } catch (err) {
+            throw new Error({ error: err });
+        }
     }
 
-    return new Promise((resolve, reject) => {
-        if (review) resolve(review);
-        else reject({ error: { message: "Error, no creada" } });
-    });
+    if (review) return review;
+    else throw new Error({ error: { message: "Error, no creada" } });
 };
 
 module.exports = {

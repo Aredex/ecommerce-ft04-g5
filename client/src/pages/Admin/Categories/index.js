@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState} from "react";
 import style from "./index.module.scss";
 import CRUD from "./CRUD";
 import * as actionsCategories from "store/Actions/Categories/CategoriesActions"
@@ -12,20 +12,22 @@ const Categories = ({ state, disabledCRUD, createCategory, updateCategory,
 
   useEffect(() => {
     getAllCategories()
-  }, []);
+  }, [getAllCategories]);
   useEffect(() => {
     getAllCategories()
-  }, [state.categoryRemove,
-  state.categoryCreate,
-  state.categoryReadOnly,
-  state.categoryUpdate]);
+  }, [getAllCategories, state.categoryRemove,
+    state.categoryCreate,
+    state.categoryReadOnly,
+    state.categoryUpdate]);
 
-  const categories = state.categories;
+  var categories = state.categories;
   const bandera = {
     readOnly: state.categoryReadOnly,
     create: state.categoryCreate,
     update: state.categoryUpdate,
   }
+  const[filter,setFilter] = useState("name");
+  const[order,setOrder] = useState(true);
 
   const handleView = async (id) => {
     await handleViewCategory(id)
@@ -65,13 +67,27 @@ const Categories = ({ state, disabledCRUD, createCategory, updateCategory,
     }
   }
 
+  function handleFilter(e){
+    e.preventDefault()
+    setOrder(!order)
+    setFilter(e.target.name); 
+    categories = order ? categories.sort((a,b)=>a[filter].toUpperCase() > b[filter].toUpperCase()? 1:-1): categories.sort((a,b)=>a[filter].toUpperCase() < b[filter].toUpperCase()? 1:-1);
+  }
+
   return (
     <section>
       <table className={style.table}>
         <thead>
           <tr>
-            <th>Nombre:</th>
-            <th>Descripción:</th>
+            <th><button 
+            className={filter === "name" ? order? style.asc: style.desc:null } 
+            name ="name"
+            onClick={handleFilter}>Nombre:</button></th>
+            <th><button
+            className={filter === "description" ? order? style.asc: style.desc:null } 
+            name ="description"
+            onClick={handleFilter}
+            >Descripción:</button></th>
             <th style={{ width: "11rem" }}>
               <button onClick={() => handleCreate()}>
                 <i className="fas fa-plus"></i> Agregar

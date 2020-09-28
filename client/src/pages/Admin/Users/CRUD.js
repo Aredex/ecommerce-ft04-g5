@@ -41,6 +41,20 @@ const CRUD = ({ formikData, onClose }) => {
                 name="role"
                 readOnly
               />
+              {formikData.update && values.role === 'GUEST' ? <button
+                type="button"
+                className={style.primary}
+                onClick={formikData.onPromote}
+              >
+                Promover a ADMIN
+                </button> :
+                <button
+                  type="button"
+                  className={style.changerole}
+                  onClick={formikData.onDegrade}
+                >
+                  Degradar a GUEST
+                </button>}
               {!formikData.readOnly && !formikData.update && (
                 <>
                   <InputField

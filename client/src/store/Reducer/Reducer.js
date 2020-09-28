@@ -4,7 +4,7 @@ import UsersReducer from "./Users/UsersReducer.js";
 import CategoriesReducer from "./Categories/CategoriesReducer.js";
 import orders from "./Orders";
 import orders_reducer from "./Orders/ordersReducers";
-
+import ImageProductReducer from "./ImageProduct/ImageProductReducer.js";
 
 export default combineReducers({
   ProductsReducer,
@@ -12,4 +12,5 @@ export default combineReducers({
   CategoriesReducer,
   orders,
   orders_reducer,
+  imageProduct: ImageProductReducer,
 });

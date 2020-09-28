@@ -5,7 +5,7 @@
   display: grid;
   grid-template-rows: auto 1fr auto;
   grid-template-columns: 1fr;
-  height: 100vh;
+  height: 100%;
 }
 .header {
   background: white;
@@ -13,6 +13,7 @@
   grid-template-rows: 4rem;
   align-items: center;
   width: stretch;
+  width: -moz-available;
   .logo {
     width: 2rem;
     padding: 1rem;
@@ -21,59 +22,6 @@
     font-size: 1.5rem;
     padding: 1rem;
     color: #0e0e0e;
-  }
-
-  .nav {
-    position: relative;
-
-    nav {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      z-index: 100;
-      background: #fff;
-      width: fit-content;
-      min-width: 15rem;
-      height: calc(100vh - 4rem);
-      transform: translateX(-100%);
-      transition: transform 0.25s;
-      justify-content: space-between;
-
-      section {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .navLink {
-        text-decoration: none;
-        color: #111;
-        padding: 0.5rem 1.25rem;
-        border-left: solid 0.25rem transparent;
-      }
-      .activeNav {
-        border-color: $--primary-color;
-      }
-    }
-
-    .showNav {
-      transform: translateX(0%);
-    }
-  }
-  .buttonMenu {
-    width: 3rem;
-    height: 3rem;
-    margin: 0.5rem;
-    box-sizing: border-box;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    &:focus {
-      outline: none;
-    }
-    i {
-      font-size: 1.5rem;
-    }
   }
 
   @include respond-to("default") {
@@ -95,6 +43,38 @@
   overflow: hidden;
   overflow-y: auto;
 }
+
+.content::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+.content::-webkit-scrollbar:vertical {
+  width:1rem;
+}
+
+.content::-webkit-scrollbar-button:increment,.content::-webkit-scrollbar-button {
+  display: none;
+} 
+
+.content::-webkit-scrollbar:horizontal {
+  height: 1rem;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background-color: $--primary-color;
+  border-radius: 20px;
+  border: 2px solid #f1f2f3;
+}
+
+.content::-webkit-scrollbar-track {
+  border-radius: 9999px;  
+}
+
+
+
+
+
+
+
 .footer {
   height: 0rem;
 }

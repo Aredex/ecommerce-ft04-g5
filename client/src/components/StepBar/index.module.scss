@@ -1,0 +1,88 @@
+@import "var.scss";
+@import 'bp.scss';
+
+.stepBar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  position: relative;
+  padding: 0.5rem 0;
+  .step {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    place-items: center;
+    position: relative;
+    color: #3e3e3e;
+    
+    .dot {
+      box-shadow: 0 0 4px #3e3e3e;
+      border-radius: 9999px;
+      width: 1.5rem;
+      height: 1.5rem;
+      display: grid;
+      z-index: 1;
+      position: relative;
+      background: #fff;
+      grid-area: 2 / 1 / span 1 / span 1;
+      i {
+        font-size: 1rem;
+        margin: auto;
+      }
+    }
+    
+    span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      @include respond-to("default") {
+        display: none;
+      }
+      @include respond-to("small") {
+        display: initial;
+      }
+    }
+
+
+    + .step {
+      &::before {
+        content: ' ';
+        background: #fff;
+        box-shadow: 0 0 4px #e3e3e3;
+        height: 4px;
+        position: absolute;
+        bottom: 0.625rem;
+        width: 100%;
+        right: 50%;
+        z-index: 0;
+      }
+    }
+  }
+}
+.step.complete {
+  color: $--primary-color;
+  + .step.complete {
+    &::before {
+      background: $--primary-color;
+    }
+  }
+  + .step.completeExact {
+    &::before {
+      background: $--primary-color;
+    }
+  }
+}
+.step.completeExact{
+  color: $--primary-color;
+  span {
+    @include respond-to("default") {
+      display: initial;
+    }
+  }
+  + .step {
+    &::before {
+      background: linear-gradient(90deg, $--primary-color 0%, #fff 75%);
+    }
+  }
+}

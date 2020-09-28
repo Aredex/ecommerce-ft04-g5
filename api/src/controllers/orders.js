@@ -1,5 +1,5 @@
 const { getOne: getProduct } = require("./products");
-const { Order, Product, User, Op } = require("../db");
+const { Order, Product, User, Op, Image } = require("../db");
 
 // Obtiene todas las ordenes hechas y puede filtrar según su status
 
@@ -7,13 +7,14 @@ const getAllFiler = ({ search }) => {
     return new Promise((resolve, reject) => {
         if (!isNaN(search)) {
             search = Number(search);
-            console.log(search);
 
             getOne(search)
                 .then((order) => resolve(order))
                 .catch((err) => reject(err));
         } else {
-            getAll({ search })
+            getAll({
+                search,
+            })
                 .then((order) => resolve(order))
                 .catch((err) => reject(err));
         }
@@ -31,7 +32,14 @@ const getAll = ({ status, search }) => {
     }
 
     if (search) {
-        obj = { model: User, where: { name: { [Op.substring]: search } } };
+        obj = {
+            model: User,
+            where: {
+                name: {
+                    [Op.substring]: search,
+                },
+            },
+        };
         include[1] = obj;
     }
 
@@ -61,15 +69,49 @@ const getAll = ({ status, search }) => {
 
                 resolve(orders);
             })
-            .catch((err) => reject({ error: err }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
     });
 };
 
-const confirmedOrder = async ({ id, address }) => {
+const confirmedOrder = async ({
+    id,
+    payment_method_id,
+    payment_type_id,
+    payment_status,
+    payment_status_detail,
+    card_expiration_month,
+    card_expiration_year,
+    card_first_six_digits,
+    card_last_four_digits,
+    transaction_amount,
+}) => {
+    const Order = await getOne(id);
+    Order.status = "CONFIRMED";
+    Order.payment_method_id = payment_method_id;
+    Order.payment_type_id = payment_type_id;
+    Order.payment_status = payment_status;
+    Order.payment_status_detail = payment_status_detail;
+    Order.card_expiration_month = card_expiration_month;
+    Order.card_expiration_year = card_expiration_year;
+    Order.card_first_six_digits = card_first_six_digits;
+    Order.card_last_four_digits = card_last_four_digits;
+    Order.transaction_amount = transaction_amount;
+
+    await Order.save();
+    return Order;
+};
+
+const toPaymentOrder = async ({ id, address, init_point }) => {
     if (!address) {
         return new Promise((resolve, reject) => {
             reject({
-                error: { message: "Es necesario tener la dirección de envío" },
+                error: {
+                    message: "Es necesario tener la dirección de envío",
+                },
             });
         });
     }
@@ -78,7 +120,7 @@ const confirmedOrder = async ({ id, address }) => {
     let poderComprar = true;
 
     Order.products.map((product) => {
-        if (product.order_product.amount >= product.stock) {
+        if (product.order_product.amount > product.stock) {
             poderComprar = false;
         }
     });
@@ -104,19 +146,76 @@ const confirmedOrder = async ({ id, address }) => {
 
         Promise.all(products)
             .then(() => {
-                Order.status = "CONFIRMED";
+                Order.status = "PENDING_PAYMENT";
                 Order.address = address;
-                return Order.save();
+                Order.init_point = init_point;
+                Order.save();
             })
-            .then((order) => resolve(order))
-            .catch((err) => reject({ error: err }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
+
+        getOne(id).then((e) => {
+            resolve(e);
+        });
     });
+};
+
+const rejectedOrder = async (id) => {
+    let order = await getOne(id);
+    if (order.status === "REJECTED") {
+        return new Promise((resolve, reject) => {
+            reject({ error: { message: "La orden ya ha sido rechazada" } });
+        });
+    }
+    const result = await order.products.map(async (p) => {
+        const product = await getProduct(p.id);
+        product.stock = product.stock + p.order_product.amount;
+        await product.save();
+        return product;
+    });
+
+    if (!order.status !== "REJECTED") {
+        order.status = "REJECTED";
+        order = await order.save();
+
+        const result = await order.products.map(async (p) => {
+            const product = await getProduct(p.id);
+            product.stock = product.stock + p.order_product.amount;
+            await product.save();
+            return product;
+        });
+
+        return new Promise((resolve, reject) => {
+            Promise.all(result)
+                .then(() => {
+                    return getOne(id);
+                })
+                .then((order) => resolve(order))
+                .catch(reject);
+        });
+    }
 };
 
 // Busca una orden por su ID
 const getOne = (id) => {
     return new Promise((resolve, reject) => {
-        Order.findOne({ where: { id }, include: [Product, User] })
+        Order.findOne({
+            where: {
+                id,
+            },
+            include: [
+                {
+                    model: Product,
+                    include: {
+                        model: Image,
+                    },
+                },
+                User,
+            ],
+        })
             .then((order) => {
                 if (!order) {
                     return reject({
@@ -137,16 +236,27 @@ const getOne = (id) => {
 
                 resolve(order);
             })
-            .catch((err) => reject({ error: err }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
     });
 };
 
 // Crea una orden
 const createOne = (status, address) => {
     return new Promise((resolve, reject) => {
-        Order.create({ status, address })
+        Order.create({
+            status,
+            address,
+        })
             .then((order) => resolve(order))
-            .catch((err) => reject({ error: err }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
     });
 };
 
@@ -160,8 +270,18 @@ const editOne = ({ id, status, address }) => {
 
                 return order.save();
             })
+            .then((order) => {
+                if (order.products.length === 0) {
+                    return order.destroy();
+                }
+                return order;
+            })
             .then((order) => resolve(order))
-            .catch((err) => reject({ error: err }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
     });
 };
 
@@ -172,9 +292,15 @@ const deleteOne = (id) => {
             .then((order) => {
                 order.destroy();
 
-                resolve({ description: "successfully remove" });
+                resolve({
+                    description: "successfully remove",
+                });
             })
-            .catch((err) => reject({ error: err }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
     });
 };
 
@@ -184,7 +310,11 @@ const emptyOrder = (id) => {
         getOne(id)
             .then((order) => order.setProducts([]))
             .then((order) => resolve(order))
-            .catch((err) => reject({ error: err }));
+            .catch((err) =>
+                reject({
+                    error: err,
+                })
+            );
     });
 };
 
@@ -195,6 +325,8 @@ module.exports = {
     editOne,
     deleteOne,
     emptyOrder,
+    toPaymentOrder,
     confirmedOrder,
     getAllFiler,
+    rejectedOrder,
 };
