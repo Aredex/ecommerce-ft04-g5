@@ -22,9 +22,7 @@ useEffect(() => {
   state.orderUpdate,
   state.orderDetail]);
 
-  var orders = state.allOrders
-
-
+  let orders = state.allOrders
 
   const handleChange = async (e, id, address)=>{
 
