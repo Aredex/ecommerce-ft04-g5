@@ -1,22 +1,38 @@
 @import "var";
 .container {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 select {
-	 background: transparent;
-     border: none;
-     border-bottom: 1px ridge;
-     font-size: 14px;
-     height: 30px;
-     padding: 5px;
-     overflow: hidden; 
-     background: transparent;
+  background: transparent;
+  border: none;
+  border-bottom: 1px ridge;
+  font-size: 14px;
+  height: 30px;
+  padding: 5px;
+  overflow: hidden;
+  background: transparent;
+  outline: none;
+
+  &:hover,
+  &:focus {
+    background-color: $--primary-color;
+    color: #ffff;
+    cursor: pointer;
+    outline: none;
+    //     border: 1px solid $--primary-color;
+  }
 }
 
-select:hover,
-select:focus {
-	outline: none;
-	border: 1px ridge $--primary-color;
+option {
+  background-color: #e3e3e3;
+  color: black;
+  cursor: pointer;
+  outline: none;
+
+  &:nth-child(even) {
+    background: #fff;
+  }
 }
