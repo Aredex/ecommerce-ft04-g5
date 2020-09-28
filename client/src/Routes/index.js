@@ -13,6 +13,8 @@ import Success from "pages/Checkout/Success";
 import Cancel from "pages/Checkout/Cancel";
 import Profile from "pages/Profile";
 import PageNotFound from "pages/PageNotFound";
+import About from "pages/About";
+import ContactUs from "pages/ContactUs";
 
 
 const Routes = () => {
@@ -20,6 +22,8 @@ const Routes = () => {
     <>
       <Switch>
         <Route exact path="/" component={Home}></Route>
+        <Route exact path="/about" component={About}></Route>
+        <Route exact path="/contactus" component={ContactUs}></Route>
         <Route exact path="/products" component={Products} />
         <Route exact path="/checkout" component={Checkout} />
         <Route exact path="/checkout/success" component={Success} />
