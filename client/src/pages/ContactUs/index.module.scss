@@ -1,7 +1,7 @@
 @import "var.scss";
 
 .content {
-    max-width: 1178px;
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
     padding: 1.5rem;
@@ -66,7 +66,7 @@
     border-radius: 4px;
     width: 300px;
     transition: all 0.5s;
-    font-size: 20px;
+    font-size: 15px;
 }
 
 .form form button:hover,
@@ -102,8 +102,10 @@ button span{
 // }
 
 .contact {
+    color: #00cc76;
     background: rgb(164, 243, 210);
     margin: 0;
+    text-shadow: 1px 1px 1px black;
 }
 
 .info {

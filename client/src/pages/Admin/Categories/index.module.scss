@@ -39,22 +39,12 @@ width: -moz-available;
       font-size: 1rem;
       width: 100%;
     }
-    .active{
-      font-weight: bold;
-    }
     .asc{
-      border-top: 5px solid $--primary-color;
+      box-shadow: 0 -4px 0 $--primary-color;
     }
     .desc{
-      border-bottom: 5px solid $--primary-color;
+      box-shadow: 0 4px 0 $--primary-color;
     }
-    
-  }
-  .asc{
-    border-top: 5px solid $--primary-color;
-  }
-  .desc{
-    border-bottom: 5px solid $--primary-color;
   }
   tbody {
     button {

@@ -5,8 +5,12 @@ import CRUD from "./CRUD";
 import { toAdmin, toGuest } from "services/user";
 
 const Users = () => {
-  const [users, setUsers] = useState([]);
+  var [users, setUsers] = useState([]);
   const [formikData, setFormikData] = useState(null);
+
+  const[filter,setFilter] = useState("name");
+  const[order,setOrder] = useState(true);
+
   const getAll = useCallback(() => {
     Axios.get(`${process.env.REACT_APP_API}/users`).then(({ data }) => setUsers(data));
   }, []);
@@ -101,16 +105,27 @@ const Users = () => {
     getAll();
   }, [getAll]);
 
+  function handleFilter(e){
+    e.preventDefault()
+    setOrder(!order)
+    setFilter(e.target.name); 
+    if(filter === "id"){
+      users = order ? users.sort((a,b)=>a[filter] > b[filter]? 1:-1): users.sort((a,b)=>a[filter] < b[filter]? 1:-1);
+    }else{
+      users = order ? users.sort((a,b)=>a[filter].toUpperCase() > b[filter].toUpperCase()? 1:-1): users.sort((a,b)=>a[filter].toUpperCase() < b[filter].toUpperCase()? 1:-1);
+    }
+  }
+
   return (
     <section>
       <table className={style.table}>
         <thead>
           <tr>
-            <th style={{ width: "3rem" }}>Id:</th>
-            <th>Nombre:</th>
-            <th>Email:</th>
-            <th style={{ width: "5rem" }}>Role:</th>
-            <th style={{ width: "5rem" }}>Estado:</th>
+          <th style={{ width: "3rem" }}><button className={filter === "id" ? order? style.asc: style.desc:null } name ="id"onClick={handleFilter}>Id:</button></th>
+          <th><button className={filter === "name" ? order? style.asc: style.desc:null } name ="name"onClick={handleFilter}>Nombre:</button></th>
+          <th><button className={filter === "email" ? order? style.asc: style.desc:null } name ="email"onClick={handleFilter}>Email:</button></th>
+          <th style={{ width: "5rem" }}><button className={filter === "role" ? order? style.asc: style.desc:null } name ="role"onClick={handleFilter}>Rol:</button></th>
+          <th style={{ width: "5rem" }}><button className={filter === "status" ? order? style.asc: style.desc:null } name ="status"onClick={handleFilter}>Estado:</button></th>
             <th style={{ width: "11rem" }}>
               <button onClick={() => handleCreate()}>
                 <i className="fas fa-plus"></i> Agregar

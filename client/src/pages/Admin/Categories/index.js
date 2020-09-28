@@ -80,11 +80,11 @@ const Categories = ({ state, disabledCRUD, createCategory, updateCategory,
         <thead>
           <tr>
             <th><button 
-            className={filter == "name" ? order? style.asc: style.desc:null } 
+            className={filter === "name" ? order? style.asc: style.desc:null } 
             name ="name"
             onClick={handleFilter}>Nombre:</button></th>
             <th><button
-            className={filter == "description" ? order? style.asc: style.desc:null } 
+            className={filter === "description" ? order? style.asc: style.desc:null } 
             name ="description"
             onClick={handleFilter}
             >Descripción:</button></th>
