@@ -5,6 +5,7 @@ import { signin } from "services/auth";
 import { getUser } from "store/Actions/Users/UsersActions";
 import Axios from "axios";
 import ReactGA from 'react-ga';
+import useOrders from "./useOrders";
 
 export default function useUser() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -13,7 +14,7 @@ export default function useUser() {
     undefined
   );
   const userLogin = useSelector((x) => x.UsersReducer.userLogin);
-
+  const { reloadShoppingCart } = useOrders()
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,6 +37,7 @@ export default function useUser() {
       ReactGA.set({ userId: undefined })
     }
     dispatch(getUser(localUser));
+    reloadShoppingCart()
   }, [localUser, dispatch]);
 
   useEffect(() => {
