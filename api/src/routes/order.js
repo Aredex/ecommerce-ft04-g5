@@ -38,6 +38,7 @@ const { ordersDevolution } = require("../controllers/order_id_string");
 const { sendEmail } = require("../mailmodel/sendEmail");
 const { dispatch } = require("../mailmodel/dispatch");
 
+
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\\
 
 // Rutas para obtener todas las ordenes y crear una orden
@@ -343,24 +344,22 @@ router.route("/:id/sent").put((req, res) => {
 });
 
 // Ruta para especificar que una orden ya ha  entregada
-router.route("/:id/delivered").get((req, res) => {
+router.route("/:id/delivered").put((req, res) => {
     const { id } = req.params;
-
-    // if (isAdmin(req)) {
+     if (isAdmin(req)) {
     editOne({
         id,
         status: "DELIVERED",
     })
         .then((order_product) => {
-            var aux = dispatch(order_product);
-            res.send(aux);
-            // res.json(order_product).status(204)})
+            dispatch(order_product);
+            res.json(order_product).status(204)
         })
         .catch((err) => res.status(400).json(err));
 
-    // } else {
-    //     res.sendStatus(401)
-    // }
+     } else {
+         res.sendStatus(401)
+     }
 });
 
 // Ruta para especificar que una orden ya ha sido entregada
