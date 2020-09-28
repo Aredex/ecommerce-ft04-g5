@@ -25,8 +25,13 @@ export default function SignUp() {
     },
     onSubmit: async (values) => {
       if (values.password === values.passwordConfirm) {
-        await register(`${values.name} ${values.surname}`, values.email, values.password)
-        history.push("/");
+        try {
+          await register(`${values.name} ${values.surname}`, values.email, values.password)
+          history.push("/");
+        } catch (error) {
+          const data = error.response.data
+          if (data.message) alert(data.message)
+        }
       } else {
         alert('La contraseña no coincide.')
       }

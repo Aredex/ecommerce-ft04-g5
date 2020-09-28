@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import General from './General';
 import style from "./index.module.scss";
 import Orders from './Orders';
+import Reviews from './Reviews';
 
 function Profile() {
   const [showFilter, setShowFilter] = useState(false);
@@ -38,10 +39,18 @@ function Profile() {
           >
             Ordenes
           </NavLink>
+          <NavLink
+            className={style.navLink}
+            activeClassName={style.activeNav}
+            to="/profile/reviews"
+          >
+            Mis opiniones
+          </NavLink>
         </div>
       </aside>
       <Route path="/profile" exact component={General} />
       <Route path="/profile/orders" exact component={Orders} />
+      <Route path="/profile/reviews" exact component={Reviews} />
     </div>
   )
 }
