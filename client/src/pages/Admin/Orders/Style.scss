@@ -1,0 +1,22 @@
+@import "var";
+.container {
+	display: flex;
+	align-items: center;
+}
+
+select {
+	 background: transparent;
+     border: none;
+     border-bottom: 1px ridge;
+     font-size: 14px;
+     height: 30px;
+     padding: 5px;
+     overflow: hidden; 
+     background: transparent;
+}
+
+select:hover,
+select:focus {
+	outline: none;
+	border: 1px ridge $--primary-color;
+}

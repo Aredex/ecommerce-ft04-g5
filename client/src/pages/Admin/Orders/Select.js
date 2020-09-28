@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getAllOrders, setDeliveredOrder } from "services/orders";
+import './Style.scss'
 
 
 const valores = [
@@ -14,14 +15,12 @@ const valores = [
 
 export default function Select(props) { 
 
-
-
   return (
-    <div>
+    <div className='container'>
       <select onChange={(e)=>{props.handleChange(e, props.id, props.address, props.i)}}>
       {valores.map((val, index)=>{
         if(props.status === val){
-            return <option value={`${val}`} key={index} selected>{val}</option>
+            return <option value={`${val}`} key={index} disabled selected>{val}</option>
         }else{
           return <option value={`${val}`} key={index}>{val}</option>      }            
       })}
