@@ -14,7 +14,6 @@ export default function useUser() {
     undefined
   );
   const userLogin = useSelector((x) => x.UsersReducer.userLogin);
-  const { reloadShoppingCart } = useOrders()
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -37,7 +36,6 @@ export default function useUser() {
       ReactGA.set({ userId: undefined })
     }
     dispatch(getUser(localUser));
-    reloadShoppingCart()
   }, [localUser, dispatch]);
 
   useEffect(() => {
