@@ -109,7 +109,7 @@ const Users = () => {
     e.preventDefault()
     setOrder(!order)
     setFilter(e.target.name); 
-    if(filter == "id"){
+    if(filter === "id"){
       users = order ? users.sort((a,b)=>a[filter] > b[filter]? 1:-1): users.sort((a,b)=>a[filter] < b[filter]? 1:-1);
     }else{
       users = order ? users.sort((a,b)=>a[filter].toUpperCase() > b[filter].toUpperCase()? 1:-1): users.sort((a,b)=>a[filter].toUpperCase() < b[filter].toUpperCase()? 1:-1);
@@ -121,11 +121,11 @@ const Users = () => {
       <table className={style.table}>
         <thead>
           <tr>
-          <th style={{ width: "3rem" }}><button className={filter == "id" ? order? style.asc: style.desc:null } name ="id"onClick={handleFilter}>Id:</button></th>
-          <th><button className={filter == "name" ? order? style.asc: style.desc:null } name ="name"onClick={handleFilter}>Nombre:</button></th>
-          <th><button className={filter == "email" ? order? style.asc: style.desc:null } name ="email"onClick={handleFilter}>Email:</button></th>
-          <th style={{ width: "5rem" }}><button className={filter == "role" ? order? style.asc: style.desc:null } name ="role"onClick={handleFilter}>Rol:</button></th>
-          <th style={{ width: "5rem" }}><button className={filter == "status" ? order? style.asc: style.desc:null } name ="status"onClick={handleFilter}>Estado:</button></th>
+          <th style={{ width: "3rem" }}><button className={filter === "id" ? order? style.asc: style.desc:null } name ="id"onClick={handleFilter}>Id:</button></th>
+          <th><button className={filter === "name" ? order? style.asc: style.desc:null } name ="name"onClick={handleFilter}>Nombre:</button></th>
+          <th><button className={filter === "email" ? order? style.asc: style.desc:null } name ="email"onClick={handleFilter}>Email:</button></th>
+          <th style={{ width: "5rem" }}><button className={filter === "role" ? order? style.asc: style.desc:null } name ="role"onClick={handleFilter}>Rol:</button></th>
+          <th style={{ width: "5rem" }}><button className={filter === "status" ? order? style.asc: style.desc:null } name ="status"onClick={handleFilter}>Estado:</button></th>
             <th style={{ width: "11rem" }}>
               <button onClick={() => handleCreate()}>
                 <i className="fas fa-plus"></i> Agregar

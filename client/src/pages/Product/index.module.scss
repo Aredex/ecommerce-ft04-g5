@@ -32,6 +32,9 @@
   height: 80vh;
   border-radius: 0.5rem;
   overflow: hidden;
+  @include respond-to("default") {
+    height: 50vh;
+  }
   @include respond-to("small") {
     grid-area: 1 / 1 / span 4 / span 1;
   }
@@ -64,22 +67,16 @@
   .leftd{
     left:0;
     &:hover{
-      background:  #00cc7659;
-
       i{
         transform: scale(3);
-        background: transparent;
       }
     }
   }
   .rightd{
     right:0;
     &:hover{
-      background:  #00cc7659;
       i{
         transform: scale(3);
-        background: transparent;
-
       }
     }
   }
@@ -88,11 +85,9 @@
     height: 100%;
     object-fit: contain;
   }
-
   .inactive{
     display: none;
   }
-  
 }
 .info {
   display: flex;
