@@ -5,7 +5,7 @@
   position: relative;
   display: grid;
   width: stretch;
-width: -moz-available;
+  width: -moz-available;
   height: auto;
   padding: 0 1rem;
   padding-bottom: 1rem;
@@ -28,15 +28,71 @@ width: -moz-available;
 }
 
 .carusel {
+  position: relative;
+  height: 80vh;
   border-radius: 0.5rem;
   overflow: hidden;
   @include respond-to("small") {
     grid-area: 1 / 1 / span 4 / span 1;
   }
+  button{
+    position: absolute;
+    top: 0;
+    width: 3rem;
+    height: 100%;
+    border:none;
+    cursor:pointer;
+    outline:none;
+    background: transparent;
+
+    i{
+      position: absolute;
+      top: 50%;
+      transform: scale(1.5);
+      color:#fff;
+      border-radius: 9999px;
+      padding:0 .2rem;
+      background:  #00cc7659;
+    }
+    .left{
+      left: 1rem;
+    }
+    .right{
+      right: 1rem;
+    }
+  }
+  .leftd{
+    left:0;
+    &:hover{
+      background:  #00cc7659;
+
+      i{
+        transform: scale(3);
+        background: transparent;
+      }
+    }
+  }
+  .rightd{
+    right:0;
+    &:hover{
+      background:  #00cc7659;
+      i{
+        transform: scale(3);
+        background: transparent;
+
+      }
+    }
+  }
   img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
   }
+
+  .inactive{
+    display: none;
+  }
+  
 }
 .info {
   display: flex;

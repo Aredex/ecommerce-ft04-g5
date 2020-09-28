@@ -1,3 +1,5 @@
+@import "var.scss";
+
 .page {
   display: grid;
   grid-template-rows: 1fr;
@@ -30,6 +32,20 @@ width: -moz-available;
       }
     }
   }
+
+  th{
+    button{
+      font-size: 1rem;
+      width: 100%;
+    }
+    .asc{
+      box-shadow: 0 -1rem 0 $--primary-color;
+    }
+    .desc{
+      box-shadow: 0 1rem 0 $--primary-color;
+    }
+  }
+  
   tbody {
     button {
       width: 3rem;
