@@ -128,7 +128,7 @@ const Products = ({
     e.preventDefault()
     setOrder(!order)
     setFilter(e.target.name); 
-    if(filter == "name" || filter == "description"){
+    if(filter === "name" || filter === "description"){
       products = order ? products.sort((a,b)=>a[filter].toUpperCase() > b[filter].toUpperCase()? 1:-1): products.sort((a,b)=>a[filter].toUpperCase() < b[filter].toUpperCase()? 1:-1);
     }else{
       products = order ? products.sort((a,b)=>a[filter] > b[filter]? 1:-1): products.sort((a,b)=>a[filter] < b[filter]? 1:-1);
@@ -140,10 +140,10 @@ const Products = ({
       <table className={style.table}>
         <thead>
           <tr>
-            <th><button className={filter == "name" ? order? style.asc: style.desc:null } name ="name"onClick={handleFilter}>Nombre:</button></th>
-            <th><button className={filter == "description" ? order? style.asc: style.desc:null } name ="description"onClick={handleFilter}>Descripción:</button></th>
-            <th><button className={filter == "price" ? order? style.asc: style.desc:null} name ="price"onClick={handleFilter}>Precio:</button></th>
-            <th><button className={filter == "stock" ? order? style.asc: style.desc:null} name ="stock"onClick={handleFilter}>Stock:</button></th>
+            <th><button className={filter === "name" ? order? style.asc: style.desc:null } name ="name"onClick={handleFilter}>Nombre:</button></th>
+            <th><button className={filter === "description" ? order? style.asc: style.desc:null } name ="description"onClick={handleFilter}>Descripción:</button></th>
+            <th><button className={filter === "price" ? order? style.asc: style.desc:null} name ="price"onClick={handleFilter}>Precio:</button></th>
+            <th><button className={filter === "stock" ? order? style.asc: style.desc:null} name ="stock"onClick={handleFilter}>Stock:</button></th>
             <th style={{ width: "11rem" }}>
               <button onClick={() => handleCreate()}>
                 <i className="fas fa-plus"></i> Agregar
