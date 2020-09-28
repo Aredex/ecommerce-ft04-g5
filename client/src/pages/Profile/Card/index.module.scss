@@ -36,3 +36,15 @@
     column-gap: 0.25rem;
   }
 }
+.master.creditCard {
+  background-image: linear-gradient(to right top, #b99647, #98673e, #6b4034, #382222, #000000);
+}
+.visa.creditCard {
+  background-image: linear-gradient(to right top, #01060d, #000b20, #000e30, #000e40, #070a4c);
+}
+.oca.creditCard {
+  background-image: linear-gradient(to left top, #bcebff, #8bc7ea, #5da3d5, #337fc0, #075ba8);
+}
+.diners.creditCard {
+  background-image: linear-gradient(to right bottom, #f0f48f, #ded86f, #ccbc50, #baa030, #a88507);
+}

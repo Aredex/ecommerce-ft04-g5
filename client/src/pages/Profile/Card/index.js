@@ -15,9 +15,18 @@ function Card({ order }) {
         return order.card_last_four_digits.split('')
     return undefined
   }, [order])
+  function getClassCard(cardId) {
+    switch (cardId) {
+      case 'master': return style.master
+      case 'visa': return style.visa
+      case 'oca': return style.oca
+      case 'diners': return style.diners
+      default: return ''
+    }
+  }
   if (firstSixDigits)
     return (
-      <div className={style.creditCard}>
+      <div className={[style.creditCard, getClassCard(order.payment_method_id)].join(' ')}>
         <div className={style.cardNumber}>
           <div className={style.group}>
             <span>{firstSixDigits[0]}</span>
@@ -46,6 +55,8 @@ function Card({ order }) {
         </div>
         {order.payment_method_id === 'visa' && <img className={style.cardLogo} src="https://cdn.visa.com/cdn/assets/images/logos/visa/logo.png" alt="" />}
         {order.payment_method_id === 'master' && <img className={style.cardLogo} src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="" />}
+        {order.payment_method_id === 'oca' && <img className={style.cardLogo} src="https://www.oca.com.uy/imagenes/frontend/logo.png" alt="" />}
+        {order.payment_method_id === 'diners' && <img className={style.cardLogo} src="http://www.dinersclub.com.ar/assets/images/layout/diners.png" alt="" />}
       </div>
     )
   else return null

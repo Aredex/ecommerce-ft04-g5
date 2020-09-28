@@ -228,17 +228,29 @@
       }
       .headerInfo {
         display: grid;
-        grid-template-columns: 3fr 1fr;
-        grid-template-rows: 12rem;
+        @include respond-to("default") {
+          grid-template-columns: 100%;
+          place-items: center;
+          width: 100%;
+        }
+        @include respond-to("small") {
+          grid-template-rows: 12rem;
+          grid-template-columns: 3fr 1fr;
+        }
+
         .info {
-          margin-top: 1rem;
           flex-direction: column;
+          @include respond-to("default") {
+            margin-bottom: 1rem;
+            width: inherit;
+          }
           div {
             @include respond-to("default") {
               width: 100vw;
-              flex-direction: column;
+              flex-direction: row;
             }
             @include respond-to("small") {
+              margin-top: 1rem;
               width: 100vw;
               flex-direction: row;
             }
