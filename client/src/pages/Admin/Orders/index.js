@@ -28,7 +28,7 @@ useEffect(() => {
 
   const handleChange = async (e, id, address)=>{
 
-    var r = window.confirm(`Desea caambiar el estado de la orden a ${e.target.value}`);
+    var r = window.confirm(`Desea cambiar el estado de la orden a ${e.target.value}`);
    if (r == true) { 
       switch(e.target.value){
 
