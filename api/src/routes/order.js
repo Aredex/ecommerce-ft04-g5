@@ -26,7 +26,10 @@ const {
     addProductToOrder,
     addMultipleProductsToOrder,
 } = require("../controllers/order_products");
-const { setUsertoOrder } = require("../controllers/users_order");
+const {
+    setUsertoOrder,
+    getProductsPurchasedByuser,
+} = require("../controllers/users_order");
 
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\\
 const { ordersDevolution } = require("../controllers/order_id_string");
@@ -203,6 +206,18 @@ router.route("/:idOrder/user/:idUser").post((req, res) => {
 
     if (isAdmin(req) || (isUser(req) && req.user.uid === idUser)) {
         setUsertoOrder(idUser, idOrder)
+            .then((order_product) => res.json(order_product))
+            .catch((err) => res.status(400).json(err));
+    } else {
+        res.sendStatus(401);
+    }
+});
+
+router.route("/user/:userId").get((req, res) => {
+    const { userId } = req.params;
+
+    if (isAdmin(req) || (isUser(req) && req.user.uid === userId)) {
+        getProductsPurchasedByuser(userId)
             .then((order_product) => res.json(order_product))
             .catch((err) => res.status(400).json(err));
     } else {
