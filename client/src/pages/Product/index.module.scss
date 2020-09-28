@@ -64,11 +64,15 @@
       right: 1rem;
     }
   }
+  
   .leftd{
     left:0;
     &:hover{
       i{
         transform: scale(3);
+        @include respond-to("default") {
+          transform:scale(1.5)
+        }
       }
     }
   }
@@ -77,6 +81,9 @@
     &:hover{
       i{
         transform: scale(3);
+        @include respond-to("default") {
+          transform:scale(1.5)
+        }
       }
     }
   }
