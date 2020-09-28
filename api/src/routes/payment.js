@@ -41,7 +41,6 @@ router.route('/meli/callback').get(async (req, res) => {
   if (req.query.collection_status !== 'null') {
     try {
       const { body } = await mercadopago.payment.get(req.query.collection_id)
-      console.log(body.transaction_amount)
       const order_product = await confirmedOrder({
         id: req.query.external_reference,
         payment_method_id: body.payment_method_id,

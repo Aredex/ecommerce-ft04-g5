@@ -13,15 +13,15 @@ function ItemCard({
 }) {
     return (
         <Card className={style.itemCard}>
-            <h3 className={style.productName}>
-                {product.name}
+            <div className={style.productName}>
+                <h3>{product.name}</h3>
                 <i
                     className={["far fa-times-circle", style.removeButton].join(
                         " "
                     )}
                     onClick={() => removeProduct(product.id)}
                 />
-            </h3>
+            </div>
             <div className={style.data}>
                 {showPrice && (
                     <div className={style.dataItem}>

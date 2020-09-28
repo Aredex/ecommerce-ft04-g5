@@ -35,8 +35,10 @@ export default function SignIn() {
       password: "",
     },
     onSubmit: async (values) => {
-      await loginWithEmail(values.email, values.password);
-      history.push("/");
+      try {
+        await loginWithEmail(values.email, values.password);
+        history.push("/");
+      } catch { }
     },
   });
   return (

@@ -38,7 +38,7 @@
 }
 .reviewForm {
   width: stretch;
-width: -moz-available;
+  width: -moz-available;
   .Input {
     display: flex;
     flex-direction: column;
@@ -101,24 +101,24 @@ label {
 
 .input {
   width: stretch;
-width: -moz-available;
+  width: -moz-available;
 
   display: flex;
 
   border: solid 1px #a3a3a3;
 
   margin: -1px 0;
-  textarea {
-    width: 100%;
-    height: auto;
-    border: none;
-    font-size: inherit;
-    font-family: inherit;
-    padding: 0.25rem;
-    resize: none;
+textarea {
+  width: 100%;
+  height: auto;
+  border: none;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0.25rem;
+  resize: none;
 
-    &:focus {
-      outline: none;
-    }
-    }
+  &:focus {
+    outline: none;
   }
+  }
+}

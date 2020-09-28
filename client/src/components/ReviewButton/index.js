@@ -23,7 +23,7 @@ const Star = ({ size, fill, stroke }) => (
   </svg>
 );
 
-const ModalReview = ({ reviews, onClose, idProduct }) => {
+const ModalReview = ({ reviews, onClose, onUpdate, idProduct, calificate }) => {
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
   const [review, setReview] = useState({
@@ -65,14 +65,54 @@ const ModalReview = ({ reviews, onClose, idProduct }) => {
       idProduct
     }
     await Axios.post(`${process.env.REACT_APP_API}/reviews`, data)
-    dispatch(getProductDetail(idProduct));
+    onUpdate && onUpdate()
+    onClose()
   };
+
+  console.log(calificate)
 
   return (
     <Modal>
       <Modal.Header>Calificaciones:</Modal.Header>
       <Modal.Body>
-        {reviews &&
+        {calificate ?
+          <section className={style.reviewForm}>
+            <section className={style.Input}>
+              <div>
+                {[...Array(5)].map((star, i) => {
+                  const ratingValue = i + 1;
+
+                  return (
+                    <label key={i}>
+                      <input
+                        type="radio"
+                        name="estrellas"
+                        value={ratingValue}
+                        onClick={() => setRating(ratingValue)}
+                        onChange={onChange}
+                      />
+                      <FaStar
+                        className="star"
+                        color={ratingValue <= (hover || rating) ? "#00cc76" : "grey"}
+                        size={25}
+                        onMouseEnter={() => setHover(ratingValue)}
+                        onMouseLeave={() => setHover(null)}
+                      />
+                    </label>
+                  );
+                })}
+              </div>
+              <textarea
+                rows={5}
+                name="rating"
+                type="text"
+                placeholder="Ingresa tu reseña..."
+                value={review.rating}
+                onChange={onChange}
+              />
+            </section>
+          </section>
+          : reviews &&
           Array.isArray(reviews) &&
           reviews.map(({ id, stars, description }) => (
             <article key={id} className={style.review}>
@@ -105,74 +145,44 @@ const ModalReview = ({ reviews, onClose, idProduct }) => {
               </div>
               <div className={style.message}>{description}</div>
             </article>
-          ))}
+          ))
+        }
+
       </Modal.Body>
       <Modal.Footer>
-        <section className={style.reviewForm}>
-          {localUser && <section className={style.Input}>
-            <div>
-              {[...Array(5)].map((star, i) => {
-                const ratingValue = i + 1;
-
-                return (
-                  <label key={i}>
-                    <input
-                      type="radio"
-                      name="estrellas"
-                      value={ratingValue}
-                      onClick={() => setRating(ratingValue)}
-                      onChange={onChange}
-                    />
-                    <FaStar
-                      className="star"
-                      color={ratingValue <= (hover || rating) ? "#00cc76" : "grey"}
-                      size={25}
-                      onMouseEnter={() => setHover(ratingValue)}
-                      onMouseLeave={() => setHover(null)}
-                    />
-                  </label>
-                );
-              })}
-            </div>
-            <textarea
-              rows={5}
-              name="rating"
-              type="text"
-              placeholder="Ingresa tu reseña..."
-              value={review.rating}
-              onChange={onChange}
-            />
-          </section>}
-          <section className={style.buttonGroup}>
-
-            <button type="button" onClick={onClose}>
-              Cerrar
-        </button>
-            {localUser && <button type="submit" className={style.primary} onClick={handleSubmit}>
-              Enviar
-        </button>}
-          </section>
-        </section>
+        <button type="button" onClick={onClose}>
+          Cerrar
+            </button>
+        {calificate &&
+          <button type="submit" className={style.primary} onClick={handleSubmit}>
+            Enviar
+            </button>}
       </Modal.Footer>
     </Modal>
   );
 };
 
-const ReviewButton = ({ reviews, idProduct }) => {
+const ReviewButton = ({ reviews, idProduct, onUpdate, calificate, className }) => {
   const [showModal, setShowModal] = useState(false);
+  const { userLogin } = useUser()
   const rating = useMemo(() => {
-    if (reviews.length > 0) {
-      let result = reviews.reduce((result, item) => {
-        result += Number(item.stars)
-        return result
-      }, 0)
-      return result / reviews.length
+    if (calificate) {
+      const review = reviews.find(review => review.userId === userLogin.user.id)
+      return review ? review.stars : 0
+    } else {
+      if (reviews.length > 0) {
+        let result = reviews.reduce((result, item) => {
+          result += Number(item.stars)
+          return result
+        }, 0)
+        return result / reviews.length
+      }
     }
     return 0
   }, [reviews])
   return (
     <>
-      <div className={style.reviewButton} onClick={() => setShowModal(true)}>
+      <div className={[style.reviewButton, className].join(' ')} onClick={() => setShowModal(true)}>
         <span>Calificación:</span>
         <Star
           fill={rating >= 0.5 ? "#00cc76" : "transparent"}
@@ -201,7 +211,7 @@ const ReviewButton = ({ reviews, idProduct }) => {
         />
       </div>
       {showModal && (
-        <ModalReview reviews={reviews} idProduct={idProduct} onClose={() => setShowModal(false)} />
+        <ModalReview reviews={reviews} idProduct={idProduct} onClose={() => setShowModal(false)} onUpdate={onUpdate} calificate={calificate} />
       )}
     </>
   );
